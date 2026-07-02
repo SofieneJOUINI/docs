@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Git Cheat Sheet — Full Reference Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --core:#FF6B5E;    --core-bg:#FFF0ED;
+    --history:#1FA398; --history-bg:#EAFAF7;
+    --branch:#8A5CF6;  --branch-bg:#F3EEFF;
+    --remote:#F2921D;  --remote-bg:#FFF3E1;
+    --config:#3C6E71;  --config-bg:#EEF3F2;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;}
+
+  #toc{
+    width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;
+  }
+  #toc h1{font-family:'Kalam',cursive;font-size:1.35rem;margin:0 0 12px;line-height:1.1;}
+  #toc a{display:block;font-size:.76rem;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:6px;margin-bottom:1px;}
+  #toc a:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;margin:14px 0 4px;padding:3px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.core{background:var(--core);}
+  #toc .grp.history{background:var(--history);}
+  #toc .grp.branch{background:var(--branch);}
+  #toc .grp.remote{background:var(--remote);}
+  #toc .grp.config{background:var(--config);}
+  #toc .navlink{display:inline-block;margin-bottom:14px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+
+  main{flex:1;min-width:0;padding:32px 40px 100px;max-width:1020px;}
+
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:30px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.4rem;margin:0;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+
+  .layer-banner{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.4rem;color:#fff;padding:10px 18px;border-radius:10px;margin:34px 0 18px;display:flex;align-items:center;gap:10px;}
+  .layer-banner.core{background:var(--core);}
+  .layer-banner.history{background:var(--history);}
+  .layer-banner.branch{background:var(--branch);}
+  .layer-banner.remote{background:var(--remote);}
+  .layer-banner.config{background:var(--config);}
+  .layer-banner small{font-family:'Inter',sans-serif;font-weight:500;font-size:.7rem;opacity:.9;}
+
+  .cmd-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;}
+
+  .cmd{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:14px;
+    align-items:start;
+    border:2px solid var(--ink);
+    border-radius:10px;
+    padding:12px 16px;
+    background:#fff;
+  }
+  .cmd.core{background:var(--core-bg);border-color:var(--core);box-shadow:3px 3px 0 var(--core);}
+  .cmd.history{background:var(--history-bg);border-color:var(--history);box-shadow:3px 3px 0 var(--history);}
+  .cmd.branch{background:var(--branch-bg);border-color:var(--branch);box-shadow:3px 3px 0 var(--branch);}
+  .cmd.remote{background:var(--remote-bg);border-color:var(--remote);box-shadow:3px 3px 0 var(--remote);}
+  .cmd.config{background:var(--config-bg);border-color:var(--config);box-shadow:3px 3px 0 var(--config);}
+
+  @media (max-width:680px){ .cmd{grid-template-columns:1fr;} }
+
+  .cmd .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:500;
+    font-size:.8rem;
+    background:#fff;
+    border:1.5px solid var(--ink);
+    border-radius:6px;
+    padding:4px 8px;
+    display:inline-block;
+    white-space:pre-wrap;
+    line-height:1.4;
+  }
+  .cmd p{font-size:.83rem;line-height:1.5;margin:2px 0 0;}
+  .cmd code{background:rgba(255,255,255,.7);border-radius:3px;padding:0 3px;font-size:.85em;}
+
+  .note-box{
+    border-left:4px solid var(--ink);
+    background:#fff;
+    padding:8px 12px;
+    font-size:.79rem;
+    font-style:italic;
+    color:var(--ink-soft);
+    margin:10px 0 20px;
+    border-radius:0 6px 6px 0;
+  }
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+
+  @media (max-width:820px){
+    body{display:block;}
+    #toc{position:relative;width:auto;height:auto;}
+    main{padding:24px 18px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>Git 🌱</h1>
+  <a class="navlink" href="./index.html">← Technical Docs</a>
+  <a class="navlink" href="./hexagonal-full-reference.html" style="margin-left:4px;">Hexagon →</a>
+  <a class="navlink" href="./clean-code-full-reference.html" style="margin-left:4px;">Clean Code →</a>
+
+  <div class="grp core">Core</div>
+  <a href="#basics">Git Basics</a>
+  <a href="#undoing">Undoing Changes</a>
+
+  <div class="grp history">History</div>
+  <a href="#rewriting">Rewriting History</a>
+  <a href="#log">Git Log</a>
+  <a href="#diff">Git Diff</a>
+
+  <div class="grp branch">Branching</div>
+  <a href="#branches">Git Branches</a>
+  <a href="#rebase">Git Rebase</a>
+
+  <div class="grp remote">Remote</div>
+  <a href="#remotes">Remote Repositories</a>
+  <a href="#pull">Git Pull</a>
+  <a href="#push">Git Push</a>
+
+  <div class="grp config">Config &amp; Reset</div>
+  <a href="#config">Git Config</a>
+  <a href="#reset">Git Reset</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>Git <span>Cheat Sheet</span></h1>
+  </header>
+
+  <!-- ============================ CORE ============================ -->
+  <div class="layer-banner core">🔴 Core <small>the everyday commands</small></div>
+
+  <section id="basics">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Basics</h2>
+    <div class="cmd-grid">
+      <div class="cmd core"><span class="tag">git init &lt;directory&gt;</span><p>Create an empty Git repo in the specified directory. Run with no arguments to initialize the current directory as a git repository.</p></div>
+      <div class="cmd core"><span class="tag">git clone &lt;repo&gt;</span><p>Clone the repo located at <code>&lt;repo&gt;</code> onto your local machine. The original repo can be on the local filesystem or on a remote machine via HTTP or SSH.</p></div>
+      <div class="cmd core"><span class="tag">git config user.name &lt;name&gt;</span><p>Define the author name used for all commits in the current repo. Devs commonly use the <code>--global</code> flag to set config options for the current user.</p></div>
+      <div class="cmd core"><span class="tag">git add &lt;directory&gt;</span><p>Stage all changes in <code>&lt;directory&gt;</code> for the next commit. Replace <code>&lt;directory&gt;</code> with a <code>&lt;file&gt;</code> to stage a specific file.</p></div>
+      <div class="cmd core"><span class="tag">git commit -m "&lt;message&gt;"</span><p>Commit the staged snapshot, but instead of launching a text editor, use <code>&lt;message&gt;</code> as the commit message.</p></div>
+      <div class="cmd core"><span class="tag">git status</span><p>List which files are staged, unstaged, and untracked.</p></div>
+      <div class="cmd core"><span class="tag">git log</span><p>Display the entire commit history using the default format. See <b>Git Log</b> below for customization options.</p></div>
+      <div class="cmd core"><span class="tag">git diff</span><p>Show unstaged changes between your index and your working directory.</p></div>
+    </div>
+  </section>
+
+  <section id="undoing">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Undoing Changes</h2>
+    <div class="cmd-grid">
+      <div class="cmd core"><span class="tag">git revert &lt;commit&gt;</span><p>Create a new commit that undoes all of the changes made in <code>&lt;commit&gt;</code>, then apply it to the current branch.</p></div>
+      <div class="cmd core"><span class="tag">git reset &lt;file&gt;</span><p>Remove <code>&lt;file&gt;</code> from the staging area, but leave the working directory unchanged. This unstages a file without overwriting any changes.</p></div>
+      <div class="cmd core"><span class="tag">git clean -n</span><p>Show which files would be removed from the working directory. Use the <code>-f</code> flag in place of <code>-n</code> to actually execute the clean.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ HISTORY ============================ -->
+  <div class="layer-banner history">🟢 History <small>inspecting and reshaping commits</small></div>
+
+  <section id="rewriting">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Rewriting Git History</h2>
+    <div class="cmd-grid">
+      <div class="cmd history"><span class="tag">git commit --amend</span><p>Replace the last commit with the staged changes plus the last commit combined. Use with nothing staged to just edit the last commit's message.</p></div>
+      <div class="cmd history"><span class="tag">git rebase &lt;base&gt;</span><p>Rebase the current branch onto <code>&lt;base&gt;</code>. <code>&lt;base&gt;</code> can be a commit ID, branch name, a tag, or a relative reference to <code>HEAD</code>.</p></div>
+      <div class="cmd history"><span class="tag">git reflog</span><p>Show a log of changes to the local repository's <code>HEAD</code>. Add the <code>--relative-date</code> flag to show date info, or <code>--all</code> to show all refs.</p></div>
+    </div>
+  </section>
+
+  <section id="log">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Log — Additional Options</h2>
+    <div class="cmd-grid">
+      <div class="cmd history"><span class="tag">git log -&lt;limit&gt;</span><p>Limit the number of commits shown to <code>&lt;limit&gt;</code>. E.g. <code>git log -5</code> limits to 5 commits.</p></div>
+      <div class="cmd history"><span class="tag">git log --oneline</span><p>Condense each commit down to a single line.</p></div>
+      <div class="cmd history"><span class="tag">git log --stat</span><p>Include which files were altered, and the relative number of lines added or deleted from each of them.</p></div>
+      <div class="cmd history"><span class="tag">git log -p</span><p>Display the full diff of each commit.</p></div>
+      <div class="cmd history"><span class="tag">git log --author="&lt;pattern&gt;"</span><p>Search for commits by a particular author.</p></div>
+      <div class="cmd history"><span class="tag">git log --grep="&lt;pattern&gt;"</span><p>Search for commits with a commit message that matches <code>&lt;pattern&gt;</code>.</p></div>
+      <div class="cmd history"><span class="tag">git log &lt;since&gt;..&lt;until&gt;</span><p>Show commits that occur between <code>&lt;since&gt;</code> and <code>&lt;until&gt;</code>. Both args can be a commit ID, branch name, <code>HEAD</code>, or any other kind of revision reference.</p></div>
+      <div class="cmd history"><span class="tag">git log -- &lt;file&gt;</span><p>Only display commits that include changes to the specified file.</p></div>
+      <div class="cmd history"><span class="tag">git log --graph --decorate</span><p><code>--graph</code> draws a text-based graph of commits on the left side of the commit messages. <code>--decorate</code> adds the names of branches or tags pointing to the commits shown.</p></div>
+    </div>
+  </section>
+
+  <section id="diff">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Diff</h2>
+    <div class="cmd-grid">
+      <div class="cmd history"><span class="tag">git diff HEAD</span><p>Show the difference between your working directory and the last commit.</p></div>
+      <div class="cmd history"><span class="tag">git diff --cached</span><p>Show the difference between staged changes and the last commit.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ BRANCHING ============================ -->
+  <div class="layer-banner branch">🟣 Branching &amp; Merging <small>parallel lines of work</small></div>
+
+  <section id="branches">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Branches</h2>
+    <div class="cmd-grid">
+      <div class="cmd branch"><span class="tag">git branch</span><p>List all of the branches in your repo. Add a <code>&lt;branch&gt;</code> argument to create a new branch with that name.</p></div>
+      <div class="cmd branch"><span class="tag">git checkout -b &lt;branch&gt;</span><p>Create and check out a new branch named <code>&lt;branch&gt;</code>. Drop the <code>-b</code> flag to check out an existing branch instead.</p></div>
+      <div class="cmd branch"><span class="tag">git merge &lt;branch&gt;</span><p>Merge <code>&lt;branch&gt;</code> into the current branch.</p></div>
+    </div>
+  </section>
+
+  <section id="rebase">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Rebase — Additional Options</h2>
+    <div class="cmd-grid">
+      <div class="cmd branch"><span class="tag">git rebase -i &lt;base&gt;</span><p>Interactively rebase the current branch onto <code>&lt;base&gt;</code>. Launches an editor where you enter commands for how each commit will be transferred to the new base.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ REMOTE ============================ -->
+  <div class="layer-banner remote">🟠 Remote <small>syncing with other repos</small></div>
+
+  <section id="remotes">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Remote Repositories</h2>
+    <div class="cmd-grid">
+      <div class="cmd remote"><span class="tag">git remote add &lt;name&gt; &lt;url&gt;</span><p>Create a new connection to a remote repo. After adding a remote, you can use <code>&lt;name&gt;</code> as a shortcut for <code>&lt;url&gt;</code> in other commands.</p></div>
+      <div class="cmd remote"><span class="tag">git fetch &lt;remote&gt; &lt;branch&gt;</span><p>Fetch a specific <code>&lt;branch&gt;</code> from the repo. Leave off <code>&lt;branch&gt;</code> to fetch all remote refs.</p></div>
+      <div class="cmd remote"><span class="tag">git pull &lt;remote&gt;</span><p>Fetch the specified remote's copy of the current branch and immediately merge it into the local copy.</p></div>
+      <div class="cmd remote"><span class="tag">git push &lt;remote&gt; &lt;branch&gt;</span><p>Push the branch to <code>&lt;remote&gt;</code>, along with the necessary commits and objects. Creates a named branch in the remote repo if it doesn't already exist.</p></div>
+    </div>
+  </section>
+
+  <section id="pull">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Pull — Additional Options</h2>
+    <div class="cmd-grid">
+      <div class="cmd remote"><span class="tag">git pull --rebase &lt;remote&gt;</span><p>Fetch the remote's copy of the current branch and rebase it into the local copy. Uses <code>git rebase</code> instead of <code>merge</code> to integrate the branches.</p></div>
+    </div>
+  </section>
+
+  <section id="push">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Push — Additional Options</h2>
+    <div class="cmd-grid">
+      <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --force</span><p>Forces the push through even if it results in a non-fast-forward merge.</p></div>
+      <div class="note-box">⚠️ Don't use <code>--force</code> unless you're absolutely sure you know what you're doing — it can overwrite remote history other people are relying on.</div>
+      <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --all</span><p>Push all of your local branches to the specified remote.</p></div>
+      <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --tags</span><p>Tags aren't automatically pushed when you push a branch or use <code>--all</code>. This flag sends all of your local tags to the remote repo.</p></div>
+    </div>
+  </section>
+
+  <!-- ============================ CONFIG & RESET ============================ -->
+  <div class="layer-banner config">📚 Config &amp; Reset <small>set up once, use carefully</small></div>
+
+  <section id="config">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Config</h2>
+    <div class="cmd-grid">
+      <div class="cmd config"><span class="tag">git config --global user.name &lt;name&gt;</span><p>Define the author name to be used for all commits by the current user.</p></div>
+      <div class="cmd config"><span class="tag">git config --global user.email &lt;email&gt;</span><p>Define the author email to be used for all commits by the current user.</p></div>
+      <div class="cmd config"><span class="tag">git config --global alias.&lt;alias-name&gt; &lt;git-command&gt;</span><p>Create a shortcut for a Git command. E.g. <code>alias.glog "log --graph --oneline"</code> sets <code>git glog</code> as the equivalent of <code>git log --graph --oneline</code>.</p></div>
+      <div class="cmd config"><span class="tag">git config --system core.editor &lt;editor&gt;</span><p>Set the text editor used by commands for all users on the machine. <code>&lt;editor&gt;</code> should be the command that launches the desired editor (e.g. <code>vi</code>).</p></div>
+      <div class="cmd config"><span class="tag">git config --global --edit</span><p>Open the global configuration file in a text editor for manual editing.</p></div>
+    </div>
+  </section>
+
+  <section id="reset">
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Reset</h2>
+    <div class="cmd-grid">
+      <div class="cmd config"><span class="tag">git reset</span><p>Reset the staging area to match the most recent commit, but leave the working directory unchanged.</p></div>
+      <div class="cmd config"><span class="tag">git reset --hard</span><p>Reset the staging area <em>and</em> the working directory to match the most recent commit, overwriting all changes in the working directory.</p></div>
+      <div class="cmd config"><span class="tag">git reset &lt;commit&gt;</span><p>Move the current branch tip backward to <code>&lt;commit&gt;</code>, reset the staging area to match, but leave the working directory alone.</p></div>
+      <div class="cmd config"><span class="tag">git reset --hard &lt;commit&gt;</span><p>Same as above, but resets both the staging area and the working directory to match. Deletes uncommitted changes, and all commits after <code>&lt;commit&gt;</code>.</p></div>
+      <div class="note-box">⚠️ Any <code>--hard</code> reset permanently discards uncommitted changes — make sure you don't need them first.</div>
+    </div>
+  </section>
+
+  <footer>📚 Commit often, push carefully.</footer>
+
+</main>
+</body>
+</html>

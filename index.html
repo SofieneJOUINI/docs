@@ -13,6 +13,7 @@
 
     --hexA:#FF6B5E;  --hexB:#1FA398;  --hexC:#8A5CF6;  --hexD:#F2921D;
     --cleanA:#FF6B5E; --cleanB:#1FA398; --cleanC:#8A5CF6; --cleanD:#F2921D; --cleanE:#3C6E71;
+    --gitA:#FF6B5E; --gitB:#1FA398; --gitC:#8A5CF6; --gitD:#F2921D; --gitE:#3C6E71;
   }
   *{box-sizing:border-box;}
   body{
@@ -28,7 +29,7 @@
     justify-content:center;
     padding:40px 20px;
   }
-  .wrap{max-width:920px; width:100%;}
+  .wrap{max-width:1160px; width:100%;}
 
   header{
     text-align:center;
@@ -45,9 +46,10 @@
 
   .cards{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(3, 1fr);
     gap:22px;
   }
+  @media (max-width:900px){ .cards{grid-template-columns:1fr 1fr;} }
   @media (max-width:680px){ .cards{grid-template-columns:1fr;} }
 
   .card{
@@ -103,6 +105,7 @@
 
   .card.hexagon{border-top:8px solid var(--hexC);}
   .card.cleancode{border-top:8px solid var(--cleanA);}
+  .card.git{border-top:8px solid var(--gitB);}
 
   footer{
     text-align:center;
@@ -146,6 +149,20 @@
         <span class="swatch" style="background:var(--cleanE)"></span>
       </div>
       <p>Full reference — Variables, Functions, Objects &amp; Classes, SOLID, Testing, Concurrency, Error Handling, Formatting &amp; Comments, with Bad/Good code pairs.</p>
+      <span class="go">Open guide</span>
+    </a>
+
+    <a class="card git" href="./git-cheatsheet-full-reference.html">
+      <span class="icon">🌱</span>
+      <h2>Git Cheat Sheet</h2>
+      <div class="swatches">
+        <span class="swatch" style="background:var(--gitA)"></span>
+        <span class="swatch" style="background:var(--gitB)"></span>
+        <span class="swatch" style="background:var(--gitC)"></span>
+        <span class="swatch" style="background:var(--gitD)"></span>
+        <span class="swatch" style="background:var(--gitE)"></span>
+      </div>
+      <p>Full reference — Basics, Undoing Changes, Rewriting History, Branching, Remote Repositories, Config &amp; Reset, with every command and flag.</p>
       <span class="go">Open guide</span>
     </a>
 

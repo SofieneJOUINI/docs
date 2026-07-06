@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SOLID Principles — Full Reference Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --s:#FF6B5E;  --s-bg:#FFF0ED;
+    --o:#1FA398;  --o-bg:#EAFAF7;
+    --l:#8A5CF6;  --l-bg:#F3EEFF;
+    --i:#F2921D;  --i-bg:#FFF3E1;
+    --d:#3C6E71;  --d-bg:#EEF3F2;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{
+    width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;
+  }
+  #toc h1{font-family:'Kalam',cursive;font-size:1.35rem;margin:0 0 4px;line-height:1.1;}
+  #toc .tagline{font-size:.7rem;color:var(--ink-soft);margin-bottom:16px;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.8rem;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:6px;margin-bottom:2px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.s{background:var(--s);} #toc .grp.o{background:var(--o);} #toc .grp.l{background:var(--l);}
+  #toc .grp.i{background:var(--i);} #toc .grp.d{background:var(--d);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:880px;}
+
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:30px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.4rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+  header.hero p{font-size:.9rem;color:var(--ink-soft);max-width:680px;margin:0;}
+
+  .principle{scroll-margin-top:16px;margin-bottom:34px;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff;}
+  .principle .band{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;padding:12px 20px;display:flex;align-items:center;gap:12px;}
+  .principle .band .letter{font-family:'Kalam',cursive;font-size:1.6rem;line-height:1;background:rgba(255,255,255,.25);border-radius:8px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+  .principle .band .full{font-size:1.05rem;}
+  .principle .band .full small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:.68rem;opacity:.9;margin-top:1px;}
+  .principle.s .band{background:var(--s);} .principle.s .body{background:var(--s-bg);}
+  .principle.o .band{background:var(--o);} .principle.o .body{background:var(--o-bg);}
+  .principle.l .band{background:var(--l);} .principle.l .body{background:var(--l-bg);}
+  .principle.i .band{background:var(--i);} .principle.i .body{background:var(--i-bg);}
+  .principle.d .band{background:var(--d);} .principle.d .body{background:var(--d-bg);}
+
+  .body{padding:18px 20px 20px;}
+  .body p{font-size:.86rem;line-height:1.6;margin:0 0 10px;}
+  .body ul{font-size:.85rem;line-height:1.6;margin:0 0 10px;padding-left:20px;}
+  .body li{margin-bottom:4px;}
+
+  .quote{border-left:4px solid var(--ink);background:rgba(255,255,255,.7);padding:8px 12px;font-size:.8rem;font-style:italic;color:var(--ink-soft);margin:0 0 12px;border-radius:0 6px 6px 0;}
+
+  .notes{border:1.5px dashed var(--ink);border-radius:8px;padding:10px 14px;margin:12px 0 0;background:rgba(255,255,255,.55);}
+  .notes .tag{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:6px;display:block;}
+  .notes ul{margin:0;padding-left:18px;}
+  .notes li{font-size:.82rem;line-height:1.55;margin-bottom:4px;}
+
+  .example{border-left:4px solid var(--ink);padding:8px 12px;font-size:.82rem;line-height:1.55;margin:12px 0 0;border-radius:0 6px 6px 0;background:rgba(255,255,255,.85);}
+  .example strong{font-family:'Space Grotesk',sans-serif;}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;font-size:.95rem;}
+  footer a{color:var(--ink-soft);}
+
+  @media (max-width:820px){
+    body{display:block;}
+    #toc{position:relative;width:auto;height:auto;}
+    main{padding:24px 18px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>SOLID 🧊</h1>
+  <div class="tagline">Full reference — with team notes</div>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp s">S</div>
+  <a class="item" href="#s">Single Responsibility</a>
+  <div class="grp o">O</div>
+  <a class="item" href="#o">Open/Closed</a>
+  <div class="grp l">L</div>
+  <a class="item" href="#l">Liskov Substitution</a>
+  <div class="grp i">I</div>
+  <a class="item" href="#i">Interface Segregation</a>
+  <div class="grp d">D</div>
+  <a class="item" href="#d">Dependency Inversion</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>SOLID <span>Principles</span></h1>
+    <p>Five principles of object-oriented class design, explained in plain English, paired with our team's own notes and examples from meetings.</p>
+  </header>
+
+  <!-- ============================ S ============================ -->
+  <div class="principle s" id="s">
+    <div class="band"><span class="letter">S</span><span class="full">Single Responsibility Principle<small>a class should have only one reason to change</small></span></div>
+    <div class="body">
+      <p>A component should do one thing, and only one potential change in the software's specification should be able to affect it. When a class mixes concerns — say, business logic alongside printing or persistence logic — different teams end up editing the same file for unrelated reasons, which makes merge conflicts more frequent and version history harder to read.</p>
+      <div class="notes">
+        <span class="tag">Team notes</span>
+        <ul>
+          <li>Each component should have <strong>one, and only one, reason to change</strong>.</li>
+          <li>If a component has many reasons to change, it breaks Single Responsibility.</li>
+        </ul>
+      </div>
+      <div class="example"><strong>Example:</strong> an <code>Invoice</code> class that calculates totals shouldn't also know how to print itself or save itself to a file — split those into an <code>InvoicePrinter</code> and an <code>InvoicePersistence</code> class instead.</div>
+    </div>
+  </div>
+
+  <!-- ============================ O ============================ -->
+  <div class="principle o" id="o">
+    <div class="band"><span class="letter">O</span><span class="full">Open/Closed Principle<small>open for extension, closed for modification</small></span></div>
+    <div class="body">
+      <p>Classes should be extendable without editing their existing, already-tested code. In practice this means: if you need new behavior, you add a new implementation rather than changing what's already there — usually by depending on an interface or abstract class rather than a concrete one.</p>
+      <div class="notes">
+        <span class="tag">Team notes</span>
+        <ul>
+          <li>In practice: if you need to add new behavior, you shouldn't have to change existing code.</li>
+          <li>Achieved via <strong>Interface + Strategy pattern</strong>.</li>
+          <li>The Strategy pattern is responsible for choosing the correct instance/implementation to use (which itself respects Single Responsibility).</li>
+        </ul>
+      </div>
+      <div class="example"><strong>Example:</strong> changing the <strong>GOLD</strong> tier's pricing logic shouldn't affect the "add to cart" logic. Extension example: adding a new <strong>PLATINUM</strong> tier means adding a new implementation, not touching the existing tier code.</div>
+    </div>
+  </div>
+
+  <!-- ============================ L ============================ -->
+  <div class="principle l" id="l">
+    <div class="band"><span class="letter">L</span><span class="full">Liskov Substitution Principle<small>subtypes must be substitutable for their base type</small></span></div>
+    <div class="body">
+      <p>Named after Barbara Liskov, a mathematician and computer scientist. If you substitute a type with one of its subtypes, the calling code shouldn't need to change or behave unexpectedly — a child class should extend behavior, never narrow it down. The classic trap: a <code>Square</code> that extends <code>Rectangle</code> and overrides <code>setWidth</code>/<code>setHeight</code> to keep both sides equal ends up breaking any code that assumed a <code>Rectangle</code>'s width and height are independent.</p>
+      <div class="notes">
+        <span class="tag">Team notes</span>
+        <ul>
+          <li>The calling code should <strong>not need to know about the concrete subtype</strong>.</li>
+          <li><strong>How to fix violations:</strong> push the type-specific logic into the class itself, e.g. a <code>getPrice()</code> method that each subtype implements/overrides.</li>
+        </ul>
+      </div>
+      <div class="example"><strong>Example:</strong> instead of the caller branching on which concrete subtype it has, give the base type a method like <code>getPrice()</code> and let each subtype override it — the caller just calls <code>getPrice()</code> and never needs to know which subtype it's holding.</div>
+    </div>
+  </div>
+
+  <!-- ============================ I ============================ -->
+  <div class="principle i" id="i">
+    <div class="band"><span class="letter">I</span><span class="full">Interface Segregation Principle<small>many specific interfaces beat one general-purpose one</small></span></div>
+    <div class="body">
+      <p>Clients shouldn't be forced to implement methods they don't need. A single do-everything interface means that every implementer — even ones that only care about part of it — has to satisfy the whole contract, often with stub methods that throw or do nothing.</p>
+      <div class="notes">
+        <span class="tag">Team notes</span>
+        <ul>
+          <li>About reducing dependencies between components via clear interface contracts.</li>
+          <li>Problem: if an interface changes, its clients are forced to change too.</li>
+          <li><strong>Solution:</strong> segregate (split) interfaces to protect clients — depend only on what you actually use.</li>
+          <li>Rule of thumb: depending on something means you're exposed ("subject to") its changes.</li>
+        </ul>
+      </div>
+      <div class="example"><strong>Example context:</strong> repository interfaces — split a broad <code>Repository</code> contract into smaller ones (e.g. read-only vs. write) so a client that only reads never has to depend on, or implement, the write methods.</div>
+    </div>
+  </div>
+
+  <!-- ============================ D ============================ -->
+  <div class="principle d" id="d">
+    <div class="band"><span class="letter">D</span><span class="full">Dependency Inversion Principle<small>depend on abstractions, not concrete implementations</small></span></div>
+    <div class="body">
+      <p>High-level modules shouldn't depend on low-level modules — both should depend on abstractions, and those abstractions shouldn't depend on details. This is usually implemented through Dependency Injection: a high-level class receives the interface it needs from the outside, rather than instantiating a concrete class itself.</p>
+      <div class="notes">
+        <span class="tag">Team notes</span>
+        <ul>
+          <li>Directly linked to <strong>Hexagonal Architecture</strong>.</li>
+          <li>Distinguishes <strong>data flow</strong> from <strong>dependency flow</strong> (they don't have to point the same direction).</li>
+          <li><strong>High-level components should not depend on low-level components.</strong></li>
+          <li>High-level components should be the <strong>most stable</strong> ones.</li>
+          <li><strong>Business logic (logique métier)</strong> should live in the most stable component — the <strong>domain</strong>.</li>
+          <li><strong>Dependency Injection</strong> is one of the main mechanisms used to implement Dependency Inversion.</li>
+        </ul>
+      </div>
+      <div class="example"><strong>Example:</strong> the domain shouldn't depend on the database driver — the database adapter depends on a port defined by the domain. See the <a href="./hexagonal-full-reference.html">Hexagonal Architecture &amp; DDD guide</a> for how this plays out across layers.</div>
+    </div>
+  </div>
+
+  <footer>Source: <a href="https://www.freecodecamp.org/news/solid-principles-explained-in-plain-english/" target="_blank" rel="noopener">freecodecamp.org — SOLID Principles Explained in Plain English</a></footer>
+
+</main>
+</body>
+</html>

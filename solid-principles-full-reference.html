@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SOLID Principles — Full Reference Guide</title>
+<title>SOLID Principles: Full Reference Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -82,7 +82,7 @@
 
 <nav id="toc">
   <h1>SOLID 🧊</h1>
-  <div class="tagline">Full reference — with team notes</div>
+  <div class="tagline">Full reference</div>
   <a class="back" href="./index.html">← Technical Docs</a>
 
   <div class="grp s">S</div>
@@ -101,22 +101,22 @@
 
   <header class="hero">
     <h1>SOLID <span>Principles</span></h1>
-    <p>Five principles of object-oriented class design, explained in plain English, paired with our team's own notes and examples from meetings.</p>
+    <p>Five principles of object-oriented class design.</p>
   </header>
 
   <!-- ============================ S ============================ -->
   <div class="principle s" id="s">
     <div class="band"><span class="letter">S</span><span class="full">Single Responsibility Principle<small>a class should have only one reason to change</small></span></div>
     <div class="body">
-      <p>A component should do one thing, and only one potential change in the software's specification should be able to affect it. When a class mixes concerns — say, business logic alongside printing or persistence logic — different teams end up editing the same file for unrelated reasons, which makes merge conflicts more frequent and version history harder to read.</p>
+      <p>A component should do one thing, and only one potential change in the software's specification should be able to affect it. When a class mixes concerns (say, business logic alongside printing or persistence logic), different teams end up editing the same file for unrelated reasons, which makes merge conflicts more frequent and version history harder to read.</p>
       <div class="notes">
-        <span class="tag">Team notes</span>
+        <span class="tag">Notes</span>
         <ul>
           <li>Each component should have <strong>one, and only one, reason to change</strong>.</li>
           <li>If a component has many reasons to change, it breaks Single Responsibility.</li>
         </ul>
       </div>
-      <div class="example"><strong>Example:</strong> an <code>Invoice</code> class that calculates totals shouldn't also know how to print itself or save itself to a file — split those into an <code>InvoicePrinter</code> and an <code>InvoicePersistence</code> class instead.</div>
+      <div class="example"><strong>Example:</strong> an <code>Invoice</code> class that calculates totals shouldn't also know how to print itself or save itself to a file. Split those into an <code>InvoicePrinter</code> and an <code>InvoicePersistence</code> class instead.</div>
     </div>
   </div>
 
@@ -124,9 +124,9 @@
   <div class="principle o" id="o">
     <div class="band"><span class="letter">O</span><span class="full">Open/Closed Principle<small>open for extension, closed for modification</small></span></div>
     <div class="body">
-      <p>Classes should be extendable without editing their existing, already-tested code. In practice this means: if you need new behavior, you add a new implementation rather than changing what's already there — usually by depending on an interface or abstract class rather than a concrete one.</p>
+      <p>Classes should be extendable without editing their existing, already-tested code. In practice this means: if you need new behavior, you add a new implementation rather than changing what's already there, usually by depending on an interface or abstract class rather than a concrete one.</p>
       <div class="notes">
-        <span class="tag">Team notes</span>
+        <span class="tag">Notes</span>
         <ul>
           <li>In practice: if you need to add new behavior, you shouldn't have to change existing code.</li>
           <li>Achieved via <strong>Interface + Strategy pattern</strong>.</li>
@@ -141,15 +141,15 @@
   <div class="principle l" id="l">
     <div class="band"><span class="letter">L</span><span class="full">Liskov Substitution Principle<small>subtypes must be substitutable for their base type</small></span></div>
     <div class="body">
-      <p>Named after Barbara Liskov, a mathematician and computer scientist. If you substitute a type with one of its subtypes, the calling code shouldn't need to change or behave unexpectedly — a child class should extend behavior, never narrow it down. The classic trap: a <code>Square</code> that extends <code>Rectangle</code> and overrides <code>setWidth</code>/<code>setHeight</code> to keep both sides equal ends up breaking any code that assumed a <code>Rectangle</code>'s width and height are independent.</p>
+      <p>Named after Barbara Liskov, a mathematician and computer scientist. If you substitute a type with one of its subtypes, the calling code shouldn't need to change or behave unexpectedly. A child class should extend behavior, never narrow it down. The classic trap: a <code>Square</code> that extends <code>Rectangle</code> and overrides <code>setWidth</code>/<code>setHeight</code> to keep both sides equal ends up breaking any code that assumed a <code>Rectangle</code>'s width and height are independent.</p>
       <div class="notes">
-        <span class="tag">Team notes</span>
+        <span class="tag">Notes</span>
         <ul>
           <li>The calling code should <strong>not need to know about the concrete subtype</strong>.</li>
           <li><strong>How to fix violations:</strong> push the type-specific logic into the class itself, e.g. a <code>getPrice()</code> method that each subtype implements/overrides.</li>
         </ul>
       </div>
-      <div class="example"><strong>Example:</strong> instead of the caller branching on which concrete subtype it has, give the base type a method like <code>getPrice()</code> and let each subtype override it — the caller just calls <code>getPrice()</code> and never needs to know which subtype it's holding.</div>
+      <div class="example"><strong>Example:</strong> instead of the caller branching on which concrete subtype it has, give the base type a method like <code>getPrice()</code> and let each subtype override it. The caller just calls <code>getPrice()</code> and never needs to know which subtype it's holding.</div>
     </div>
   </div>
 
@@ -157,17 +157,17 @@
   <div class="principle i" id="i">
     <div class="band"><span class="letter">I</span><span class="full">Interface Segregation Principle<small>many specific interfaces beat one general-purpose one</small></span></div>
     <div class="body">
-      <p>Clients shouldn't be forced to implement methods they don't need. A single do-everything interface means that every implementer — even ones that only care about part of it — has to satisfy the whole contract, often with stub methods that throw or do nothing.</p>
+      <p>Clients shouldn't be forced to implement methods they don't need. A single do-everything interface means that every implementer, even ones that only care about part of it, has to satisfy the whole contract, often with stub methods that throw or do nothing.</p>
       <div class="notes">
-        <span class="tag">Team notes</span>
+        <span class="tag">Notes</span>
         <ul>
           <li>About reducing dependencies between components via clear interface contracts.</li>
           <li>Problem: if an interface changes, its clients are forced to change too.</li>
-          <li><strong>Solution:</strong> segregate (split) interfaces to protect clients — depend only on what you actually use.</li>
+          <li><strong>Solution:</strong> segregate (split) interfaces to protect clients, depending only on what you actually use.</li>
           <li>Rule of thumb: depending on something means you're exposed ("subject to") its changes.</li>
         </ul>
       </div>
-      <div class="example"><strong>Example context:</strong> repository interfaces — split a broad <code>Repository</code> contract into smaller ones (e.g. read-only vs. write) so a client that only reads never has to depend on, or implement, the write methods.</div>
+      <div class="example"><strong>Example context:</strong> repository interfaces. Split a broad <code>Repository</code> contract into smaller ones (e.g. read-only vs. write) so a client that only reads never has to depend on, or implement, the write methods.</div>
     </div>
   </div>
 
@@ -175,23 +175,23 @@
   <div class="principle d" id="d">
     <div class="band"><span class="letter">D</span><span class="full">Dependency Inversion Principle<small>depend on abstractions, not concrete implementations</small></span></div>
     <div class="body">
-      <p>High-level modules shouldn't depend on low-level modules — both should depend on abstractions, and those abstractions shouldn't depend on details. This is usually implemented through Dependency Injection: a high-level class receives the interface it needs from the outside, rather than instantiating a concrete class itself.</p>
+      <p>High-level modules shouldn't depend on low-level modules. Both should depend on abstractions, and those abstractions shouldn't depend on details. This is usually implemented through Dependency Injection: a high-level class receives the interface it needs from the outside, rather than instantiating a concrete class itself.</p>
       <div class="notes">
-        <span class="tag">Team notes</span>
+        <span class="tag">Notes</span>
         <ul>
           <li>Directly linked to <strong>Hexagonal Architecture</strong>.</li>
           <li>Distinguishes <strong>data flow</strong> from <strong>dependency flow</strong> (they don't have to point the same direction).</li>
           <li><strong>High-level components should not depend on low-level components.</strong></li>
           <li>High-level components should be the <strong>most stable</strong> ones.</li>
-          <li><strong>Business logic (logique métier)</strong> should live in the most stable component — the <strong>domain</strong>.</li>
+          <li><strong>Business logic (logique métier)</strong> should live in the most stable component: the <strong>domain</strong>.</li>
           <li><strong>Dependency Injection</strong> is one of the main mechanisms used to implement Dependency Inversion.</li>
         </ul>
       </div>
-      <div class="example"><strong>Example:</strong> the domain shouldn't depend on the database driver — the database adapter depends on a port defined by the domain. See the <a href="./hexagonal-full-reference.html">Hexagonal Architecture &amp; DDD guide</a> for how this plays out across layers.</div>
+      <div class="example"><strong>Example:</strong> the domain shouldn't depend on the database driver. Instead, the database adapter depends on a port defined by the domain. See the <a href="./hexagonal-full-reference.html">Hexagonal Architecture &amp; DDD guide</a> for how this plays out across layers.</div>
     </div>
   </div>
 
-  <footer>Source: <a href="https://www.freecodecamp.org/news/solid-principles-explained-in-plain-english/" target="_blank" rel="noopener">freecodecamp.org — SOLID Principles Explained in Plain English</a></footer>
+  <footer>Source: <a href="https://www.freecodecamp.org/news/solid-principles-explained-in-plain-english/" target="_blank" rel="noopener">freecodecamp.org: SOLID Principles Explained in Plain English</a></footer>
 
 </main>
 </body>

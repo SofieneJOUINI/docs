@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Code Smells &amp; Heuristics — Full Reference Guide</title>
+<title>Code Smells &amp; Heuristics: Full Reference Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -122,7 +122,7 @@
 
   <header class="hero">
     <h1>Code Smells &amp; <span>Heuristics</span></h1>
-    <p>Robert C. Martin's full catalog from Clean Code — every smell and heuristic, organized by category and color-coded for fast scanning.</p>
+    <p>Robert C. Martin's full catalog from Clean Code: every smell and heuristic, organized by category and color-coded for fast scanning.</p>
   </header>
 
   <!-- ============================ CORE HYGIENE ============================ -->
@@ -132,26 +132,26 @@
     <h2 class="subhead">Comments</h2>
 
     <div class="item core"><span class="code-id">C1</span><h3>Inappropriate Information</h3>
-      <p>Don't use comments to hold information that belongs in a different system — version control, an issue tracker, etc. Change logs, author names, and last-modified dates just clutter the file; comments should hold technical notes about the code and design, nothing else.</p></div>
+      <p>Don't use comments to hold information that belongs in a different system, like version control or an issue tracker. Change logs, author names, and last-modified dates just clutter the file; comments should hold technical notes about the code and design, nothing else.</p></div>
 
     <div class="item core"><span class="code-id">C2</span><h3>Obsolete Comment</h3>
-      <p>A comment that's gone stale, irrelevant, or wrong is worse than no comment — it actively misleads. Update or delete a comment the moment you notice it's drifted from the code it describes.</p></div>
+      <p>A comment that's gone stale, irrelevant, or wrong is worse than no comment: it actively misleads. Update or delete a comment the moment you notice it's drifted from the code it describes.</p></div>
 
     <div class="item core"><span class="code-id">C3</span><h3>Redundant Comment</h3>
       <p>A comment is redundant if it says no more than the code already says on its own (e.g. <code>i++; // increment</code>, or a Javadoc that just repeats the method signature). Comments should say something the code itself cannot.</p></div>
 
     <div class="item core"><span class="code-id">C4</span><h3>Poorly Written Comment</h3>
-      <p>If a comment is worth writing, it's worth writing well — correct grammar, careful word choice, brevity, no stating the obvious.</p></div>
+      <p>If a comment is worth writing, it's worth writing well: correct grammar, careful word choice, brevity, no stating the obvious.</p></div>
 
     <div class="item core"><span class="code-id">C5</span><h3>Commented-Out Code</h3>
-      <p>Nobody deletes commented-out code because everyone assumes someone else needs it — so it just rots: calling functions that no longer exist, following conventions that are long gone. Delete it; version control remembers it even if the file doesn't.</p></div>
+      <p>Nobody deletes commented-out code because everyone assumes someone else needs it, so it just rots: calling functions that no longer exist, following conventions that are long gone. Delete it; version control remembers it even if the file doesn't.</p></div>
   </section>
 
   <section id="environment">
     <h2 class="subhead">Environment</h2>
 
     <div class="item core"><span class="code-id">E1</span><h3>Build Requires More Than One Step</h3>
-      <p>Building a project should be one trivial operation — a single command to check out the system, another single command to build it. No hunting for stray JARs or arcane multi-step scripts.</p></div>
+      <p>Building a project should be one trivial operation: a single command to check out the system, another single command to build it. No hunting for stray JARs or arcane multi-step scripts.</p></div>
 
     <div class="item core"><span class="code-id">E2</span><h3>Tests Require More Than One Step</h3>
       <p>You should be able to run every unit test with one command, ideally one click in the IDE. Running the full suite is so fundamental that it needs to be quick, easy, and obvious.</p></div>
@@ -161,69 +161,69 @@
     <h2 class="subhead">Functions</h2>
 
     <div class="item core"><span class="code-id">F1</span><h3>Too Many Arguments</h3>
-      <p>Fewer arguments is better — zero is ideal, then one, then two, then three. More than three is highly questionable and should be avoided.</p></div>
+      <p>Fewer arguments is better: zero is ideal, then one, then two, then three. More than three is highly questionable and should be avoided.</p></div>
 
     <div class="item core"><span class="code-id">F2</span><h3>Output Arguments</h3>
       <p>Readers expect arguments to be inputs, not outputs. If a function must change the state of something, have it change the state of the object it's called on instead of writing back into a passed-in argument.</p></div>
 
     <div class="item core"><span class="code-id">F3</span><h3>Flag Arguments</h3>
-      <p>A boolean argument is a loud admission that the function does more than one thing — confusing at the call site and a sign it should be split into two functions.</p></div>
+      <p>A boolean argument is a loud admission that the function does more than one thing, confusing at the call site and a sign it should be split into two functions.</p></div>
 
     <div class="item core"><span class="code-id">F4</span><h3>Dead Function</h3>
-      <p>Methods that are never called should be deleted outright — don't be sentimental about it, source control still remembers them.</p></div>
+      <p>Methods that are never called should be deleted outright. Don't be sentimental about it, source control still remembers them.</p></div>
   </section>
 
   <!-- ============================ GENERAL (DESIGN) ============================ -->
-  <div class="layer-banner design">🟢 General <small>the largest category — day-to-day design heuristics (G1–G36)</small></div>
+  <div class="layer-banner design">🟢 General <small>the largest category, day-to-day design heuristics (G1-G36)</small></div>
 
   <section id="g1-g12">
     <h2 class="subhead">G1 – G12</h2>
 
     <div class="item design"><span class="code-id">G1</span><h3>Multiple Languages in One Source File</h3>
-      <p>Modern files can mix languages freely (Java + XML + HTML + JS in one JSP, for example) — confusing at best. Aim for one language per source file, and minimize the extent of any unavoidable extras.</p></div>
+      <p>Modern files can mix languages freely (Java + XML + HTML + JS in one JSP, for example), which is confusing at best. Aim for one language per source file, and minimize the extent of any unavoidable extras.</p></div>
 
     <div class="item design"><span class="code-id">G2</span><h3>Obvious Behavior Is Unimplemented</h3>
-      <p>Follow the "Principle of Least Surprise" — implement the behavior another programmer would reasonably expect from a function's name (e.g. a day-name parser should handle abbreviations and ignore case). Skipping obvious behavior erodes trust in the code and forces readers back into the implementation details.</p></div>
+      <p>Follow the "Principle of Least Surprise": implement the behavior another programmer would reasonably expect from a function's name (e.g. a day-name parser should handle abbreviations and ignore case). Skipping obvious behavior erodes trust in the code and forces readers back into the implementation details.</p></div>
 
     <div class="item design"><span class="code-id">G3</span><h3>Incorrect Behavior at the Boundaries</h3>
-      <p>Correct behavior is more complicated than it looks — don't trust intuition over verification. Hunt down every boundary condition and corner case, and write a test for each one.</p></div>
+      <p>Correct behavior is more complicated than it looks. Don't trust intuition over verification. Hunt down every boundary condition and corner case, and write a test for each one.</p></div>
 
     <div class="item design"><span class="code-id">G4</span><h3>Overridden Safeties</h3>
-      <p>Turning off compiler warnings, disabling failing tests "to fix later," or manually overriding safety mechanisms is always risky — it trades a short-term inconvenience for a much larger, later cost.</p></div>
+      <p>Turning off compiler warnings, disabling failing tests "to fix later," or manually overriding safety mechanisms is always risky: it trades a short-term inconvenience for a much larger, later cost.</p></div>
 
     <div class="item design"><span class="code-id">G5</span><h3>Duplication</h3>
-      <p>One of the most important rules here — "Once, and only once" (Kent Beck's phrasing). Every duplication is a missed abstraction opportunity: identical clumps of code become a shared method, repeated switch/if chains become polymorphism, and similar-but-not-identical algorithms become a Template Method or Strategy pattern.</p></div>
+      <p>One of the most important rules here: "Once, and only once" (Kent Beck's phrasing). Every duplication is a missed abstraction opportunity: identical clumps of code become a shared method, repeated switch/if chains become polymorphism, and similar-but-not-identical algorithms become a Template Method or Strategy pattern.</p></div>
 
     <div class="item design"><span class="code-id">G6</span><h3>Code at Wrong Level of Abstraction</h3>
-      <p>Higher-level and lower-level concepts need to be cleanly separated — usually into a base class and its derivatives. If a base class carries a detail that not every derivative can support (e.g. a <code>percentFull()</code> method only some stacks can meaningfully implement), that's a sign the abstraction boundary is misplaced. Faking an answer (like returning 0) just tells a lie instead of fixing the abstraction.</p></div>
+      <p>Higher-level and lower-level concepts need to be cleanly separated, usually into a base class and its derivatives. If a base class carries a detail that not every derivative can support (e.g. a <code>percentFull()</code> method only some stacks can meaningfully implement), that's a sign the abstraction boundary is misplaced. Faking an answer (like returning 0) just tells a lie instead of fixing the abstraction.</p></div>
 
     <div class="item design"><span class="code-id">G7</span><h3>Base Classes Depending on Their Derivatives</h3>
       <p>Base classes should generally know nothing about their derivatives, so the two can be deployed and modified independently. Exceptions exist (e.g. tightly-fixed finite state machines), but as a default, keeping bases ignorant of derivatives lowers the blast radius of any change.</p></div>
 
     <div class="item design"><span class="code-id">G8</span><h3>Too Much Information</h3>
-      <p>Well-defined modules expose small interfaces and hide everything else — data, utility functions, constants, temporaries. Fewer public methods and instance variables means lower coupling and an easier-to-use module.</p></div>
+      <p>Well-defined modules expose small interfaces and hide everything else: data, utility functions, constants, temporaries. Fewer public methods and instance variables means lower coupling and an easier-to-use module.</p></div>
 
     <div class="item design"><span class="code-id">G9</span><h3>Dead Code</h3>
-      <p>Code that's never executed (an impossible <code>if</code> branch, a <code>catch</code> for an exception that's never thrown) rots quietly — it still compiles but stops tracking newer conventions. Delete it the moment you find it.</p></div>
+      <p>Code that's never executed (an impossible <code>if</code> branch, a <code>catch</code> for an exception that's never thrown) rots quietly: it still compiles but stops tracking newer conventions. Delete it the moment you find it.</p></div>
 
     <div class="item design"><span class="code-id">G10</span><h3>Vertical Separation</h3>
-      <p>Variables and functions should be defined close to where they're used — local variables just above their first use, private functions just below their first call — so a reader can find things by scanning nearby, not hunting hundreds of lines away.</p></div>
+      <p>Variables and functions should be defined close to where they're used: local variables just above their first use, private functions just below their first call, so a reader can find things by scanning nearby, not hunting hundreds of lines away.</p></div>
 
     <div class="item design"><span class="code-id">G11</span><h3>Inconsistency</h3>
-      <p>If you do something a certain way once, do all similar things the same way — consistent naming and structure (the same variable name for the same kind of object, a matching naming pattern across similar methods) makes code far easier to read and modify.</p></div>
+      <p>If you do something a certain way once, do all similar things the same way: consistent naming and structure (the same variable name for the same kind of object, a matching naming pattern across similar methods) makes code far easier to read and modify.</p></div>
 
     <div class="item design"><span class="code-id">G12</span><h3>Clutter</h3>
-      <p>Empty default constructors, unused variables, dead functions, comments that add nothing — all clutter, all removable. Keep source files clean and free of anything that doesn't earn its place.</p></div>
+      <p>Empty default constructors, unused variables, dead functions, comments that add nothing, all clutter, all removable. Keep source files clean and free of anything that doesn't earn its place.</p></div>
   </section>
 
   <section id="g13-g24">
     <h2 class="subhead">G13 – G24</h2>
 
     <div class="item design"><span class="code-id">G13</span><h3>Artificial Coupling</h3>
-      <p>Don't couple two things that don't actually depend on each other — e.g. a general-purpose enum or static function shoved inside a more specific class "for convenience." Take the time to figure out where something really belongs instead of dropping it wherever's easiest right now.</p></div>
+      <p>Don't couple two things that don't actually depend on each other, e.g. a general-purpose enum or static function shoved inside a more specific class "for convenience." Take the time to figure out where something really belongs instead of dropping it wherever's easiest right now.</p></div>
 
     <div class="item design"><span class="code-id">G14</span><h3>Feature Envy</h3>
-      <p>A method that reaches into another object's accessors/mutators to do its work "envies" that other class's scope — it really wants to live inside it. Usually worth eliminating, though sometimes it's a necessary trade-off (e.g. keeping report-formatting logic out of a domain class, even at the cost of some envy).</p></div>
+      <p>A method that reaches into another object's accessors/mutators to do its work "envies" that other class's scope: it really wants to live inside it. Usually worth eliminating, though sometimes it's a necessary trade-off (e.g. keeping report-formatting logic out of a domain class, even at the cost of some envy).</p></div>
 
     <div class="item design"><span class="code-id">G15</span><h3>Selector Arguments</h3>
       <p>A trailing boolean (or enum/int) argument that "selects" which behavior to run is a lazy substitute for splitting the function into several smaller, clearly-named functions. Prefer many small functions over one function with a hidden mode switch.</p></div>
@@ -232,68 +232,68 @@
       <p>Run-on expressions, Hungarian notation, and magic numbers all bury the author's intent. It's worth the extra time to make code's purpose visible on the surface, not just recoverable by close reading.</p></div>
 
     <div class="item design"><span class="code-id">G17</span><h3>Misplaced Responsibility</h3>
-      <p>Code should live where a reader would naturally expect to find it (the "Principle of Least Surprise" again) — a constant like <code>PI</code> belongs with the trig functions, not scattered wherever was convenient. When performance forces a less-obvious placement, the function's name should say so explicitly.</p></div>
+      <p>Code should live where a reader would naturally expect to find it (the "Principle of Least Surprise" again): a constant like <code>PI</code> belongs with the trig functions, not scattered wherever was convenient. When performance forces a less-obvious placement, the function's name should say so explicitly.</p></div>
 
     <div class="item design"><span class="code-id">G18</span><h3>Inappropriate State (Static vs. Non-Static)</h3>
-      <p>A function is a reasonable candidate for <code>static</code> only if there's no chance you'll ever want it to behave polymorphically. When in doubt, keep it non-static — it's easy to convert a non-static method to static later, much harder to go the other way once callers depend on it.</p></div>
+      <p>A function is a reasonable candidate for <code>static</code> only if there's no chance you'll ever want it to behave polymorphically. When in doubt, keep it non-static: it's easy to convert a non-static method to static later, much harder to go the other way once callers depend on it.</p></div>
 
     <div class="item design"><span class="code-id">G19</span><h3>Use Explanatory Variables</h3>
-      <p>Break calculations into intermediate values held in well-named variables — it's one of the most effective ways to make an otherwise-opaque calculation instantly readable. More explanatory variables is almost always better than fewer.</p></div>
+      <p>Break calculations into intermediate values held in well-named variables. It's one of the most effective ways to make an otherwise-opaque calculation instantly readable. More explanatory variables is almost always better than fewer.</p></div>
 
     <div class="item design"><span class="code-id">G20</span><h3>Function Names Should Say What They Do</h3>
       <p>A call like <code>date.add(5)</code> tells you nothing about units or whether the original is mutated. If the function mutates in place, name it like <code>increaseByDays</code>; if it returns a new value, name it like <code>daysLater</code>. If you have to check the implementation to know what a function does, its name has failed.</p></div>
 
     <div class="item design"><span class="code-id">G21</span><h3>Understand the Algorithm</h3>
-      <p>Getting a function to pass its tests isn't the same as understanding why it works. Before considering a function done, make sure you actually understand its logic — often the best way to build that understanding is to refactor it until the code itself makes the algorithm obvious.</p></div>
+      <p>Getting a function to pass its tests isn't the same as understanding why it works. Before considering a function done, make sure you actually understand its logic; often the best way to build that understanding is to refactor it until the code itself makes the algorithm obvious.</p></div>
 
     <div class="item design"><span class="code-id">G22</span><h3>Make Logical Dependencies Physical</h3>
-      <p>If module A depends on assumptions about module B (a "logical" dependency, like assuming a fixed page size), that assumption should instead be explicitly requested from B (a "physical" dependency, like calling <code>B.getMaxPageSize()</code>) — otherwise a silent, fragile coupling exists that breaks the moment B's assumptions change.</p></div>
+      <p>If module A depends on assumptions about module B (a "logical" dependency, like assuming a fixed page size), that assumption should instead be explicitly requested from B (a "physical" dependency, like calling <code>B.getMaxPageSize()</code>), otherwise a silent, fragile coupling exists that breaks the moment B's assumptions change.</p></div>
 
     <div class="item design"><span class="code-id">G23</span><h3>Prefer Polymorphism to If/Else or Switch/Case</h3>
-      <p>Most switch statements are the "obvious brute-force" choice, not the right one — consider polymorphism first. Rule of thumb: at most one switch statement per type of selection, and its cases should just construct the polymorphic objects that replace every other switch on that same type elsewhere in the system.</p></div>
+      <p>Most switch statements are the "obvious brute-force" choice, not the right one: consider polymorphism first. Rule of thumb: at most one switch statement per type of selection, and its cases should just construct the polymorphic objects that replace every other switch on that same type elsewhere in the system.</p></div>
 
     <div class="item design"><span class="code-id">G24</span><h3>Follow Standard Conventions</h3>
-      <p>A team should agree on a coding standard (naming, brace placement, etc.) based on common norms, and every member should follow it — the code itself should be example enough, with no separate document required.</p></div>
+      <p>A team should agree on a coding standard (naming, brace placement, etc.) based on common norms, and every member should follow it, so the code itself should be example enough, with no separate document required.</p></div>
   </section>
 
   <section id="g25-g36">
     <h2 class="subhead">G25 – G36</h2>
 
     <div class="item design"><span class="code-id">G25</span><h3>Replace Magic Numbers with Named Constants</h3>
-      <p>Raw numbers in code should almost always hide behind a named constant (<code>SECONDS_PER_DAY</code> instead of <code>86400</code>). "Magic" applies to any value that isn't self-describing, not just numbers — an unexplained string ID in a test assertion is just as opaque as an unexplained number. A few extremely well-known constants (like <code>Math.PI</code>) are the rare exception worth naming anyway, purely because the risk of a typo (e.g. a transposed digit) is otherwise invisible.</p></div>
+      <p>Raw numbers in code should almost always hide behind a named constant (<code>SECONDS_PER_DAY</code> instead of <code>86400</code>). "Magic" applies to any value that isn't self-describing, not just numbers: an unexplained string ID in a test assertion is just as opaque as an unexplained number. A few extremely well-known constants (like <code>Math.PI</code>) are the rare exception worth naming anyway, purely because the risk of a typo (e.g. a transposed digit) is otherwise invisible.</p></div>
 
     <div class="item design"><span class="code-id">G26</span><h3>Be Precise</h3>
-      <p>Vague decisions in code — assuming a query returns only one match, using floats for currency, skipping locking around concurrent updates — are either laziness or unresolved disagreement, and both should be eliminated. Know exactly why you made each decision and how edge cases are handled.</p></div>
+      <p>Vague decisions in code (assuming a query returns only one match, using floats for currency, skipping locking around concurrent updates) are either laziness or unresolved disagreement, and both should be eliminated. Know exactly why you made each decision and how edge cases are handled.</p></div>
 
     <div class="item design"><span class="code-id">G27</span><h3>Structure over Convention</h3>
-      <p>Enforce a design decision with structure, not just convention — an abstract base class with abstract methods forces every subclass to implement them; a switch/case relying on a naming convention enforces nothing.</p></div>
+      <p>Enforce a design decision with structure, not just convention: an abstract base class with abstract methods forces every subclass to implement them; a switch/case relying on a naming convention enforces nothing.</p></div>
 
     <div class="item design"><span class="code-id">G28</span><h3>Encapsulate Conditionals</h3>
-      <p>Extract a named function for a compound boolean condition (<code>if (shouldBeDeleted(timer))</code>) rather than inlining the raw logic (<code>if (timer.hasExpired() &amp;&amp; !timer.isRecurrent())</code>) — the intent reads instantly.</p></div>
+      <p>Extract a named function for a compound boolean condition (<code>if (shouldBeDeleted(timer))</code>) rather than inlining the raw logic (<code>if (timer.hasExpired() &amp;&amp; !timer.isRecurrent())</code>): the intent reads instantly.</p></div>
 
     <div class="item design"><span class="code-id">G29</span><h3>Avoid Negative Conditionals</h3>
-      <p>Positive conditionals are easier to parse than negative ones — prefer <code>if (buffer.shouldCompact())</code> over <code>if (!buffer.shouldNotCompact())</code>.</p></div>
+      <p>Positive conditionals are easier to parse than negative ones: prefer <code>if (buffer.shouldCompact())</code> over <code>if (!buffer.shouldNotCompact())</code>.</p></div>
 
     <div class="item design"><span class="code-id">G30</span><h3>Functions Should Do One Thing</h3>
-      <p>A function with multiple sequential sections (loop, check, act) is really doing several things — split each section into its own well-named function so each one does exactly one thing.</p></div>
+      <p>A function with multiple sequential sections (loop, check, act) is really doing several things. Split each section into its own well-named function so each one does exactly one thing.</p></div>
 
     <div class="item design"><span class="code-id">G31</span><h3>Hidden Temporal Couplings</h3>
-      <p>When functions must be called in a specific order, make that order impossible to get wrong — have each step's output become the next step's required input (a "bucket brigade"), instead of relying on silent, undocumented sequencing.</p></div>
+      <p>When functions must be called in a specific order, make that order impossible to get wrong: have each step's output become the next step's required input (a "bucket brigade"), instead of relying on silent, undocumented sequencing.</p></div>
 
     <div class="item design"><span class="code-id">G32</span><h3>Don't Be Arbitrary</h3>
-      <p>Every structural decision should have a reason, and that reason should be visible in the structure itself. Nesting a public class inside another class "just because it was convenient" — when unrelated code needs it too — creates confusion with no benefit; follow the convention instead (top-level, package-scoped).</p></div>
+      <p>Every structural decision should have a reason, and that reason should be visible in the structure itself. Nesting a public class inside another class "just because it was convenient", when unrelated code needs it too, creates confusion with no benefit; follow the convention instead (top-level, package-scoped).</p></div>
 
     <div class="item design"><span class="code-id">G33</span><h3>Encapsulate Boundary Conditions</h3>
       <p>Boundary math like <code>level + 1</code> is easy to lose track of if it's scattered across a function. Capture it once in a clearly-named variable (<code>nextLevel</code>) instead of repeating the raw expression.</p></div>
 
     <div class="item design"><span class="code-id">G34</span><h3>Functions Should Descend Only One Level of Abstraction</h3>
-      <p>Every statement inside a function should sit one level of abstraction below what the function's name promises. Mixing a high-level concept (e.g. "a rule has a size") with low-level syntax details (raw HTML tag construction) in the same function is a common, easy-to-miss violation — and separating them often surfaces bugs hiding in the mixed-up code.</p></div>
+      <p>Every statement inside a function should sit one level of abstraction below what the function's name promises. Mixing a high-level concept (e.g. "a rule has a size") with low-level syntax details (raw HTML tag construction) in the same function is a common, easy-to-miss violation, and separating them often surfaces bugs hiding in the mixed-up code.</p></div>
 
     <div class="item design"><span class="code-id">G35</span><h3>Keep Configurable Data at High Levels</h3>
-      <p>Defaults and configuration values that are meaningful at a high level shouldn't be buried inside a low-level function — expose them as arguments passed down from the top, so they stay easy to find and change.</p></div>
+      <p>Defaults and configuration values that are meaningful at a high level shouldn't be buried inside a low-level function. Expose them as arguments passed down from the top, so they stay easy to find and change.</p></div>
 
     <div class="item design"><span class="code-id">G36</span><h3>Avoid Transitive Navigation</h3>
-      <p>Also known as the Law of Demeter / "writing shy code": a module should only know about its immediate collaborators, never chain through them to reach a collaborator's collaborator (<code>a.getB().getC().doSomething()</code>). Long navigation chains make the architecture rigid — every intermediate change forces updates everywhere that chain appears.</p></div>
+      <p>Also known as the Law of Demeter / "writing shy code": a module should only know about its immediate collaborators, never chain through them to reach a collaborator's collaborator (<code>a.getB().getC().doSomething()</code>). Long navigation chains make the architecture rigid: every intermediate change forces updates everywhere that chain appears.</p></div>
   </section>
 
   <!-- ============================ LANGUAGE & NAMING ============================ -->
@@ -303,38 +303,38 @@
     <h2 class="subhead">Java</h2>
 
     <div class="item lang"><span class="code-id">J1</span><h3>Avoid Long Import Lists by Using Wildcards</h3>
-      <p>Importing two or more classes from the same package with a wildcard keeps the top of a file concise. Wildcard imports also create weaker (non-hard) dependencies than a long list of specific imports, keeping modules less coupled — at the minor cost of occasional name collisions across packages.</p></div>
+      <p>Importing two or more classes from the same package with a wildcard keeps the top of a file concise. Wildcard imports also create weaker (non-hard) dependencies than a long list of specific imports, keeping modules less coupled, at the minor cost of occasional name collisions across packages.</p></div>
 
     <div class="item lang"><span class="code-id">J2</span><h3>Don't Inherit Constants</h3>
-      <p>Gaining access to constants by inheriting an interface that only exists to hold them is a hideous workaround for scoping rules — it hides where the constants actually come from. Use a static import instead.</p></div>
+      <p>Gaining access to constants by inheriting an interface that only exists to hold them is a hideous workaround for scoping rules: it hides where the constants actually come from. Use a static import instead.</p></div>
 
     <div class="item lang"><span class="code-id">J3</span><h3>Constants versus Enums</h3>
-      <p>Once a language supports enums, prefer them over <code>public static final int</code> constants — an <code>int</code>'s meaning can get lost, while an enum is self-naming and can carry its own methods/fields for far more expressive, flexible code.</p></div>
+      <p>Once a language supports enums, prefer them over <code>public static final int</code> constants: an <code>int</code>'s meaning can get lost, while an enum is self-naming and can carry its own methods/fields for far more expressive, flexible code.</p></div>
   </section>
 
   <section id="names">
     <h2 class="subhead">Names</h2>
 
     <div class="item lang"><span class="code-id">N1</span><h3>Choose Descriptive Names</h3>
-      <p>Names carry roughly 90% of what makes software readable — don't rush past this. Meanings drift as software evolves, so periodically re-evaluate whether existing names still fit.</p></div>
+      <p>Names carry roughly 90% of what makes software readable. Don't rush past this. Meanings drift as software evolves, so periodically re-evaluate whether existing names still fit.</p></div>
 
     <div class="item lang"><span class="code-id">N2</span><h3>Choose Names at the Appropriate Level of Abstraction</h3>
-      <p>Don't let a name leak implementation details it shouldn't commit to. A <code>Modem</code> interface built entirely around "phone numbers" breaks the moment a cable or USB modem needs to implement it — a more abstract term like <code>connectionLocator</code> keeps the interface honest about what it actually represents.</p></div>
+      <p>Don't let a name leak implementation details it shouldn't commit to. A <code>Modem</code> interface built entirely around "phone numbers" breaks the moment a cable or USB modem needs to implement it. A more abstract term like <code>connectionLocator</code> keeps the interface honest about what it actually represents.</p></div>
 
     <div class="item lang"><span class="code-id">N3</span><h3>Use Standard Nomenclature Where Possible</h3>
-      <p>Reuse existing naming conventions wherever they exist — pattern names (e.g. <code>Decorator</code>) belong in the names of classes implementing that pattern, language idioms (<code>toString</code>) should be followed rather than reinvented, and a project's own ubiquitous language should be used consistently throughout the code.</p></div>
+      <p>Reuse existing naming conventions wherever they exist: pattern names (e.g. <code>Decorator</code>) belong in the names of classes implementing that pattern, language idioms (<code>toString</code>) should be followed rather than reinvented, and a project's own ubiquitous language should be used consistently throughout the code.</p></div>
 
     <div class="item lang"><span class="code-id">N4</span><h3>Unambiguous Names</h3>
-      <p>A name should make a function's purpose unambiguous. A vague name like <code>doRename</code> next to an internal call to <code>renamePage</code> gives the reader nothing to distinguish them — a longer, fully explicit name (<code>renamePageAndOptionallyAllReferences</code>) pays for its length with clarity.</p></div>
+      <p>A name should make a function's purpose unambiguous. A vague name like <code>doRename</code> next to an internal call to <code>renamePage</code> gives the reader nothing to distinguish them. A longer, fully explicit name (<code>renamePageAndOptionallyAllReferences</code>) pays for its length with clarity.</p></div>
 
     <div class="item lang"><span class="code-id">N5</span><h3>Use Long Names for Long Scopes</h3>
       <p>Name length should track scope length. A single-letter loop variable is perfectly fine across five lines; the same short name loses all meaning if its scope spans hundreds.</p></div>
 
     <div class="item lang"><span class="code-id">N6</span><h3>Avoid Encodings</h3>
-      <p>Type or scope prefixes (Hungarian notation like <code>m_</code>, or subsystem tags like <code>vis_</code>) are noise in modern tooling — today's environments already surface that information without mangling the name itself.</p></div>
+      <p>Type or scope prefixes (Hungarian notation like <code>m_</code>, or subsystem tags like <code>vis_</code>) are noise in modern tooling: today's environments already surface that information without mangling the name itself.</p></div>
 
     <div class="item lang"><span class="code-id">N7</span><h3>Names Should Describe Side-Effects</h3>
-      <p>A name shouldn't undersell what a function actually does. A getter that lazily creates the value if it doesn't exist yet is doing more than "getting" — a name like <code>createOrReturnOos</code> is more honest than a bare <code>getOos</code>.</p></div>
+      <p>A name shouldn't undersell what a function actually does. A getter that lazily creates the value if it doesn't exist yet is doing more than "getting": a name like <code>createOrReturnOos</code> is more honest than a bare <code>getOos</code>.</p></div>
   </section>
 
   <!-- ============================ TESTS ============================ -->
@@ -345,28 +345,28 @@
       <p>"That seems like enough" isn't a real metric. A test suite is insufficient as long as there's any condition that hasn't been explored or any calculation that hasn't been validated.</p></div>
 
     <div class="item process"><span class="code-id">T2</span><h3>Use a Coverage Tool!</h3>
-      <p>Coverage tools surface exactly which lines/branches are untested — most IDEs highlight covered vs. uncovered code visually, making gaps (like an untested <code>catch</code> body) trivial to spot.</p></div>
+      <p>Coverage tools surface exactly which lines/branches are untested. Most IDEs highlight covered vs. uncovered code visually, making gaps (like an untested <code>catch</code> body) trivial to spot.</p></div>
 
     <div class="item process"><span class="code-id">T3</span><h3>Don't Skip Trivial Tests</h3>
-      <p>Trivial tests are cheap to write and their documentary value is higher than the cost of writing them — keep them.</p></div>
+      <p>Trivial tests are cheap to write and their documentary value is higher than the cost of writing them, so keep them.</p></div>
 
     <div class="item process"><span class="code-id">T4</span><h3>An Ignored Test Is a Question about an Ambiguity</h3>
-      <p>When requirements are genuinely unclear, express that uncertainty as a commented-out or <code>@Ignore</code>d test — a concrete question about the ambiguity, not a silent gap.</p></div>
+      <p>When requirements are genuinely unclear, express that uncertainty as a commented-out or <code>@Ignore</code>d test: a concrete question about the ambiguity, not a silent gap.</p></div>
 
     <div class="item process"><span class="code-id">T5</span><h3>Test Boundary Conditions</h3>
-      <p>The middle of an algorithm is usually right; boundaries are where mistakes hide — give them special attention.</p></div>
+      <p>The middle of an algorithm is usually right; boundaries are where mistakes hide, so give them special attention.</p></div>
 
     <div class="item process"><span class="code-id">T6</span><h3>Exhaustively Test Near Bugs</h3>
-      <p>Bugs cluster. Once you find one in a function, thoroughly test the rest of that function — it's rarely alone.</p></div>
+      <p>Bugs cluster. Once you find one in a function, thoroughly test the rest of that function: it's rarely alone.</p></div>
 
     <div class="item process"><span class="code-id">T7</span><h3>Patterns of Failure Are Revealing</h3>
-      <p>A pattern across failing tests (e.g. every test with an input over five characters fails) is often the fastest route to a diagnosis — another reason to keep test cases complete and well-ordered.</p></div>
+      <p>A pattern across failing tests (e.g. every test with an input over five characters fails) is often the fastest route to a diagnosis, another reason to keep test cases complete and well-ordered.</p></div>
 
     <div class="item process"><span class="code-id">T8</span><h3>Test Coverage Patterns Can Be Revealing</h3>
       <p>Looking at what code the passing tests do and don't execute gives clues about why the failing tests are failing.</p></div>
 
     <div class="item process"><span class="code-id">T9</span><h3>Tests Should Be Fast</h3>
-      <p>A slow test is a test that eventually stops getting run — when time gets tight, slow tests are the first thing dropped from the suite. Keep them fast.</p></div>
+      <p>A slow test is a test that eventually stops getting run. When time gets tight, slow tests are the first thing dropped from the suite. Keep them fast.</p></div>
   </section>
 
   <!-- ============================ DESIGN PATTERNS ============================ -->
@@ -374,10 +374,10 @@
 
   <section id="patterns">
     <div class="item patterns">
-      <p>Design patterns are proven, reusable solutions to recurring software design problems — they promote readability, maintainability, and flexibility, but should be applied judiciously, with a clear understanding of what each one costs as well as what it buys. Patterns are generally grouped by intent:</p>
-      <p><b>Creational</b> — mechanisms for object creation that increase flexibility and reuse.</p>
-      <p><b>Structural</b> — ways to assemble objects and classes into larger structures while keeping them flexible and efficient.</p>
-      <p><b>Behavioral</b> — patterns concerned with effective communication and division of responsibility between objects.</p>
+      <p>Design patterns are proven, reusable solutions to recurring software design problems: they promote readability, maintainability, and flexibility, but should be applied judiciously, with a clear understanding of what each one costs as well as what it buys. Patterns are generally grouped by intent:</p>
+      <p><b>Creational</b>: mechanisms for object creation that increase flexibility and reuse.</p>
+      <p><b>Structural</b>: ways to assemble objects and classes into larger structures while keeping them flexible and efficient.</p>
+      <p><b>Behavioral</b>: patterns concerned with effective communication and division of responsibility between objects.</p>
     </div>
   </section>
 

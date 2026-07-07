@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Clean Code Principles — Full Reference Guide</title>
+<title>Clean Code Principles: Full Reference Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -96,7 +96,7 @@
 
 <nav id="toc">
   <h1>Clean Code 🧹</h1>
-  <div class="tagline">Full structured reference — TS/JS edition</div>
+  <div class="tagline">Full structured reference: TS/JS edition</div>
   <a href="./index.html" style="display:inline-block;margin-bottom:14px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;">← Technical Docs</a>
 
   <div class="grp vars">Variables</div>
@@ -189,7 +189,7 @@
 
   <div class="rule vars" id="v1">
     <h3>Use meaningful variable names</h3>
-    <p>Distinguish names so the reader immediately understands what differentiates them — don't rely on near-identical names like <code>a1</code>/<code>a2</code>/<code>a3</code> to carry meaning.</p>
+    <p>Distinguish names so the reader immediately understands what differentiates them. Don't rely on near-identical names like <code>a1</code>/<code>a2</code>/<code>a3</code> to carry meaning.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function between&lt;T&gt;(a1: T, a2: T, a3: T): boolean {
   return a2 &lt;= a1 &amp;&amp; a1 &lt;= a3;
@@ -230,7 +230,7 @@ function getUserData(): User;</pre></div>
 
   <div class="rule vars" id="v4">
     <h3>Use searchable names</h3>
-    <p>We read far more code than we write, so names must be searchable, not just readable. Unnamed "magic" numbers/strings hurt anyone trying to grep or understand the codebase — a linter can help flag them.</p>
+    <p>We read far more code than we write, so names must be searchable, not just readable. Unnamed "magic" numbers/strings hurt anyone trying to grep or understand the codebase. A linter can help flag them.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>// What the heck is 86400000 for?
 setTimeout(restart, 86400000);</pre></div>
@@ -254,7 +254,7 @@ setTimeout(restart, MILLISECONDS_PER_DAY);</pre></div>
 
   <div class="rule vars" id="v6">
     <h3>Avoid Mental Mapping</h3>
-    <p>Explicit beats implicit — clarity is king. Don't force the reader to remember that <code>u</code> means "user".</p>
+    <p>Explicit beats implicit: clarity is king. Don't force the reader to remember that <code>u</code> means "user".</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>const u = getUser();
 const s = getSubscription();
@@ -319,7 +319,7 @@ projector.configureFilm(GENRE.COMEDY);</pre></div>
 
   <div class="rule vars" id="f1">
     <h3>Function arguments (2 or fewer ideally)</h3>
-    <p>Fewer parameters means easier testing — beyond two or three you get a combinatorial explosion of cases to cover. If you truly need many inputs, pass an object and destructure it. Destructuring gives you: instant clarity on what the function uses, a way to simulate named parameters, cloning of primitive values passed in (helps avoid side effects — note nested objects/arrays are <em>not</em> cloned), and unused-property warnings from TypeScript.</p>
+    <p>Fewer parameters means easier testing: beyond two or three you get a combinatorial explosion of cases to cover. If you truly need many inputs, pass an object and destructure it. Destructuring gives you: instant clarity on what the function uses, a way to simulate named parameters, cloning of primitive values passed in (helps avoid side effects; note nested objects/arrays are <em>not</em> cloned), and unused-property warnings from TypeScript.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function createMenu(title: string, body: string,
   buttonText: string, cancellable: boolean) { /* ... */ }
@@ -369,13 +369,13 @@ addMonthToDate(date, 1);</pre></div>
   <div class="rule vars" id="f4">
     <h3>Functions should only be one level of abstraction</h3>
     <p>Mixing high-level orchestration with low-level detail in the same function is a sign it's doing too much. Splitting by abstraction level improves reusability and testability.</p>
-    <div class="callout">Example: a <code>parseCode()</code> that tokenizes, lexes, and parses in one giant function should be split into <code>tokenize()</code>, then a separate parse step — each handling one level of abstraction.</div>
+    <div class="callout">Example: a <code>parseCode()</code> that tokenizes, lexes, and parses in one giant function should be split into <code>tokenize()</code>, then a separate parse step, each handling one level of abstraction.</div>
   </div>
 
   <div class="rule vars" id="f5">
     <h3>Remove duplicate code</h3>
-    <p>Duplicate logic means every future change has to happen in multiple places — easy to forget one. When two things are almost-but-not-quite identical, extract a shared abstraction (a common parent, a union type, a shared method) rather than keeping parallel copies.</p>
-    <p class="callout">Caveat: getting the abstraction right matters — a bad abstraction can be worse than the duplication it replaces, and it introduces an indirect dependency between the two places that use it. If two similar-looking implementations actually live in different domains, duplication may be the right call.</p>
+    <p>Duplicate logic means every future change has to happen in multiple places, and it is easy to forget one. When two things are almost-but-not-quite identical, extract a shared abstraction (a common parent, a union type, a shared method) rather than keeping parallel copies.</p>
+    <p class="callout">Caveat: getting the abstraction right matters. A bad abstraction can be worse than the duplication it replaces, and it introduces an indirect dependency between the two places that use it. If two similar-looking implementations actually live in different domains, duplication may be the right call.</p>
   </div>
 
   <div class="rule vars" id="f6">
@@ -392,12 +392,12 @@ addMonthToDate(date, 1);</pre></div>
   // ...
 }</pre></div>
     </div>
-    <p class="callout">Note: spread and <code>Object.assign()</code> aren't quite identical — spread <em>defines</em> new properties, <code>Object.assign()</code> <em>sets</em> them. Enable <code>--strictNullChecks</code> so passing explicit <code>undefined</code>/<code>null</code> is caught at compile time.</p>
+    <p class="callout">Note: spread and <code>Object.assign()</code> aren't quite identical: spread <em>defines</em> new properties, <code>Object.assign()</code> <em>sets</em> them. Enable <code>--strictNullChecks</code> so passing explicit <code>undefined</code>/<code>null</code> is caught at compile time.</p>
   </div>
 
   <div class="rule vars" id="f7">
     <h3>Don't use flags as function parameters</h3>
-    <p>A boolean flag tells the reader the function branches into two different behaviors — meaning it's doing more than one thing. Split it into two functions instead.</p>
+    <p>A boolean flag tells the reader the function branches into two different behaviors, meaning it's doing more than one thing. Split it into two functions instead.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function createFile(name: string, temp: boolean) {
   if (temp) fs.create(`./temp/${name}`);
@@ -414,7 +414,7 @@ function createFile(name: string) {
 
   <div class="rule vars" id="f8">
     <h3>Avoid Side Effects (part 1)</h3>
-    <p>A function has a side effect if it does anything besides taking a value in and returning a value out — writing a file, mutating a global, etc. Side effects are sometimes necessary, but centralize where they happen — one dedicated service, not scattered across many functions.</p>
+    <p>A function has a side effect if it does anything besides taking a value in and returning a value out: writing a file, mutating a global, etc. Side effects are sometimes necessary, but centralize where they happen, in one dedicated service, not scattered across many functions.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>let name = 'Robert C. Martin';
 function toBase64() {
@@ -433,7 +433,7 @@ console.log(name); // unchanged</pre></div>
 
   <div class="rule vars" id="f9">
     <h3>Avoid Side Effects (part 2)</h3>
-    <p>Objects and arrays are mutable in JS/TS, so passing them into a function risks unexpected shared-state bugs — e.g. a shopping cart array mutated mid-request by an unrelated click. Prefer cloning-and-returning over in-place mutation.</p>
+    <p>Objects and arrays are mutable in JS/TS, so passing them into a function risks unexpected shared-state bugs, e.g. a shopping cart array mutated mid-request by an unrelated click. Prefer cloning-and-returning over in-place mutation.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function addItemToCart(cart: CartItem[], item: Item): void {
   cart.push({ item, date: Date.now() });
@@ -442,7 +442,7 @@ console.log(name); // unchanged</pre></div>
   return [...cart, { item, date: Date.now() }];
 }</pre></div>
     </div>
-    <p class="callout">Two caveats: sometimes mutating the input really is what you want (rare in practice — see "pure function"); and cloning large objects has a real performance cost, though good libraries make this cheap in practice.</p>
+    <p class="callout">Two caveats: sometimes mutating the input really is what you want (rare in practice, see "pure function"); and cloning large objects has a real performance cost, though good libraries make this cheap in practice.</p>
   </div>
 
   <div class="rule vars" id="f10">
@@ -504,7 +504,7 @@ if (!isEmailUsed(email)) { /* ... */ }</pre></div>
 
   <div class="rule vars" id="f15">
     <h3>Avoid type checking</h3>
-    <p>TypeScript's whole value proposition is static typing — use it. Prefer well-typed parameters/returns over runtime <code>instanceof</code> branching; it also makes refactoring easier.</p>
+    <p>TypeScript's whole value proposition is static typing: use it. Prefer well-typed parameters/returns over runtime <code>instanceof</code> branching; it also makes refactoring easier.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function travelToTexas(vehicle: Bicycle | Car) {
   if (vehicle instanceof Bicycle) vehicle.pedal(/*...*/);
@@ -519,12 +519,12 @@ function travelToTexas(vehicle: Vehicle) {
 
   <div class="rule vars" id="f16">
     <h3>Don't over-optimize</h3>
-    <p>Modern engines already optimize plenty under the hood — hand-optimizing prematurely often just wastes time and adds noise. Optimize based on measured bottlenecks, not guesses.</p>
+    <p>Modern engines already optimize plenty under the hood, so hand-optimizing prematurely often just wastes time and adds noise. Optimize based on measured bottlenecks, not guesses.</p>
   </div>
 
   <div class="rule vars" id="f17">
     <h3>Remove dead code</h3>
-    <p>Unused code is as harmful as duplicate code — delete it. Version control keeps the history if you ever need it back.</p>
+    <p>Unused code is as harmful as duplicate code: delete it. Version control keeps the history if you ever need it back.</p>
   </div>
 
   <div class="rule vars" id="f18">
@@ -572,7 +572,7 @@ account.balance = value;</pre></div>
 
   <div class="rule struct" id="o2">
     <h3>Make objects have private/protected members</h3>
-    <p>TypeScript supports <code>public</code> (default), <code>protected</code>, and <code>private</code> access modifiers — use them to hide implementation details.</p>
+    <p>TypeScript supports <code>public</code> (default), <code>protected</code>, and <code>private</code> access modifiers, use them to hide implementation details.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>class Circle {
   radius: number;
@@ -603,7 +603,7 @@ array[0] = 10; // compile error</pre></div>
 
   <div class="rule struct" id="o4">
     <h3>type vs. interface</h3>
-    <p>Use <code>type</code> when you need a union or intersection. Use <code>interface</code> when you want <code>extends</code>/<code>implements</code>. No hard rule — use whichever fits the situation.</p>
+    <p>Use <code>type</code> when you need a union or intersection. Use <code>interface</code> when you want <code>extends</code>/<code>implements</code>. No hard rule: use whichever fits the situation.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>interface EmailConfig { /* ... */ }
 interface DbConfig { /* ... */ }
@@ -628,7 +628,7 @@ class Circle implements Shape { /* ... */ }</pre></div>
   <div class="rule struct" id="c2">
     <h3>High cohesion and low coupling</h3>
     <p><b>Cohesion</b> = how related a class's members are to each other; ideally every field is used by every method (rarely fully achievable, but aim high). <b>Coupling</b> = how dependent two classes are on each other; low coupling means a change in one doesn't ripple into the other. Good design has <b>high cohesion, low coupling</b>.</p>
-    <p class="callout">Warning sign: a class like <code>UserManager</code> where each private field is only used by one subset of its methods (DB access here, email sending there) is really two responsibilities glued together — split it into e.g. <code>UserService</code> and <code>UserNotifier</code>.</p>
+    <p class="callout">Warning sign: a class like <code>UserManager</code> where each private field is only used by one subset of its methods (DB access here, email sending there) is really two responsibilities glued together, so split it into e.g. <code>UserService</code> and <code>UserNotifier</code>.</p>
   </div>
 
   <div class="rule struct" id="c3">
@@ -639,12 +639,12 @@ class Circle implements Shape { /* ... */ }</pre></div>
       <li>You can meaningfully reuse code from the base class</li>
       <li>You want a change in the base class to ripple globally through all derived classes</li>
     </ul>
-    <p class="callout">Example: <code>EmployeeTaxData extends Employee</code> is wrong — an employee <em>has</em> tax data, doesn't <em>is-a</em> tax data. Model it as composition: <code>Employee</code> holds a reference to an <code>EmployeeTaxData</code> instance instead.</p>
+    <p class="callout">Example: <code>EmployeeTaxData extends Employee</code> is wrong: an employee <em>has</em> tax data, doesn't <em>is-a</em> tax data. Model it as composition: <code>Employee</code> holds a reference to an <code>EmployeeTaxData</code> instance instead.</p>
   </div>
 
   <div class="rule struct" id="c4">
     <h3>Use method chaining</h3>
-    <p>Returning <code>this</code> from setter-style methods enables fluent, expressive call chains and less verbose call sites — a pattern widely used across libraries (e.g. query builders).</p>
+    <p>Returning <code>this</code> from setter-style methods enables fluent, expressive call chains and less verbose call sites, a pattern widely used across libraries (e.g. query builders).</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>queryBuilder.from('users');
 queryBuilder.page(1, 100);
@@ -663,37 +663,37 @@ const query = queryBuilder.build();</pre></div>
 
   <div class="rule solid" id="s1">
     <h3>Single Responsibility Principle (SRP)</h3>
-    <p class="callout">"There should never be more than one reason for a class to change." — Robert C. Martin, Clean Code</p>
-    <p>Packing a class with too much functionality means it lacks conceptual cohesion and gains many reasons to change — making it hard to predict how a modification ripples to dependents.</p>
+    <p class="callout">"There should never be more than one reason for a class to change." (Robert C. Martin, Clean Code)</p>
+    <p>Packing a class with too much functionality means it lacks conceptual cohesion and gains many reasons to change, making it hard to predict how a modification ripples to dependents.</p>
     <div class="callout">Example: a <code>UserSettings</code> class that both changes settings <em>and</em> verifies credentials should split credential verification into its own <code>UserAuth</code> class.</div>
   </div>
 
   <div class="rule solid" id="s2">
     <h3>Open/Closed Principle (OCP)</h3>
-    <p class="callout">"Software entities should be open for extension, but closed for modification." — Bertrand Meyer</p>
+    <p class="callout">"Software entities should be open for extension, but closed for modification." (Bertrand Meyer)</p>
     <p>Users should be able to add new functionality without changing existing, already-tested code.</p>
-    <div class="callout">Example: instead of an <code>HttpRequester</code> that branches on <code>instanceof AjaxAdapter</code> vs <code>instanceof NodeAdapter</code>, define an abstract <code>Adapter</code> with a <code>request()</code> method — new adapter types can be added without touching <code>HttpRequester</code> at all.</div>
+    <div class="callout">Example: instead of an <code>HttpRequester</code> that branches on <code>instanceof AjaxAdapter</code> vs <code>instanceof NodeAdapter</code>, define an abstract <code>Adapter</code> with a <code>request()</code> method, so new adapter types can be added without touching <code>HttpRequester</code> at all.</div>
   </div>
 
   <div class="rule solid" id="s3">
     <h3>Liskov Substitution Principle (LSP)</h3>
-    <p class="callout">"If S is a subtype of T, objects of type T may be replaced with objects of type S without altering any of the desirable properties of the program." — Barbara Liskov</p>
-    <p>In plain terms: a subclass should be swappable in for its parent class without breaking correctness. The classic trap is Square extending Rectangle — mathematically a square is a rectangle, but modeling it via inheritance breaks LSP the moment <code>setWidth</code>/<code>setHeight</code> behave differently on <code>Square</code> than expected.</p>
-    <div class="callout">Fix: don't force Square to extend Rectangle. Give both an abstract <code>Shape</code> base with its own <code>getArea()</code> implementation instead — no surprising behavior when swapping one shape for another.</div>
+    <p class="callout">"If S is a subtype of T, objects of type T may be replaced with objects of type S without altering any of the desirable properties of the program." (Barbara Liskov)</p>
+    <p>In plain terms: a subclass should be swappable in for its parent class without breaking correctness. The classic trap is Square extending Rectangle: mathematically a square is a rectangle, but modeling it via inheritance breaks LSP the moment <code>setWidth</code>/<code>setHeight</code> behave differently on <code>Square</code> than expected.</p>
+    <div class="callout">Fix: don't force Square to extend Rectangle. Give both an abstract <code>Shape</code> base with its own <code>getArea()</code> implementation instead, so there is no surprising behavior when swapping one shape for another.</div>
   </div>
 
   <div class="rule solid" id="s4">
     <h3>Interface Segregation Principle (ISP)</h3>
     <p class="callout">"Clients should not be forced to depend upon interfaces that they do not use."</p>
-    <p>Closely related to SRP — design abstractions so a consumer only has to implement/depend on what it actually needs, rather than a bloated "does everything" interface.</p>
+    <p>Closely related to SRP: design abstractions so a consumer only has to implement/depend on what it actually needs, rather than a bloated "does everything" interface.</p>
     <div class="callout">Example: a single <code>SmartPrinter</code> interface with <code>print()</code>/<code>fax()</code>/<code>scan()</code> forces an <code>EconomicPrinter</code> to implement fax/scan methods it can't support (throwing errors instead). Split into separate <code>Printer</code>, <code>Fax</code>, and <code>Scanner</code> interfaces so each class only implements what it supports.</div>
   </div>
 
   <div class="rule solid" id="s5">
     <h3>Dependency Inversion Principle (DIP)</h3>
     <ol>
-      <li>High-level modules should not depend on low-level modules — both should depend on abstractions.</li>
-      <li>Abstractions should not depend on details — details should depend on abstractions.</li>
+      <li>High-level modules should not depend on low-level modules; both should depend on abstractions.</li>
+      <li>Abstractions should not depend on details; details should depend on abstractions.</li>
     </ol>
     <p>Usually achieved through Dependency Injection / an Inversion of Control container. This decouples modules from each other, which is what makes refactoring safe.</p>
     <div class="callout">Example: a <code>ReportReader</code> that directly instantiates <code>new XmlFormatter()</code> is locked into XML forever. Depend on a <code>Formatter</code> interface instead, and inject whichever concrete formatter (<code>XmlFormatter</code>, <code>JsonFormatter</code>) is needed.</div>
@@ -704,14 +704,14 @@ const query = queryBuilder.build();</pre></div>
 
   <div class="rule process">
     <h3>Why it matters</h3>
-    <p>Without adequate tests, every deploy is a gamble. Aiming for 100% coverage (statements and branches) builds real confidence — but that requires a good testing framework <em>and</em> a good coverage tool. Whatever your team picks, write tests for every new feature/module and hit your coverage bar before shipping or refactoring.</p>
+    <p>Without adequate tests, every deploy is a gamble. Aiming for 100% coverage (statements and branches) builds real confidence, but that requires a good testing framework <em>and</em> a good coverage tool. Whatever your team picks, write tests for every new feature/module and hit your coverage bar before shipping or refactoring.</p>
   </div>
 
   <div class="rule process" id="t1">
     <h3>The three laws of TDD</h3>
     <ol>
       <li>You may not write production code until you have a failing unit test.</li>
-      <li>You may not write more of a test than is sufficient to fail — compilation failures count as failures.</li>
+      <li>You may not write more of a test than is sufficient to fail; compilation failures count as failures.</li>
       <li>You may not write more production code than is sufficient to pass the one currently-failing test.</li>
     </ol>
   </div>
@@ -721,16 +721,16 @@ const query = queryBuilder.build();</pre></div>
     <table>
       <tr><th>Letter</th><th>Meaning</th></tr>
       <tr><td><b>F</b>ast</td><td>Tests should run fast, since you'll be running them constantly</td></tr>
-      <tr><td><b>I</b>ndependent</td><td>Tests shouldn't depend on each other — same result whether run alone or together, in any order</td></tr>
+      <tr><td><b>I</b>ndependent</td><td>Tests shouldn't depend on each other: the same result whether run alone or together, in any order</td></tr>
       <tr><td><b>R</b>epeatable</td><td>Should pass reliably in any environment, no excuses for flakiness</td></tr>
-      <tr><td><b>S</b>elf-Validating</td><td>A test should output a plain Pass/Fail — no manually diffing log files</td></tr>
-      <tr><td><b>T</b>imely</td><td>Write the test before the production code — writing it after tends to be much harder</td></tr>
+      <tr><td><b>S</b>elf-Validating</td><td>A test should output a plain Pass/Fail, with no manually diffing log files</td></tr>
+      <tr><td><b>T</b>imely</td><td>Write the test before the production code; writing it after tends to be much harder</td></tr>
     </table>
   </div>
 
   <div class="rule process" id="t3">
     <h3>Single concept per test</h3>
-    <p>Tests should follow SRP too — one assertion (or one concept) per test, so a failure immediately tells you exactly what broke.</p>
+    <p>Tests should follow SRP too: one assertion (or one concept) per test, so a failure immediately tells you exactly what broke.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>it('handles date boundaries', () =&gt; {
   assert.equal('1/31/2015', new AwesomeDate('1/1/2015').addDays(30));
@@ -745,7 +745,7 @@ it('handles non-leap year', () =&gt; { /* one assert */ });</pre></div>
 
   <div class="rule process" id="t4">
     <h3>The name of the test should reveal its intention</h3>
-    <p>When a test fails, its name is the very first clue about what went wrong — make it descriptive, not cryptic.</p>
+    <p>When a test fails, its name is the very first clue about what went wrong, so make it descriptive, not cryptic.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>it('2/29/2020', () =&gt; { /* ... */ });
 it('throws', () =&gt; { /* ... */ });</pre></div>
@@ -779,26 +779,26 @@ downloadPage(url, 'article.html')
       <tr><th>Helper</th><th>Description</th></tr>
       <tr><td><code>Promise.resolve(value)</code></td><td>Wrap a value as a resolved promise</td></tr>
       <tr><td><code>Promise.reject(error)</code></td><td>Wrap an error as a rejected promise</td></tr>
-      <tr><td><code>Promise.all(promises)</code></td><td>Resolves with all results, or rejects on the first rejection — great for running tasks in parallel</td></tr>
-      <tr><td><code>Promise.race(promises)</code></td><td>Settles as soon as the first promise settles — handy for implementing timeouts</td></tr>
+      <tr><td><code>Promise.all(promises)</code></td><td>Resolves with all results, or rejects on the first rejection, great for running tasks in parallel</td></tr>
+      <tr><td><code>Promise.race(promises)</code></td><td>Settles as soon as the first promise settles, handy for implementing timeouts</td></tr>
     </table>
   </div>
 
   <div class="rule process" id="cc2">
     <h3>Async/Await are even cleaner than Promises</h3>
-    <p><code>async</code>/<code>await</code> lets you pause execution at an <code>await</code>ed promise, producing code that reads almost like synchronous code — cleaner than chained <code>.then()</code> calls, and errors can be handled with an ordinary <code>try/catch</code>.</p>
+    <p><code>async</code>/<code>await</code> lets you pause execution at an <code>await</code>ed promise, producing code that reads almost like synchronous code, cleaner than chained <code>.then()</code> calls, and errors can be handled with an ordinary <code>try/catch</code>.</p>
   </div>
 
   <!-- ============================ ERROR HANDLING ============================ -->
   <div class="layer-banner hygiene">📚 Error Handling <small>thrown errors are a good thing</small></div>
 
   <div class="rule hygiene">
-    <p>A thrown error means the runtime successfully caught a problem, stopped execution, and gave you a stack trace to debug from — that's a feature, not a nuisance.</p>
+    <p>A thrown error means the runtime successfully caught a problem, stopped execution, and gave you a stack trace to debug from. That's a feature, not a nuisance.</p>
   </div>
 
   <div class="rule hygiene" id="e1">
     <h3>Always use Error for throwing or rejecting</h3>
-    <p>JS/TS technically let you throw or reject with any value, but a plain string caught by higher-level code is confusing to debug. Use <code>Error</code> objects — they carry a <code>.stack</code> property and work naturally with <code>try/catch/finally</code>.</p>
+    <p>JS/TS technically let you throw or reject with any value, but a plain string caught by higher-level code is confusing to debug. Use <code>Error</code> objects: they carry a <code>.stack</code> property and work naturally with <code>try/catch/finally</code>.</p>
     <div class="codepair">
       <div class="codeblock bad"><div class="label">Bad</div><pre>function calculateTotal(items: Item[]): number {
   throw 'Not implemented.';
@@ -807,24 +807,24 @@ downloadPage(url, 'article.html')
   throw new Error('Not implemented.');
 }</pre></div>
     </div>
-    <p class="callout">Alternative: skip <code>throw</code> entirely and return typed Result/Failure objects — TypeScript's union types make this ergonomic (e.g. <code>Failable&lt;R, E&gt; = Result&lt;R&gt; | Failure&lt;E&gt;</code>).</p>
+    <p class="callout">Alternative: skip <code>throw</code> entirely and return typed Result/Failure objects. TypeScript's union types make this ergonomic (e.g. <code>Failable&lt;R, E&gt; = Result&lt;R&gt; | Failure&lt;E&gt;</code>).</p>
   </div>
 
   <div class="rule hygiene" id="e2">
     <h3>Don't ignore caught errors</h3>
-    <p>An empty <code>catch</code> block — or one that just <code>console.log</code>s and moves on — means an error can silently vanish. If you wrap code in <code>try/catch</code>, you're saying "this might fail" — so actually handle it (proper logging, a fallback path, etc).</p>
+    <p>An empty <code>catch</code> block (or one that just <code>console.log</code>s and moves on) means an error can silently vanish. If you wrap code in <code>try/catch</code>, you're saying "this might fail", so actually handle it (proper logging, a fallback path, etc).</p>
   </div>
 
   <div class="rule hygiene" id="e3">
     <h3>Don't ignore rejected promises</h3>
-    <p>Same principle as above, applied to <code>.catch()</code> — log properly (or handle) instead of a bare <code>console.log</code>, whether using <code>.catch()</code> chains or <code>try/catch</code> around <code>await</code>.</p>
+    <p>Same principle as above, applied to <code>.catch()</code>: log properly (or handle) instead of a bare <code>console.log</code>, whether using <code>.catch()</code> chains or <code>try/catch</code> around <code>await</code>.</p>
   </div>
 
   <!-- ============================ FORMATTING ============================ -->
   <div class="layer-banner hygiene">📚 Formatting <small>consistency beats personal preference</small></div>
 
   <div class="rule hygiene">
-    <p>Formatting is subjective — don't argue about it, automate it. Use a linter (ESLint for TypeScript, with a shared config like Airbnb's or a Prettier-integrated setup) so the team just agrees to disagree and moves on.</p>
+    <p>Formatting is subjective: don't argue about it, automate it. Use a linter (ESLint for TypeScript, with a shared config like Airbnb's or a Prettier-integrated setup) so the team just agrees to disagree and moves on.</p>
   </div>
 
   <div class="rule hygiene" id="fm1">
@@ -834,7 +834,7 @@ downloadPage(url, 'article.html')
 
   <div class="rule hygiene" id="fm2">
     <h3>Function callers and callees should be close</h3>
-    <p>We read code top-to-bottom like a newspaper — keep a function's caller directly above (or very near) its callee rather than scattering related methods throughout the class.</p>
+    <p>We read code top-to-bottom like a newspaper, so keep a function's caller directly above (or very near) its callee rather than scattering related methods throughout the class.</p>
   </div>
 
   <div class="rule hygiene" id="fm3">
@@ -843,7 +843,7 @@ downloadPage(url, 'article.html')
     <ul>
       <li>Alphabetize and group imports; remove unused ones</li>
       <li>Alphabetize named imports (<code>import {A, B, C} from 'foo'</code>) and alphabetize sources within each group</li>
-      <li>Prefer <code>import type</code> for type-only imports — avoids dependency cycles since these are erased at runtime</li>
+      <li>Prefer <code>import type</code> for type-only imports, avoids dependency cycles since these are erased at runtime</li>
       <li>Separate groups with blank lines, in this order: polyfills → Node builtins → external modules → internal modules → parent-directory modules → same/sibling-directory modules</li>
     </ul>
   </div>
@@ -861,7 +861,7 @@ downloadPage(url, 'article.html')
   <div class="layer-banner hygiene">📚 Comments <small>the code should speak for itself</small></div>
 
   <div class="rule hygiene">
-    <p class="callout">"Don't comment bad code — rewrite it." — Brian W. Kernighan &amp; P. J. Plaugher</p>
+    <p class="callout">"Don't comment bad code, rewrite it." (Brian W. Kernighan &amp; P. J. Plaugher)</p>
     <p>A comment is often an admission that the code itself failed to explain what it does. Code should be the primary source of truth.</p>
   </div>
 
@@ -877,12 +877,12 @@ if (isSubscriptionActive) { /* ... */ }</pre></div>
 
   <div class="rule hygiene" id="cm2">
     <h3>Don't leave commented-out code in your codebase</h3>
-    <p>Version control exists precisely so old code doesn't need to linger in comments — delete it, git history has your back.</p>
+    <p>Version control exists precisely so old code doesn't need to linger in comments. Delete it, git history has your back.</p>
   </div>
 
   <div class="rule hygiene" id="cm3">
     <h3>Don't have journal comments</h3>
-    <p>Change-log-style comments (<code>// 2016-12-20: Removed monads...</code>) duplicate what <code>git log</code> already gives you for free — remove them.</p>
+    <p>Change-log-style comments (<code>// 2016-12-20: Removed monads...</code>) duplicate what <code>git log</code> already gives you for free. Remove them.</p>
   </div>
 
   <div class="rule hygiene" id="cm4">
@@ -892,10 +892,10 @@ if (isSubscriptionActive) { /* ... */ }</pre></div>
 
   <div class="rule hygiene" id="cm5">
     <h3>TODO comments</h3>
-    <p>When you need to flag a later improvement, a <code>// TODO:</code> comment is fine — most IDEs surface these in a dedicated list. Just remember: a TODO is not a license to ship bad code.</p>
+    <p>When you need to flag a later improvement, a <code>// TODO:</code> comment is fine, most IDEs surface these in a dedicated list. Just remember: a TODO is not a license to ship bad code.</p>
   </div>
 
-  <footer>📚 Every rule, every reason, every example — good luck!</footer>
+  <footer>📚 Every rule, every reason, every example, good luck!</footer>
 
 </main>
 </body>

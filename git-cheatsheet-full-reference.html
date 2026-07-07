@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Git Cheat Sheet — Full Reference Guide</title>
+<title>Git Cheat Sheet: Full Reference Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -181,7 +181,7 @@
   </section>
 
   <section id="log">
-    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Log — Additional Options</h2>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Log: Additional Options</h2>
     <div class="cmd-grid">
       <div class="cmd history"><span class="tag">git log -&lt;limit&gt;</span><p>Limit the number of commits shown to <code>&lt;limit&gt;</code>. E.g. <code>git log -5</code> limits to 5 commits.</p></div>
       <div class="cmd history"><span class="tag">git log --oneline</span><p>Condense each commit down to a single line.</p></div>
@@ -216,7 +216,7 @@
   </section>
 
   <section id="rebase">
-    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Rebase — Additional Options</h2>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Rebase: Additional Options</h2>
     <div class="cmd-grid">
       <div class="cmd branch"><span class="tag">git rebase -i &lt;base&gt;</span><p>Interactively rebase the current branch onto <code>&lt;base&gt;</code>. Launches an editor where you enter commands for how each commit will be transferred to the new base.</p></div>
     </div>
@@ -236,17 +236,17 @@
   </section>
 
   <section id="pull">
-    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Pull — Additional Options</h2>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Pull: Additional Options</h2>
     <div class="cmd-grid">
       <div class="cmd remote"><span class="tag">git pull --rebase &lt;remote&gt;</span><p>Fetch the remote's copy of the current branch and rebase it into the local copy. Uses <code>git rebase</code> instead of <code>merge</code> to integrate the branches.</p></div>
     </div>
   </section>
 
   <section id="push">
-    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Push — Additional Options</h2>
+    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;">Git Push: Additional Options</h2>
     <div class="cmd-grid">
       <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --force</span><p>Forces the push through even if it results in a non-fast-forward merge.</p></div>
-      <div class="note-box">⚠️ Don't use <code>--force</code> unless you're absolutely sure you know what you're doing — it can overwrite remote history other people are relying on.</div>
+      <div class="note-box">⚠️ Don't use <code>--force</code> unless you're absolutely sure you know what you're doing: it can overwrite remote history other people are relying on.</div>
       <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --all</span><p>Push all of your local branches to the specified remote.</p></div>
       <div class="cmd remote"><span class="tag">git push &lt;remote&gt; --tags</span><p>Tags aren't automatically pushed when you push a branch or use <code>--all</code>. This flag sends all of your local tags to the remote repo.</p></div>
     </div>
@@ -273,7 +273,7 @@
       <div class="cmd config"><span class="tag">git reset --hard</span><p>Reset the staging area <em>and</em> the working directory to match the most recent commit, overwriting all changes in the working directory.</p></div>
       <div class="cmd config"><span class="tag">git reset &lt;commit&gt;</span><p>Move the current branch tip backward to <code>&lt;commit&gt;</code>, reset the staging area to match, but leave the working directory alone.</p></div>
       <div class="cmd config"><span class="tag">git reset --hard &lt;commit&gt;</span><p>Same as above, but resets both the staging area and the working directory to match. Deletes uncommitted changes, and all commits after <code>&lt;commit&gt;</code>.</p></div>
-      <div class="note-box">⚠️ Any <code>--hard</code> reset permanently discards uncommitted changes — make sure you don't need them first.</div>
+      <div class="note-box">⚠️ Any <code>--hard</code> reset permanently discards uncommitted changes, so make sure you don't need them first.</div>
     </div>
   </section>
 

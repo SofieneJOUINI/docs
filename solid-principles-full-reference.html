@@ -108,12 +108,12 @@
   <div class="principle s" id="s">
     <div class="band"><span class="letter">S</span><span class="full">Single Responsibility Principle<small>a class should have only one reason to change</small></span></div>
     <div class="body">
-      <p>A component should do one thing, and only one potential change in the software's specification should be able to affect it. When a class mixes concerns (say, business logic alongside printing or persistence logic), different teams end up editing the same file for unrelated reasons, which makes merge conflicts more frequent and version history harder to read.</p>
+      <p>A class should do one thing, and only one potential change in the software's specification should be able to affect it. When a class mixes concerns (say, business logic alongside printing or persistence logic), different teams end up editing the same file for unrelated reasons, which makes merge conflicts more frequent and version history harder to read.</p>
       <div class="notes">
         <span class="tag">Notes</span>
         <ul>
-          <li>Each component should have <strong>one, and only one, reason to change</strong>.</li>
-          <li>If a component has many reasons to change, it breaks Single Responsibility.</li>
+          <li>Each class should have <strong>one, and only one, reason to change</strong>.</li>
+          <li>If a class has many reasons to change, it breaks Single Responsibility.</li>
         </ul>
       </div>
       <div class="example"><strong>Example:</strong> an <code>Invoice</code> class that calculates totals shouldn't also know how to print itself or save itself to a file. Split those into an <code>InvoicePrinter</code> and an <code>InvoicePersistence</code> class instead.</div>
@@ -183,7 +183,7 @@
           <li>Distinguishes <strong>data flow</strong> from <strong>dependency flow</strong> (they don't have to point the same direction).</li>
           <li><strong>High-level components should not depend on low-level components.</strong></li>
           <li>High-level components should be the <strong>most stable</strong> ones.</li>
-          <li><strong>Business logic (logique métier)</strong> should live in the most stable component: the <strong>domain</strong>.</li>
+          <li><strong>Business logic</strong> should live in the most stable component: the <strong>domain</strong>.</li>
           <li><strong>Dependency Injection</strong> is one of the main mechanisms used to implement Dependency Inversion.</li>
         </ul>
       </div>

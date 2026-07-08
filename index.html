@@ -17,6 +17,7 @@
     --smellsA:#FF6B5E; --smellsB:#1FA398; --smellsC:#8A5CF6; --smellsD:#F2921D; --smellsE:#3C6E71;
     --patternsA:#FF6B5E; --patternsB:#1FA398; --patternsC:#8A5CF6;
     --solidA:#FF6B5E; --solidB:#1FA398; --solidC:#8A5CF6; --solidD:#F2921D; --solidE:#3C6E71;
+    --compA:#FF6B5E; --compB:#F2921D; --compC:#3C6E71; --compD:#8A5CF6; --compE:#1FA398; --compF:#2B6CB0;
   }
   *{box-sizing:border-box;}
   body{
@@ -112,6 +113,7 @@
   .card.smells{border-top:8px solid var(--smellsD);}
   .card.patterns{border-top:8px solid var(--patternsB);}
   .card.solid{border-top:8px solid var(--solidC);}
+  .card.component{border-top:8px solid var(--compD);}
 
   footer{
     text-align:center;
@@ -209,6 +211,21 @@
         <span class="swatch" style="background:var(--solidE)"></span>
       </div>
       <p>Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation &amp; Dependency Inversion, with plain-English explanations, notes and examples.</p>
+      <span class="go">Open guide</span>
+    </a>
+
+    <a class="card component" href="./component-principles-full-reference.html">
+      <span class="icon">📦</span>
+      <h2>Component Principles</h2>
+      <div class="swatches">
+        <span class="swatch" style="background:var(--compA)"></span>
+        <span class="swatch" style="background:var(--compB)"></span>
+        <span class="swatch" style="background:var(--compC)"></span>
+        <span class="swatch" style="background:var(--compD)"></span>
+        <span class="swatch" style="background:var(--compE)"></span>
+        <span class="swatch" style="background:var(--compF)"></span>
+      </div>
+      <p>Component Cohesion (REP, CCP, CRP) &amp; Component Coupling (ADP, SDP, SAP), short descriptions for how classes should group into components and depend on each other.</p>
       <span class="go">Open guide</span>
     </a>
 

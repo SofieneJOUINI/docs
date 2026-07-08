@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Component Principles: Full Reference Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --rep:#FF6B5E;  --rep-bg:#FFF0ED;
+    --ccp:#F2921D;  --ccp-bg:#FFF3E1;
+    --crp:#3C6E71;  --crp-bg:#EEF3F2;
+    --adp:#8A5CF6;  --adp-bg:#F3EEFF;
+    --sdp:#1FA398;  --sdp-bg:#EAFAF7;
+    --sap:#2B6CB0;  --sap-bg:#EAF2FA;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{
+    width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;
+  }
+  #toc h1{font-family:'Kalam',cursive;font-size:1.35rem;margin:0 0 4px;line-height:1.1;}
+  #toc .tagline{font-size:.7rem;color:var(--ink-soft);margin-bottom:16px;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.8rem;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:6px;margin-bottom:2px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.rep{background:var(--rep);} #toc .grp.ccp{background:var(--ccp);} #toc .grp.crp{background:var(--crp);}
+  #toc .grp.adp{background:var(--adp);} #toc .grp.sdp{background:var(--sdp);} #toc .grp.sap{background:var(--sap);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:900px;}
+
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.4rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+  header.hero p{font-size:.9rem;color:var(--ink-soft);max-width:700px;margin:0 0 6px;}
+
+  .group-def{
+    font-size:.86rem;line-height:1.6;margin:2px 0 14px;padding:10px 14px;background:#fff;
+    border:1.5px solid var(--ink);border-radius:8px;max-width:700px;
+  }
+  .group-def strong{font-family:'Space Grotesk',sans-serif;}
+
+  .group-banner{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--ink);margin:30px 0 8px;padding-bottom:6px;border-bottom:2.5px solid var(--ink);}
+
+  .principle{scroll-margin-top:16px;margin-bottom:16px;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff;}
+  .principle .band{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;padding:10px 18px;display:flex;align-items:center;gap:10px;}
+  .principle .band .abbr{font-family:'Kalam',cursive;font-size:1.3rem;line-height:1;background:rgba(255,255,255,.25);border-radius:8px;min-width:52px;height:32px;display:flex;align-items:center;justify-content:center;padding:0 6px;}
+  .principle .band .full{font-size:.92rem;}
+  .principle.rep .band{background:var(--rep);} .principle.rep .body{background:var(--rep-bg);}
+  .principle.ccp .band{background:var(--ccp);} .principle.ccp .body{background:var(--ccp-bg);}
+  .principle.crp .band{background:var(--crp);} .principle.crp .body{background:var(--crp-bg);}
+  .principle.adp .band{background:var(--adp);} .principle.adp .body{background:var(--adp-bg);}
+  .principle.sdp .band{background:var(--sdp);} .principle.sdp .body{background:var(--sdp-bg);}
+  .principle.sap .band{background:var(--sap);} .principle.sap .body{background:var(--sap-bg);}
+
+  .body{padding:14px 18px 16px;}
+  .body p{font-size:.85rem;line-height:1.65;margin:0 0 10px;}
+  .body p:last-child{margin-bottom:0;}
+
+  .diagram{margin:14px 0 30px;padding:16px;border:1.5px dashed var(--ink);border-radius:10px;background:#fff;}
+  .diagram .cap{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.78rem;margin-bottom:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;}
+  .diagram svg{display:block;margin:0 auto;max-width:100%;height:auto;}
+  .diagram .note{font-size:.78rem;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+
+  .tension{margin:0 0 30px;padding:12px 16px;border:1.5px dashed var(--ink);border-radius:8px;background:rgba(255,255,255,.6);font-size:.82rem;line-height:1.6;}
+  .tension strong{font-family:'Space Grotesk',sans-serif;}
+
+  .analogy{margin:0 0 30px;padding:16px 18px;border:2px solid var(--ink);border-radius:10px;background:#FFF8E1;box-shadow:4px 4px 0 var(--ink);}
+  .analogy .cap{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;margin-bottom:10px;}
+  .analogy p{font-size:.85rem;line-height:1.6;margin:0 0 8px;color:var(--ink-soft);}
+  .analogy ul{margin:0;padding-left:20px;}
+  .analogy li{font-size:.85rem;line-height:1.65;margin-bottom:6px;}
+  .analogy li strong{font-family:'Space Grotesk',sans-serif;color:var(--ink);}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+  footer a{color:var(--ink-soft);}
+  footer .conclusion{font-family:'Inter',sans-serif;font-size:.85rem;line-height:1.6;color:var(--ink);text-align:left;max-width:700px;margin:0 auto 18px;padding:14px 18px;background:#fff;border:1.5px solid var(--ink);border-radius:8px;}
+
+  @media (max-width:820px){
+    body{display:block;}
+    #toc{position:relative;width:auto;height:auto;}
+    main{padding:24px 18px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>Component Principles 📦</h1>
+  <div class="tagline">Full reference</div>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp rep">Cohesion</div>
+  <a class="item" href="#rep">REP</a>
+  <a class="item" href="#ccp">CCP</a>
+  <a class="item" href="#crp">CRP</a>
+  <a class="item" href="#tension">Tension triangle</a>
+  <div class="grp adp">Coupling</div>
+  <a class="item" href="#adp">ADP</a>
+  <a class="item" href="#sdp">SDP</a>
+  <a class="item" href="#sap">SAP</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>Component <span>Principles</span></h1>
+    <p>A component is the smallest unit that can be built, released and deployed on its own (a package, a jar, a DLL, a plugin). These principles cover how classes should be grouped into components, and how those components should depend on one another.</p>
+  </header>
+
+  <div class="group-banner">Component Cohesion</div>
+  <div class="group-def"><strong>Cohesion, in short:</strong> which classes belong together inside the same component, so it stays focused, reusable, and doesn't drag in things nobody asked for.</div>
+
+  <div class="principle rep" id="rep">
+    <div class="band"><span class="abbr">REP</span><span class="full">Reuse/Release Equivalence Principle</span></div>
+    <div class="body">
+      <p>Classes grouped into a reusable component should share a common theme and be tracked and released together under a version number, so consumers know exactly what they're depending on and when it changes.</p>
+      <p>Without release numbers, there is no way to guarantee that components stay compatible with each other. The version also tells consumers when a new release is available and what changed in it, so they can decide whether to upgrade or stay on the current one for now. In short, a component shouldn't be a random grab-bag of classes; it needs a shared theme, and everything sharing that theme should ship, version and get documented together.</p>
+    </div>
+  </div>
+
+  <div class="principle ccp" id="ccp">
+    <div class="band"><span class="abbr">CCP</span><span class="full">Common Closure Principle</span></div>
+    <div class="body">
+      <p>Classes that tend to change for the same reasons, at the same time, belong in the same component; classes that change for different reasons belong in different ones. It's the Single Responsibility Principle applied at the component level, so a single requirement change only forces a redeploy of one component.</p>
+      <p>When classes that always change together are split across components, a single requirement change forces several components to be reworked, revalidated and re-released instead of just one. CCP also mirrors the Open/Closed Principle: since no component can be completely closed to every kind of change, it's grouped instead around the changes it's closed to, so a given modification is likely to stay contained to a small number of components.</p>
+    </div>
+  </div>
+
+  <div class="principle crp" id="crp">
+    <div class="band"><span class="abbr">CRP</span><span class="full">Common Reuse Principle</span></div>
+    <div class="body">
+      <p>Classes that are normally reused together should live in the same component. The flip side matters too: don't bundle classes that aren't tightly related, or consumers end up depending on (and being forced to redeploy for) code they never actually use.</p>
+      <p>Classes are rarely reused in isolation, so the ones that collaborate as part of one reusable idea should sit together, with their dependencies on each other made explicit. The reverse case is the costly one: if component B only uses one class from component A, but A bundles other unrelated classes, then every change to any of A's classes forces B to be recompiled, revalidated and redeployed, even when the class B actually depends on never changed. Classes without a strong link to the rest shouldn't share a component.</p>
+    </div>
+  </div>
+
+  <div class="diagram" id="tension">
+    <div class="cap">Cohesion tension triangle</div>
+    <svg viewBox="0 0 460 340" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="230,30 60,300 400,300" fill="none" stroke="#2B2620" stroke-width="2.5"/>
+      <circle cx="230" cy="30" r="30" fill="#FF6B5E" stroke="#2B2620" stroke-width="2"/>
+      <text x="230" y="36" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="16" fill="#fff">REP</text>
+      <circle cx="60" cy="300" r="30" fill="#F2921D" stroke="#2B2620" stroke-width="2"/>
+      <text x="60" y="306" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="16" fill="#fff">CCP</text>
+      <circle cx="400" cy="300" r="30" fill="#3C6E71" stroke="#2B2620" stroke-width="2"/>
+      <text x="400" y="306" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15" fill="#fff">CRP</text>
+      <text x="130" y="150" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245" transform="rotate(-58 130 150)">fewer unnecessary releases</text>
+      <text x="330" y="150" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245" transform="rotate(58 330 150)">fewer unneeded dependencies</text>
+      <text x="230" y="322" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245">fewer, larger components</text>
+    </svg>
+    <div class="note">Each edge is the cost of ignoring the principle at the opposite vertex. Lean too hard on REP and CRP (reusable, tightly-collaborating classes) and simple changes ripple through many components; lean too hard on CCP and REP (everything closed together, released together) and components multiply. Projects tend to start closer to the CCP/CRP side for development speed, then drift toward REP as reuse becomes the priority.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="cap">🧰 Simple analogy</div>
+    <p>Before moving on to coupling, here's a way to keep the three cohesion principles straight: think of shipping physical products.</p>
+    <ul>
+      <li><strong>REP:</strong> you ship items packed in boxes, and the box itself is the reusable, versioned unit.</li>
+      <li><strong>CCP:</strong> items that tend to break or change together get packed into the same box.</li>
+      <li><strong>CRP:</strong> you don't make a customer buy the whole box if all they need is one item inside it.</li>
+    </ul>
+  </div>
+
+  <div class="group-banner">Component Coupling</div>
+  <div class="group-def"><strong>Coupling, in short:</strong> how components are allowed to depend on each other, so a change in one doesn't quietly force changes everywhere else.</div>
+
+  <div class="principle adp" id="adp">
+    <div class="band"><span class="abbr">ADP</span><span class="full">Acyclic Dependencies Principle</span></div>
+    <div class="body">
+      <p>The dependency graph between components must be a directed acyclic graph, with no cycles. If a cycle appears, break it either by inverting a dependency through a new interface, or by extracting the shared classes into a new component that both sides depend on instead.</p>
+      <p>This matters most once several people or teams work on the same codebase: without clear boundaries, a fix by one developer routinely breaks something another developer depends on. Splitting the system into releasable components, each owned by a team and versioned independently, means a team can keep working in its own component and let other teams choose when to adopt a new release, instead of being forced to react immediately to every change.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="cap">Acyclic dependency graph</div>
+    <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#2B2620"/>
+        </marker>
+      </defs>
+      <g font-family="Space Grotesk, sans-serif" font-weight="700" font-size="13" fill="#fff">
+        <rect x="20" y="30" width="90" height="40" rx="8" fill="#8A5CF6" stroke="#2B2620" stroke-width="2"/>
+        <text x="65" y="55" text-anchor="middle">Orders</text>
+        <rect x="200" y="30" width="90" height="40" rx="8" fill="#8A5CF6" stroke="#2B2620" stroke-width="2"/>
+        <text x="245" y="55" text-anchor="middle">Payments</text>
+        <rect x="380" y="30" width="120" height="40" rx="8" fill="#8A5CF6" stroke="#2B2620" stroke-width="2"/>
+        <text x="440" y="55" text-anchor="middle">Notifications</text>
+        <rect x="110" y="180" width="90" height="40" rx="8" fill="#8A5CF6" stroke="#2B2620" stroke-width="2"/>
+        <text x="155" y="205" text-anchor="middle">Shipping</text>
+        <rect x="300" y="180" width="90" height="40" rx="8" fill="#8A5CF6" stroke="#2B2620" stroke-width="2"/>
+        <text x="345" y="205" text-anchor="middle">Catalog</text>
+      </g>
+      <g stroke="#2B2620" stroke-width="2" fill="none" marker-end="url(#arrow)">
+        <line x1="110" y1="50" x2="195" y2="50"/>
+        <line x1="290" y1="50" x2="375" y2="50"/>
+        <line x1="65" y1="70" x2="150" y2="178"/>
+        <line x1="245" y1="70" x2="345" y2="178"/>
+        <line x1="200" y1="200" x2="296" y2="200"/>
+      </g>
+    </svg>
+    <div class="note">A directed acyclic graph: no matter which component you start from, following the arrows never leads back to where you began. If a new requirement made <code>Catalog</code> need something from <code>Shipping</code>, the arrow would point back and create a cycle, which ADP says must be broken again before release.</div>
+  </div>
+
+  <div class="principle sdp" id="sdp">
+    <div class="band"><span class="abbr">SDP</span><span class="full">Stable-Dependencies Principle</span></div>
+    <div class="body">
+      <p>A component should only depend on components that are at least as stable as itself. Depending on a volatile component drags your own component's stability down, since every change in the dependency now ripples into you too.</p>
+      <p>No real system can be made entirely of stable components, or it could never change; some components are meant to be volatile, and that's fine as long as nothing stable depends on them. Stability here just means how much work it takes to change a component: size, clarity and complexity all play a part, but the biggest factor is how many other components depend on it, since every dependent is one more thing that has to be reconciled with the change.</p>
+    </div>
+  </div>
+
+  <div class="diagram">
+    <div class="cap">Stable vs. volatile components</div>
+    <svg viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#2B2620"/>
+        </marker>
+      </defs>
+      <rect x="165" y="100" width="130" height="55" rx="10" fill="#1FA398" stroke="#2B2620" stroke-width="2.5"/>
+      <text x="230" y="125" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="14" fill="#fff">Domain</text>
+      <text x="230" y="143" text-anchor="middle" font-family="Inter, sans-serif" font-size="10.5" fill="#fff">stable</text>
+
+      <g font-family="Space Grotesk, sans-serif" font-weight="700" font-size="12.5" fill="#2B2620">
+        <rect x="15" y="15" width="110" height="40" rx="8" fill="#EAFAF7" stroke="#2B2620" stroke-width="2"/>
+        <text x="70" y="39" text-anchor="middle">Web UI</text>
+        <rect x="335" y="15" width="110" height="40" rx="8" fill="#EAFAF7" stroke="#2B2620" stroke-width="2"/>
+        <text x="390" y="39" text-anchor="middle">CLI tool</text>
+        <rect x="15" y="200" width="110" height="40" rx="8" fill="#EAFAF7" stroke="#2B2620" stroke-width="2"/>
+        <text x="70" y="224" text-anchor="middle">DB adapter</text>
+        <rect x="335" y="200" width="110" height="40" rx="8" fill="#EAFAF7" stroke="#2B2620" stroke-width="2"/>
+        <text x="390" y="224" text-anchor="middle">3rd-party API</text>
+      </g>
+      <g stroke="#2B2620" stroke-width="2" fill="none" marker-end="url(#arrow2)">
+        <line x1="120" y1="45" x2="180" y2="105"/>
+        <line x1="340" y1="45" x2="285" y2="105"/>
+        <line x1="120" y1="210" x2="180" y2="150"/>
+        <line x1="340" y1="210" x2="285" y2="150"/>
+      </g>
+    </svg>
+    <div class="note">Volatile, easily-changed components (UI, adapters, third-party integrations) all point inward toward the stable core. None of them are depended on by the core itself, so they're free to change often without forcing the stable component to change with them.</div>
+  </div>
+
+  <div class="principle sap" id="sap">
+    <div class="band"><span class="abbr">SAP</span><span class="full">Stable-Abstractions Principle</span></div>
+    <div class="body">
+      <p>A stable component should also be abstract, so its stability doesn't block future extension. A volatile component should stay concrete, since it's expected to change anyway and abstracting it early just adds ceremony.</p>
+      <p>Put together with SDP, this gives a simple rule: the components everything else depends on should be built mostly from interfaces and abstract classes, not concrete implementation, so new behavior can be added by extending them rather than by editing them. A component that's both stable and concrete becomes rigid; one that's unstable and abstract just adds needless indirection.</p>
+    </div>
+  </div>
+
+  <div class="analogy">
+    <div class="cap">🧱 Simple analogy</div>
+    <p>This is the classic analogy from component-based software engineering literature (Clemens Szyperski's <em>Component Software</em>), where components are compared to LEGO bricks.</p>
+    <ul>
+      <li><strong>ADP:</strong> bricks only stack upward, layer by layer. You'd never build something where a brick at the bottom needs a brick above it to already be in place first, that's the circular dependency ADP forbids.</li>
+      <li><strong>SDP:</strong> a small, easily-swapped piece (a single window or wheel) snaps onto the sturdy base plate, never the other way around. The base plate never depends on any one specific brick.</li>
+      <li><strong>SAP:</strong> the stud-and-tube connector is the one thing that never changes across thousands of different brick designs. It's stable precisely because it's abstract, a plain generic connector, not a specific shape, which is exactly why so many different concrete bricks can be built on top of it.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="conclusion">Cohesion and coupling pull in different directions, and there's no single correct balance; what fits a small project on day one is rarely what fits it once it's grown. Component design isn't only about solving today's technical problem, it's about how the new piece will sit next to everything already in the system, and that trade-off shifts as the system matures.</div>
+    Source: <a href="https://dev.to/rubemfsv/component-principles-the-concept-behind-the-code-dn6" target="_blank" rel="noopener">dev.to/rubemfsv: Component Principles, The concept behind the code</a>
+  </footer>
+
+</main>
+</body>
+</html>

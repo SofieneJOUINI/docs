@@ -146,19 +146,8 @@
 
   <div class="diagram" id="tension">
     <div class="cap">Cohesion tension triangle</div>
-    <svg viewBox="0 0 460 340" xmlns="http://www.w3.org/2000/svg">
-      <polygon points="230,30 60,300 400,300" fill="none" stroke="#2B2620" stroke-width="2.5"/>
-      <circle cx="230" cy="30" r="30" fill="#FF6B5E" stroke="#2B2620" stroke-width="2"/>
-      <text x="230" y="36" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="16" fill="#fff">REP</text>
-      <circle cx="60" cy="300" r="30" fill="#F2921D" stroke="#2B2620" stroke-width="2"/>
-      <text x="60" y="306" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="16" fill="#fff">CCP</text>
-      <circle cx="400" cy="300" r="30" fill="#3C6E71" stroke="#2B2620" stroke-width="2"/>
-      <text x="400" y="306" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-weight="700" font-size="15" fill="#fff">CRP</text>
-      <text x="130" y="150" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245" transform="rotate(-58 130 150)">fewer unnecessary releases</text>
-      <text x="330" y="150" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245" transform="rotate(58 330 150)">fewer unneeded dependencies</text>
-      <text x="230" y="322" text-anchor="middle" font-family="Inter, sans-serif" font-size="11.5" fill="#5A5245">fewer, larger components</text>
-    </svg>
-    <div class="note">Each edge is the cost of ignoring the principle at the opposite vertex. Lean too hard on REP and CRP (reusable, tightly-collaborating classes) and simple changes ripple through many components; lean too hard on CCP and REP (everything closed together, released together) and components multiply. Projects tend to start closer to the CCP/CRP side for development speed, then drift toward REP as reuse becomes the priority.</div>
+    <img src="images/stress_diagramm.webp" alt="Cohesion tension triangle showing REP, CCP and CRP" style="display:block;max-width:100%;height:auto;margin:0 auto;border-radius:8px;">
+    <div class="note">An architect has to pick a spot on this triangle that fits what the project needs right now, knowing that spot won't stay right forever. Lean too hard toward REP and CRP, and a small change ends up touching a large number of components. Lean too hard toward CCP and REP, and the project churns out far more releases than it needs to. Martin (2017) points out that projects typically start closer to the right side of the triangle and drift toward the left as they mature.</div>
   </div>
 
   <div class="analogy">

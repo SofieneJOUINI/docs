@@ -115,6 +115,24 @@
   .card.solid{border-top:8px solid var(--solidC);}
   .card.component{border-top:8px solid var(--compD);}
 
+  .pagination{
+    display:flex;align-items:center;justify-content:center;gap:14px;margin-top:32px;
+  }
+  .pagination button{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.8rem;
+    border:2.5px solid var(--ink);border-radius:8px;background:#fff;color:var(--ink);
+    padding:8px 16px;cursor:pointer;box-shadow:3px 3px 0 var(--ink);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .pagination button:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+  .pagination button:disabled{opacity:.35;cursor:not-allowed;box-shadow:none;}
+  .pagination .dots{display:flex;gap:8px;}
+  .pagination .dot{
+    width:11px;height:11px;border-radius:50%;border:2px solid var(--ink);background:#fff;
+    cursor:pointer;padding:0;
+  }
+  .pagination .dot.active{background:var(--ink);}
+
   footer{
     text-align:center;
     margin-top:28px;
@@ -131,8 +149,7 @@
     <h1>Technical <span>Docs</span></h1>
   </header>
 
-  <div class="cards">
-
+  <div class="cards" id="cardsGrid">
     <a class="card hexagon" href="./hexagonal-full-reference.html">
       <span class="icon">🧩</span>
       <h2>Hexagonal Architecture &amp; DDD</h2>
@@ -231,7 +248,65 @@
 
   </div>
 
+  <div class="pagination" id="pagination">
+    <button id="prevBtn" aria-label="Previous page">← Prev</button>
+    <div class="dots" id="dots"></div>
+    <button id="nextBtn" aria-label="Next page">Next →</button>
+  </div>
 
 </div>
+
+<script>
+  (function(){
+    var PAGE_SIZE = 6;
+    var grid = document.getElementById('cardsGrid');
+    var cards = Array.prototype.slice.call(grid.children);
+    var totalPages = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
+    var current = 0;
+
+    var dotsWrap = document.getElementById('dots');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+    var paginationEl = document.getElementById('pagination');
+
+    if (totalPages <= 1) {
+      paginationEl.style.display = 'none';
+    } else {
+      for (var i = 0; i < totalPages; i++) {
+        var dot = document.createElement('button');
+        dot.className = 'dot';
+        dot.setAttribute('aria-label', 'Page ' + (i + 1));
+        dot.addEventListener('click', (function(pageIndex){
+          return function(){ goTo(pageIndex); };
+        })(i));
+        dotsWrap.appendChild(dot);
+      }
+    }
+
+    function render() {
+      cards.forEach(function(card, idx){
+        var page = Math.floor(idx / PAGE_SIZE);
+        card.style.display = (page === current) ? '' : 'none';
+      });
+      var dots = dotsWrap.querySelectorAll('.dot');
+      dots.forEach(function(d, idx){
+        d.classList.toggle('active', idx === current);
+      });
+      prevBtn.disabled = (current === 0);
+      nextBtn.disabled = (current === totalPages - 1);
+    }
+
+    function goTo(pageIndex) {
+      current = Math.min(Math.max(pageIndex, 0), totalPages - 1);
+      render();
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    prevBtn.addEventListener('click', function(){ goTo(current - 1); });
+    nextBtn.addEventListener('click', function(){ goTo(current + 1); });
+
+    render();
+  })();
+</script>
 </body>
 </html>

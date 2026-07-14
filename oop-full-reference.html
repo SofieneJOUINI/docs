@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Object-Oriented Programming Principles: Full Reference Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --inh:#F2921D;  --inh-bg:#FFF3E1;
+    --abs:#2B6CB0;  --abs-bg:#EAF2FA;
+    --poly:#8A5CF6; --poly-bg:#F3EEFF;
+    --enc:#1FA398;  --enc-bg:#EAFAF7;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{
+    width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;
+    padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;
+  }
+  #toc h1{font-family:'Kalam',cursive;font-size:1.3rem;margin:0 0 4px;line-height:1.15;}
+  #toc .tagline{font-size:.7rem;color:var(--ink-soft);margin-bottom:16px;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.8rem;color:var(--ink);text-decoration:none;padding:5px 8px;border-radius:6px;margin-bottom:2px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;margin:12px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;background:var(--ink-soft);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:920px;}
+
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.3rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+  header.hero p{font-size:.9rem;color:var(--ink-soft);max-width:720px;margin:0;}
+
+  .section{scroll-margin-top:16px;margin-bottom:22px;border:2.5px solid var(--ink);border-radius:12px;overflow:hidden;background:#fff;}
+  .section .band{font-family:'Space Grotesk',sans-serif;font-weight:700;color:#fff;padding:11px 20px;font-size:1rem;}
+  .section.inh .band{background:var(--inh);} .section.inh .body{background:var(--inh-bg);}
+  .section.abs .band{background:var(--abs);} .section.abs .body{background:var(--abs-bg);}
+  .section.poly .band{background:var(--poly);} .section.poly .body{background:var(--poly-bg);}
+  .section.enc .band{background:var(--enc);} .section.enc .body{background:var(--enc-bg);}
+
+  .body{padding:16px 20px 20px;}
+  .body p{font-size:.86rem;line-height:1.65;margin:0 0 12px;}
+  .body p:last-child{margin-bottom:0;}
+  .body ul{font-size:.86rem;line-height:1.65;margin:0 0 12px;padding-left:20px;}
+  .body li{margin-bottom:6px;}
+
+  .simple{font-size:.85rem;line-height:1.6;margin:0 0 14px;padding:9px 13px;background:#fff;border:1.5px solid var(--ink);border-radius:8px;}
+  .simple strong{font-family:'Space Grotesk',sans-serif;}
+
+  .sub{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.8rem;margin:14px 0 6px;color:var(--ink);}
+
+  pre{
+    margin:8px 0 12px;padding:11px 14px;background:#282420;color:#EDE6D6;border-radius:8px;
+    font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.55;overflow-x:auto;
+  }
+  pre .kw{color:#8AB4F8;} pre .tp{color:#F2921D;} pre .cm{color:#7d9b76;font-style:italic;}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+  footer a{color:var(--ink-soft);}
+  footer .conclusion{font-family:'Inter',sans-serif;font-size:.85rem;line-height:1.6;color:var(--ink);text-align:left;max-width:720px;margin:0 auto 18px;padding:14px 18px;background:#fff;border:1.5px solid var(--ink);border-radius:8px;}
+  footer .src{font-family:'Inter',sans-serif;font-size:.76rem;margin-top:4px;}
+
+  @media (max-width:820px){
+    body{display:block;}
+    #toc{position:relative;width:auto;height:auto;}
+    main{padding:24px 18px 80px;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>Object-Oriented Programming Principles 🧬</h1>
+  <div class="tagline">Full reference, with Java examples</div>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp">Contents</div>
+  <a class="item" href="#inh">Inheritance</a>
+  <a class="item" href="#abs">Abstraction</a>
+  <a class="item" href="#poly">Polymorphism</a>
+  <a class="item" href="#enc">Encapsulation</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>Object-Oriented Programming <span>Principles</span></h1>
+  </header>
+
+  <div class="section inh" id="inh">
+    <div class="band">Inheritance</div>
+    <div class="body">
+      <div class="simple"><strong>In short:</strong> a child class inherits the properties and behavior of its parent class.</div>
+      <ul>
+        <li>A subclass reuses the fields and methods already defined on its superclass, instead of redefining them.</li>
+        <li>On top of what it inherits, the subclass is free to add its own extra fields and methods.</li>
+        <li>This is either reusing the parent's properties as-is, or extending the parent with new features.</li>
+      </ul>
+      <pre><span class="kw">class</span> Vehicle {
+    <span class="kw">void</span> start(){ System.out.println(<span class="tp">"Vehicle started"</span>); }
+}
+<span class="kw">class</span> Car <span class="kw">extends</span> Vehicle {
+    <span class="kw">void</span> honk(){ System.out.println(<span class="tp">"Car honking"</span>); }
+}
+<span class="cm">// Car has both start() and honk()</span>
+Car myCar = <span class="kw">new</span> Car();
+myCar.start(); myCar.honk();</pre>
+    </div>
+  </div>
+
+  <div class="section abs" id="abs">
+    <div class="band">Abstraction</div>
+    <div class="body">
+      <div class="simple"><strong>In short:</strong> separate the idea of what something does from the details of how it does it.</div>
+      <ul>
+        <li>Abstraction means defining ideas in one place, so those ideas can be implemented differently by each subclass.</li>
+        <li>In Java, abstraction is built with abstract classes and interfaces.</li>
+        <li>Until Java 8, interfaces could only declare abstract methods; from Java 8 onward they can also carry concrete default and static methods.</li>
+      </ul>
+      <pre><span class="kw">abstract class</span> Shape {
+    <span class="kw">abstract void</span> draw();  <span class="cm">// the idea, no implementation here</span>
+}
+<span class="kw">class</span> Circle <span class="kw">extends</span> Shape {
+    <span class="kw">void</span> draw(){ System.out.println(<span class="tp">"Drawing a circle"</span>); }
+}
+<span class="kw">class</span> Rectangle <span class="kw">extends</span> Shape {
+    <span class="kw">void</span> draw(){ System.out.println(<span class="tp">"Drawing a rectangle"</span>); }
+}</pre>
+    </div>
+  </div>
+
+  <div class="section poly" id="poly">
+    <div class="band">Polymorphism</div>
+    <div class="body">
+      <div class="simple"><strong>In short:</strong> "poly" means many, "morph" means forms; one interface or method, taking many forms.</div>
+      <ul>
+        <li>Any operator, method, or constructor that can be used for more than one kind of task counts as polymorphic. The classic example: <code>+</code> both adds numbers and concatenates strings.</li>
+        <li>Java has two kinds of polymorphism: <strong>static</strong> (resolved at compile time) and <strong>dynamic</strong> (resolved at runtime).</li>
+      </ul>
+      <div class="sub">Static polymorphism: method overloading</div>
+      <ul>
+        <li>Several methods share a name but differ in their parameters.</li>
+        <li>The compiler decides which one to call before the program even runs.</li>
+      </ul>
+      <pre><span class="kw">class</span> Calculator {
+    <span class="kw">static</span> <span class="tp">int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b){ <span class="kw">return</span> a+b; }
+    <span class="kw">static</span> <span class="tp">double</span> add(<span class="tp">double</span> a, <span class="tp">double</span> b){ <span class="kw">return</span> a+b; }
+}
+Calculator.add(2, 3);      <span class="cm">// resolved at compile time</span>
+Calculator.add(2.5, 1.5);  <span class="cm">// resolved at compile time</span></pre>
+      <div class="sub">Dynamic polymorphism: method overriding</div>
+      <ul>
+        <li>A subclass redefines a method already declared by its superclass.</li>
+        <li>Also called late binding, or dynamic binding, because the version that actually runs is determined at runtime, based on the real object, not the reference type.</li>
+      </ul>
+      <pre><span class="kw">class</span> Animal {
+    <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Some generic sound"</span>); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+    <span class="cm">@Override</span>
+    <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Bark"</span>); }
+}
+Animal a = <span class="kw">new</span> Animal();
+a.makeSound();          <span class="cm">// prints "Some generic sound"</span>
+a = <span class="kw">new</span> Dog();
+a.makeSound();          <span class="cm">// prints "Bark", decided at runtime</span></pre>
+    </div>
+  </div>
+
+  <div class="section enc" id="enc">
+    <div class="band">Encapsulation</div>
+    <div class="body">
+      <div class="simple"><strong>In short:</strong> bundle data and the operations on that data into a single unit.</div>
+      <ul>
+        <li>Encapsulation means grouping variables (data) and the methods (operations) that act on them into one class.</li>
+        <li>In Java, this is done by making fields private and reaching them only through the class's own methods.</li>
+      </ul>
+      <pre><span class="kw">class</span> Person {
+    <span class="kw">private</span> String name;
+    <span class="kw">private</span> <span class="tp">int</span> age;
+
+    <span class="kw">public</span> String getName(){ <span class="kw">return</span> name; }
+    <span class="kw">public void</span> setName(String name){ <span class="kw">this</span>.name = name; }
+
+    <span class="kw">public</span> <span class="tp">int</span> getAge(){ <span class="kw">return</span> age; }
+    <span class="kw">public void</span> setAge(<span class="tp">int</span> age){ <span class="kw">this</span>.age = age; }
+}</pre>
+    </div>
+  </div>
+
+  <footer>
+    <div class="conclusion">Inheritance, Abstraction, Polymorphism, and Encapsulation are the four pillars behind every Java OOP design: reuse what a parent already provides, define an idea once and let each class implement it its own way, let one call take many forms, and keep an object's data and behavior bundled and guarded together.</div>
+    Source: <a href="https://javaconceptoftheday.com/java-oop-concepts-cheat-sheet/" target="_blank" rel="noopener">javaconceptoftheday.com: Java OOP Concepts Cheat Sheet</a>
+  </footer>
+
+</main>
+</body>
+</html>

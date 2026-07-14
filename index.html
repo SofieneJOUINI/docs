@@ -18,6 +18,7 @@
     --patternsA:#FF6B5E; --patternsB:#1FA398; --patternsC:#8A5CF6;
     --solidA:#FF6B5E; --solidB:#1FA398; --solidC:#8A5CF6; --solidD:#F2921D; --solidE:#3C6E71;
     --compA:#FF6B5E; --compB:#F2921D; --compC:#3C6E71; --compD:#8A5CF6; --compE:#1FA398; --compF:#2B6CB0;
+    --oopA:#1FA398; --oopB:#F2921D; --oopC:#8A5CF6; --oopD:#2B6CB0; --oopE:#FF6B5E;
   }
   *{box-sizing:border-box;}
   body{
@@ -114,6 +115,7 @@
   .card.patterns{border-top:8px solid var(--patternsB);}
   .card.solid{border-top:8px solid var(--solidC);}
   .card.component{border-top:8px solid var(--compD);}
+  .card.oop{border-top:8px solid var(--oopC);}
 
   .pagination{
     display:flex;align-items:center;justify-content:center;gap:14px;margin-top:32px;
@@ -243,6 +245,20 @@
         <span class="swatch" style="background:var(--compF)"></span>
       </div>
       <p>Component Cohesion (REP, CCP, CRP) &amp; Component Coupling (ADP, SDP, SAP), short descriptions for how classes should group into components and depend on each other.</p>
+      <span class="go">Open guide</span>
+    </a>
+
+    <a class="card oop" href="./oop-full-reference.html">
+      <span class="icon">🧬</span>
+      <h2>Object-Oriented Programming Principles</h2>
+      <div class="swatches">
+        <span class="swatch" style="background:var(--oopA)"></span>
+        <span class="swatch" style="background:var(--oopB)"></span>
+        <span class="swatch" style="background:var(--oopC)"></span>
+        <span class="swatch" style="background:var(--oopD)"></span>
+        <span class="swatch" style="background:var(--oopE)"></span>
+      </div>
+      <p>Inheritance, Abstraction, Polymorphism &amp; Encapsulation, simple explanations with Java examples, based on javaconceptoftheday.com's Java OOP concepts cheat sheet.</p>
       <span class="go">Open guide</span>
     </a>
 

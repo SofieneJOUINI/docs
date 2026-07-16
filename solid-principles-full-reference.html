@@ -68,6 +68,9 @@
   .example{border-left:4px solid var(--ink);padding:8px 12px;font-size:.82rem;line-height:1.55;margin:12px 0 0;border-radius:0 6px 6px 0;background:rgba(255,255,255,.85);}
   .example strong{font-family:'Space Grotesk',sans-serif;}
 
+  pre{margin:12px 0 0;padding:11px 14px;background:#282420;color:#EDE6D6;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.55;overflow-x:auto;}
+  pre .kw{color:#8AB4F8;} pre .tp{color:#F2921D;} pre .cm{color:#7d9b76;font-style:italic;}
+
   footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;font-size:.95rem;}
   footer a{color:var(--ink-soft);}
 
@@ -117,6 +120,19 @@
         </ul>
       </div>
       <div class="example"><strong>Example:</strong> an <code>Invoice</code> class that calculates totals shouldn't also know how to print itself or save itself to a file. Split those into an <code>InvoicePrinter</code> and an <code>InvoicePersistence</code> class instead.</div>
+      <pre><span class="cm">// ❌ Violates SRP: the class handles both report generation and saving</span>
+<span class="kw">class</span> Report {
+  generate(): <span class="tp">string</span> { <span class="kw">return</span> <span class="tp">"Report Content"</span>; }
+  saveToFile(content: <span class="tp">string</span>): <span class="kw">void</span> { console.log(<span class="tp">`Saving report: ${content}`</span>); }
+}
+
+<span class="cm">// ✅ SRP applied: separate concerns into different classes</span>
+<span class="kw">class</span> ReportGenerator {
+  generate(): <span class="tp">string</span> { <span class="kw">return</span> <span class="tp">"Report Content"</span>; }
+}
+<span class="kw">class</span> ReportSaver {
+  save(content: <span class="tp">string</span>): <span class="kw">void</span> { console.log(<span class="tp">`Saving report: ${content}`</span>); }
+}</pre>
     </div>
   </div>
 
@@ -134,6 +150,25 @@
         </ul>
       </div>
       <div class="example"><strong>Example:</strong> changing the <strong>GOLD</strong> tier's pricing logic shouldn't affect the "add to cart" logic. Extension example: adding a new <strong>PLATINUM</strong> tier means adding a new implementation, not touching the existing tier code.</div>
+      <pre><span class="cm">// ❌ Violates OCP: modifying the class every time a new discount type is added</span>
+<span class="kw">class</span> Invoice {
+  calculateTotal(amount: <span class="tp">number</span>, discountType: <span class="tp">string</span>): <span class="tp">number</span> {
+    <span class="kw">if</span> (discountType === <span class="tp">"percentage"</span>) <span class="kw">return</span> amount * 0.9;
+    <span class="kw">if</span> (discountType === <span class="tp">"fixed"</span>) <span class="kw">return</span> amount - 10;
+    <span class="kw">return</span> amount;
+  }
+}
+
+<span class="cm">// ✅ OCP applied: extend behavior via an interface, no need to modify existing code</span>
+<span class="kw">interface</span> Discount { apply(amount: <span class="tp">number</span>): <span class="tp">number</span>; }
+
+<span class="kw">class</span> PercentageDiscount <span class="kw">implements</span> Discount {
+  apply(amount: <span class="tp">number</span>) { <span class="kw">return</span> amount * 0.9; }
+}
+<span class="kw">class</span> InvoiceProcessor {
+  <span class="kw">constructor</span>(<span class="kw">private</span> discount: Discount) {}
+  calculateTotal(amount: <span class="tp">number</span>) { <span class="kw">return this</span>.discount.apply(amount); }
+}</pre>
     </div>
   </div>
 
@@ -150,6 +185,20 @@
         </ul>
       </div>
       <div class="example"><strong>Example:</strong> instead of the caller branching on which concrete subtype it has, give the base type a method like <code>getPrice()</code> and let each subtype override it. The caller just calls <code>getPrice()</code> and never needs to know which subtype it's holding.</div>
+      <pre><span class="cm">// ❌ Violates LSP: Penguin breaks what callers expect from Bird</span>
+<span class="kw">class</span> Bird { fly(): <span class="kw">void</span> { console.log(<span class="tp">"Flying..."</span>); } }
+<span class="kw">class</span> Penguin <span class="kw">extends</span> Bird {
+  fly(): <span class="kw">void</span> { <span class="kw">throw new</span> Error(<span class="tp">"Penguins cannot fly!"</span>); }
+}
+
+<span class="cm">// ✅ LSP applied: separate behaviors properly</span>
+<span class="kw">abstract class</span> BirdBase { <span class="kw">abstract</span> move(): <span class="kw">void</span>; }
+<span class="kw">class</span> FlyingBird <span class="kw">extends</span> BirdBase {
+  move(): <span class="kw">void</span> { console.log(<span class="tp">"Flying..."</span>); }
+}
+<span class="kw">class</span> NonFlyingBird <span class="kw">extends</span> BirdBase {
+  move(): <span class="kw">void</span> { console.log(<span class="tp">"Walking..."</span>); }
+}</pre>
     </div>
   </div>
 
@@ -168,6 +217,24 @@
         </ul>
       </div>
       <div class="example"><strong>Example context:</strong> repository interfaces. Split a broad <code>Repository</code> contract into smaller ones (e.g. read-only vs. write) so a client that only reads never has to depend on, or implement, the write methods.</div>
+      <pre><span class="cm">// ❌ Violates ISP: Robot is forced to implement eat() when it doesn't need to</span>
+<span class="kw">interface</span> Worker { work(): <span class="kw">void</span>; eat(): <span class="kw">void</span>; }
+<span class="kw">class</span> RobotWorker <span class="kw">implements</span> Worker {
+  work(): <span class="kw">void</span> { console.log(<span class="tp">"Working..."</span>); }
+  eat(): <span class="kw">void</span> { <span class="kw">throw new</span> Error(<span class="tp">"Robots don't eat!"</span>); }
+}
+
+<span class="cm">// ✅ ISP applied: separate interfaces</span>
+<span class="kw">interface</span> Workable { work(): <span class="kw">void</span>; }
+<span class="kw">interface</span> Eatable { eat(): <span class="kw">void</span>; }
+
+<span class="kw">class</span> Human <span class="kw">implements</span> Workable, Eatable {
+  work(): <span class="kw">void</span> { console.log(<span class="tp">"Working..."</span>); }
+  eat(): <span class="kw">void</span> { console.log(<span class="tp">"Eating..."</span>); }
+}
+<span class="kw">class</span> Robot <span class="kw">implements</span> Workable {
+  work(): <span class="kw">void</span> { console.log(<span class="tp">"Working..."</span>); }
+}</pre>
     </div>
   </div>
 
@@ -188,10 +255,30 @@
         </ul>
       </div>
       <div class="example"><strong>Example:</strong> the domain shouldn't depend on the database driver. Instead, the database adapter depends on a port defined by the domain. See the <a href="./hexagonal-full-reference.html">Hexagonal Architecture &amp; DDD guide</a> for how this plays out across layers.</div>
+      <pre><span class="cm">// ❌ Violates DIP: UserService is tightly coupled to a specific implementation</span>
+<span class="kw">class</span> MySQLDatabase {
+  save(data: <span class="tp">string</span>): <span class="kw">void</span> { console.log(<span class="tp">`Saving "${data}" to MySQL`</span>); }
+}
+<span class="kw">class</span> UserService {
+  <span class="kw">private</span> db: MySQLDatabase = <span class="kw">new</span> MySQLDatabase();
+  saveUser(name: <span class="tp">string</span>): <span class="kw">void</span> { <span class="kw">this</span>.db.save(name); }
+}
+
+<span class="cm">// ✅ DIP applied: depend on an abstraction instead of a concrete class</span>
+<span class="kw">interface</span> Database { save(data: <span class="tp">string</span>): <span class="kw">void</span>; }
+
+<span class="kw">class</span> MongoDB <span class="kw">implements</span> Database {
+  save(data: <span class="tp">string</span>): <span class="kw">void</span> { console.log(<span class="tp">`Saving "${data}" to MongoDB`</span>); }
+}
+<span class="kw">class</span> UserServiceDIP {
+  <span class="kw">constructor</span>(<span class="kw">private</span> db: Database) {}
+  saveUser(name: <span class="tp">string</span>): <span class="kw">void</span> { <span class="kw">this</span>.db.save(name); }
+}
+<span class="cm">// Usage: new UserServiceDIP(new MongoDB()) can swap databases with zero changes above</span></pre>
     </div>
   </div>
 
-  <footer>Source: <a href="https://www.freecodecamp.org/news/solid-principles-explained-in-plain-english/" target="_blank" rel="noopener">freecodecamp.org: SOLID Principles Explained in Plain English</a></footer>
+  <footer>Source: <a href="https://www.freecodecamp.org/news/solid-principles-explained-in-plain-english/" target="_blank" rel="noopener">freecodecamp.org: SOLID Principles Explained in Plain English</a><br>Code examples: <a href="https://it-cheat-sheets-21aa0a.gitlab.io/object-oriented-design-patterns-in-typescript-cheat-sheet.html" target="_blank" rel="noopener">it-cheat-sheets-21aa0a.gitlab.io: Object-oriented design patterns in TypeScript cheat sheet</a></footer>
 
 </main>
 </body>

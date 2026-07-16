@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Java: Full Reference Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#2B2620; --ink-soft:#5A5245;
+    --basics:#FF6B5E; --basics-bg:#FFF0ED;
+    --collections:#F2921D; --collections-bg:#FFF3E1;
+    --control:#3C6E71; --control-bg:#EEF3F2;
+    --oop:#8A5CF6; --oop-bg:#F3EEFF;
+    --io:#1FA398; --io-bg:#EAFAF7;
+    --func:#2B6CB0; --func-bg:#EAF2FA;
+    --conc:#C0392B; --conc-bg:#FBEAE9;
+    --adv:#6B4F9E; --adv-bg:#F1ECF8;
+    --tool:#5A5245; --tool-bg:#EFE9DA;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{width:260px;flex:0 0 260px;position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;}
+  #toc h1{font-family:'Kalam',cursive;font-size:1.3rem;margin:0 0 4px;line-height:1.15;}
+  #toc .tagline{font-size:.7rem;color:var(--ink-soft);margin-bottom:16px;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.74rem;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:6px;margin-bottom:1px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.03em;margin:10px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.basics{background:var(--basics);} #toc .grp.collections{background:var(--collections);}
+  #toc .grp.control{background:var(--control);} #toc .grp.oop{background:var(--oop);}
+  #toc .grp.io{background:var(--io);} #toc .grp.func{background:var(--func);}
+  #toc .grp.conc{background:var(--conc);} #toc .grp.adv{background:var(--adv);} #toc .grp.tool{background:var(--tool);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:980px;}
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.3rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+  header.hero p{font-size:.9rem;color:var(--ink-soft);max-width:720px;margin:0;}
+
+  .layer-banner{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:#fff;padding:9px 18px;border-radius:8px;margin:30px 0 14px;}
+  .layer-banner.basics{background:var(--basics);} .layer-banner.collections{background:var(--collections);}
+  .layer-banner.control{background:var(--control);} .layer-banner.oop{background:var(--oop);}
+  .layer-banner.io{background:var(--io);} .layer-banner.func{background:var(--func);}
+  .layer-banner.conc{background:var(--conc);} .layer-banner.adv{background:var(--adv);} .layer-banner.tool{background:var(--tool);}
+
+  .rule{scroll-margin-top:14px;border:2px solid var(--ink);border-radius:10px;margin-bottom:14px;overflow:hidden;background:#fff;}
+  .rule .t{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;padding:8px 14px;color:#fff;}
+  .rule.basics .t{background:var(--basics);} .rule.basics .b{background:var(--basics-bg);}
+  .rule.collections .t{background:var(--collections);} .rule.collections .b{background:var(--collections-bg);}
+  .rule.control .t{background:var(--control);} .rule.control .b{background:var(--control-bg);}
+  .rule.oop .t{background:var(--oop);} .rule.oop .b{background:var(--oop-bg);}
+  .rule.io .t{background:var(--io);} .rule.io .b{background:var(--io-bg);}
+  .rule.func .t{background:var(--func);} .rule.func .b{background:var(--func-bg);}
+  .rule.conc .t{background:var(--conc);} .rule.conc .b{background:var(--conc-bg);}
+  .rule.adv .t{background:var(--adv);} .rule.adv .b{background:var(--adv-bg);}
+  .rule.tool .t{background:var(--tool);} .rule.tool .b{background:var(--tool-bg);}
+  .rule .b{padding:10px 14px 12px;}
+  .rule ul{font-size:.82rem;line-height:1.55;margin:0 0 8px;padding-left:18px;}
+  .rule li{margin-bottom:3px;}
+  .rule p{font-size:.82rem;line-height:1.55;margin:0 0 8px;}
+  pre{margin:0 0 8px;padding:9px 12px;background:#282420;color:#EDE6D6;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.5;overflow-x:auto;}
+  pre:last-child{margin-bottom:0;}
+  pre .kw{color:#8AB4F8;} pre .tp{color:#F2921D;} pre .cm{color:#7d9b76;font-style:italic;}
+  table.ref{width:100%;border-collapse:collapse;margin:0 0 10px;font-size:.78rem;}
+  table.ref th,table.ref td{border:1px solid rgba(43,38,32,.25);padding:4px 8px;text-align:left;}
+  table.ref th{background:rgba(43,38,32,.08);font-family:'Space Grotesk',sans-serif;}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+  footer a{color:var(--ink-soft);}
+  @media (max-width:820px){ body{display:block;} #toc{position:relative;width:auto;height:auto;} main{padding:24px 18px 80px;} }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>Java ☕</h1>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp basics">Basics</div>
+  <a class="item" href="#variables">Variables</a>
+  <a class="item" href="#primitives">Primitive types</a>
+  <a class="item" href="#nonprimitives">Non-primitive types</a>
+  <a class="item" href="#numbers">Numbers</a>
+  <a class="item" href="#strings">Strings</a>
+  <a class="item" href="#characters">Characters</a>
+  <a class="item" href="#arrays">Arrays</a>
+
+  <div class="grp collections">Collections</div>
+  <a class="item" href="#collections">Collections overview</a>
+  <a class="item" href="#arraylists">ArrayLists</a>
+  <a class="item" href="#linkedlists">LinkedLists</a>
+  <a class="item" href="#hashsets">HashSets</a>
+  <a class="item" href="#treesets">TreeSets</a>
+  <a class="item" href="#linkedhashsets">LinkedHashSets</a>
+  <a class="item" href="#priorityqueues">PriorityQueues</a>
+  <a class="item" href="#hashmaps">HashMaps</a>
+  <a class="item" href="#treemaps">TreeMaps</a>
+  <a class="item" href="#linkedhashmaps">LinkedHashMaps</a>
+  <a class="item" href="#stacks">Stacks</a>
+
+  <div class="grp control">Control flow</div>
+  <a class="item" href="#conditionals">Conditional statements</a>
+  <a class="item" href="#loops">Loops</a>
+
+  <div class="grp oop">OOP</div>
+  <a class="item" href="#classes">Classes and objects</a>
+  <a class="item" href="#modifiers">Access modifiers</a>
+  <a class="item" href="#gettersetters">Getters and setters</a>
+  <a class="item" href="#inheritance">Inheritance</a>
+  <a class="item" href="#superkw">super keyword</a>
+  <a class="item" href="#ctoroverload">Constructor overloading</a>
+  <a class="item" href="#methodoverload">Method overloading</a>
+  <a class="item" href="#methodoverride">Method overriding</a>
+  <a class="item" href="#abstractclasses">Abstract classes</a>
+  <a class="item" href="#interfaces">Interfaces</a>
+  <a class="item" href="#anonymous">Anonymous classes</a>
+  <a class="item" href="#sealed">Sealed classes</a>
+  <a class="item" href="#records">Records</a>
+  <a class="item" href="#relationships">Inheritance vs Association vs Aggregation vs Composition</a>
+  <a class="item" href="#finalkw">final keyword</a>
+  <a class="item" href="#wrappers">Wrapper classes and autoboxing</a>
+
+  <div class="grp io">Operators &amp; I/O</div>
+  <a class="item" href="#operators">Expressions and operators</a>
+  <a class="item" href="#userio">User input/output</a>
+  <a class="item" href="#casting">Type casting</a>
+  <a class="item" href="#exceptions">Exception handling</a>
+  <a class="item" href="#classicio">Classic I/O</a>
+  <a class="item" href="#nio">Java NIO</a>
+  <a class="item" href="#serialization">Serialization</a>
+  <a class="item" href="#printf">Printf</a>
+  <a class="item" href="#varargs">Varargs</a>
+
+  <div class="grp func">Functional Java</div>
+  <a class="item" href="#lambdas">Lambda expressions</a>
+  <a class="item" href="#functionalinterfaces">Functional interfaces</a>
+  <a class="item" href="#streams">Streams API</a>
+  <a class="item" href="#optional">Optional class</a>
+  <a class="item" href="#methodrefs">Method references</a>
+  <a class="item" href="#var">var (Java 10+)</a>
+
+  <div class="grp conc">Concurrency</div>
+  <a class="item" href="#concurrency">Concurrency &amp; Multithreading</a>
+  <a class="item" href="#parallelism">Parallelism</a>
+
+  <div class="grp adv">Advanced</div>
+  <a class="item" href="#generics">Generics</a>
+  <a class="item" href="#annotations">Annotations</a>
+  <a class="item" href="#reflection">Reflection</a>
+  <a class="item" href="#enums">Enums</a>
+  <a class="item" href="#innerclasses">Inner/nested classes</a>
+  <a class="item" href="#packages">Packages and imports</a>
+  <a class="item" href="#modules">Java modules (JPMS)</a>
+
+  <div class="grp tool">Tooling</div>
+  <a class="item" href="#testing">Unit testing</a>
+  <a class="item" href="#datetime">Date &amp; time</a>
+  <a class="item" href="#buildtools">Build tools</a>
+  <a class="item" href="#javadoc">Javadoc</a>
+  <a class="item" href="#timers">Timers</a>
+  <a class="item" href="#monitoring">Monitoring</a>
+  <a class="item" href="#shell">Shell commands</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>Java <span>Cheat Sheet</span></h1>
+  </header>
+
+  <!-- ===================== BASICS ===================== -->
+  <div class="layer-banner basics">Basics</div>
+
+  <div class="rule basics" id="variables"><div class="t">Variables</div><div class="b">
+    <pre>String name = <span class="tp">"Hello World"</span>;</pre>
+    <p>Declares a variable that can be reassigned later, initialized with a value.</p>
+    <pre><span class="kw">final</span> String name = <span class="tp">"Hello World"</span>;</pre>
+    <p>Declares a variable that cannot be reassigned, also initialized with a value.</p>
+  </div></div>
+
+  <div class="rule basics" id="primitives"><div class="t">Primitive types</div><div class="b">
+    <p>Primitive types are the most basic data types, and they aren't objects. They hold simple, fixed-size values like numbers and booleans, without using references.</p>
+    <pre><span class="tp">byte</span> smallNumber = 100;</pre>
+    <p>Saves memory in large arrays where the values are small. Range: -128 to 127.</p>
+    <pre><span class="tp">short</span> mediumNumber = 30000;</pre>
+    <p>Rarely used, but useful for memory efficiency. Range: -32,768 to 32,767.</p>
+    <pre><span class="tp">int</span> age = 25;</pre>
+    <p>The most commonly used integer type. Range: -2,147,483,648 to 2,147,483,647.</p>
+    <pre><span class="tp">long</span> bigNumber = 9223372036854775807L;</pre>
+    <p>Used when <code>int</code> isn't large enough. Needs an <code>L</code> suffix. Range: roughly ±9.2 quintillion.</p>
+    <pre><span class="tp">float</span> price = 10.99f;</pre>
+    <p>A 32-bit IEEE-754 floating-point number, about 6-7 significant decimal digits of precision (the exact precision depends on the number's size). Needs the <code>f</code> suffix on literals.</p>
+    <pre><span class="tp">double</span> pi = 3.141592653589793;</pre>
+    <p>A 64-bit IEEE-754 floating-point number, about 15-16 significant decimal digits of precision (again depending on magnitude). The standard type for floating-point math.</p>
+    <pre><span class="tp">char</span> letter = <span class="tp">'A'</span>;
+<span class="tp">char</span> unicodeChar = <span class="tp">'\u00A9'</span>; <span class="cm">// '©'</span></pre>
+    <p><code>char</code> holds a single UTF-16 code unit. Most common characters fit in one <code>char</code>, though some Unicode characters need two (a surrogate pair).</p>
+    <pre><span class="tp">boolean</span> isJavaFun = <span class="kw">true</span>;</pre>
+    <p>Stores only <code>true</code> or <code>false</code>.</p>
+  </div></div>
+
+  <div class="rule basics" id="nonprimitives"><div class="t">Non-primitive types</div><div class="b">
+    <p>Non-primitive (reference) types hold references to objects instead of raw values. The objects those references point to get created at runtime, for instance via <code>new</code>, array creation, string literals, anonymous classes, lambdas, or method returns. A reference can be <code>null</code> when it points to nothing.</p>
+    <pre>String name = <span class="tp">"Hello"</span>; <span class="cm">// String literal</span>
+Point p1 = <span class="kw">new</span> Point(10, 20); <span class="cm">// Explicit object creation</span></pre>
+    <p>Strings are sequences of characters, immutable in Java. Object creation typically uses <code>new</code>, as with the <code>Point</code> example.</p>
+    <pre><span class="tp">int</span>[] numbers = {1, 2, 3, 4};       <span class="cm">// array of integers</span>
+String[] names = <span class="kw">new</span> String[3]; <span class="cm">// default values: null</span>
+String[] names2 = {<span class="tp">"Alice"</span>, <span class="tp">"Bob"</span>, <span class="tp">"Charlie"</span>}; <span class="cm">// predefined values</span></pre>
+    <p>Arrays are fixed-size containers for elements of one type, and can hold either primitive or non-primitive types.</p>
+    <pre><span class="kw">class</span> Car { String model; <span class="tp">int</span> year; }
+
+Car myCar = <span class="kw">new</span> Car(); <span class="cm">// creating an object</span>
+myCar.model = <span class="tp">"Tesla"</span>;  <span class="cm">// assigning values</span>
+myCar.year = 2024;</pre>
+    <p>A class is a blueprint for objects; an object is an instance of a class. Objects can have attributes (variables) and methods (functions), and are created with <code>new</code>.</p>
+    <pre><span class="tp">int</span> x = 10;
+Integer y = Integer.valueOf(x); <span class="cm">// wrapping int into an object</span>
+<span class="tp">int</span> z = y.intValue();        <span class="cm">// unwrapping, back to a primitive</span></pre>
+    <p>Java offers wrapper classes to treat primitives as objects (<code>Integer</code> for <code>int</code>, <code>Double</code> for <code>double</code>, <code>Boolean</code> for <code>boolean</code>, etc). Useful in collections (<code>ArrayList&lt;Integer&gt;</code>) and for utility methods like <code>Integer.parseInt("100")</code>.</p>
+    <pre>ArrayList&lt;String&gt; names = <span class="kw">new</span> ArrayList&lt;&gt;();
+names.add(<span class="tp">"Alice"</span>);
+names.add(<span class="tp">"Bob"</span>);
+System.out.println(names.get(0)); <span class="cm">// Alice</span></pre>
+    <p>Collections are data structures that store objects. Many, like <code>ArrayList</code>, can grow or shrink dynamically; others may be fixed-size or immutable depending on how they're created. Common types: <code>ArrayList</code>, <code>LinkedList</code>, <code>HashSet</code>, <code>HashMap</code>.</p>
+    <pre>String a = <span class="kw">new</span> String(<span class="tp">"Hello"</span>);
+String b = <span class="kw">new</span> String(<span class="tp">"Hello"</span>);
+System.out.println(a == b);        <span class="cm">// false, different memory locations</span>
+System.out.println(a.equals(b));   <span class="cm">// true, same content</span></pre>
+    <p>Passing objects to a method passes the reference by value: the method gets a copy of the reference, so it can modify the object but not the caller's reference itself. Use <code>.equals()</code> rather than <code>==</code> for comparison, since <code>==</code> checks reference equality, not value equality. Java's garbage collector automatically clears out unreferenced objects.</p>
+  </div></div>
+
+  <div class="rule basics" id="numbers"><div class="t">Numbers</div><div class="b">
+    <pre>Math.abs(-10);   <span class="cm">// 10, the absolute value</span>
+Math.round(4.7); <span class="cm">// 5</span>
+Math.floor(4.9); <span class="cm">// 4.0, rounds down</span>
+Math.ceil(4.1);  <span class="cm">// 5.0, rounds up</span>
+Math.pow(2, 3);  <span class="cm">// 8.0</span>
+Math.sqrt(16);   <span class="cm">// 4.0</span>
+Math.max(10,20); <span class="cm">// 20</span>
+Math.min(10,20); <span class="cm">// 10</span>
+Math.random();   <span class="cm">// 0.0 to 1.0, inclusive of 0.0, exclusive of 1.0</span></pre>
+    <pre><span class="cm">// Older way (commonly seen)</span>
+(<span class="tp">int</span>) (Math.random() * 10);
+<span class="cm">// Modern way (recommended)</span>
+ThreadLocalRandom.current().nextInt(10);</pre>
+    <p>Both return a random integer between 0 and 9.</p>
+    <pre><span class="tp">int</span> num = Integer.parseInt(<span class="tp">"123"</span>);     <span class="cm">// 123</span>
+<span class="tp">double</span> d = Double.parseDouble(<span class="tp">"3.14"</span>); <span class="cm">// 3.14</span></pre>
+    <p>Converts strings to numbers.</p>
+    <pre><span class="tp">char</span> x = <span class="tp">'1'</span>;
+<span class="tp">int</span> y = x - <span class="tp">'0'</span>; <span class="cm">// 1</span></pre>
+    <p>Converts a char digit to its int value.</p>
+    <pre>String str = Integer.toString(456);  <span class="cm">// "456"</span>
+String str2 = String.valueOf(3.14);  <span class="cm">// "3.14"</span></pre>
+    <p>Converts numbers to strings.</p>
+    <pre><span class="kw">import</span> java.math.BigInteger;
+
+BigInteger bigNum1 = <span class="kw">new</span> BigInteger(<span class="tp">"999999999999999999999"</span>);
+BigInteger bigNum2 = <span class="kw">new</span> BigInteger(<span class="tp">"2"</span>);
+BigInteger result = bigNum1.multiply(bigNum2); <span class="cm">// 1999999999999999999998</span></pre>
+    <p>For values beyond what <code>long</code> can hold, use <code>BigInteger</code> or <code>BigDecimal</code>.</p>
+    <pre><span class="kw">import</span> java.math.BigDecimal;
+
+BigDecimal num1 = <span class="kw">new</span> BigDecimal(<span class="tp">"0.1"</span>);
+BigDecimal num2 = <span class="kw">new</span> BigDecimal(<span class="tp">"0.2"</span>);
+System.out.println(num1.add(num2)); <span class="cm">// 0.3</span></pre>
+    <p><code>BigDecimal</code> is useful because ordinary floating-point arithmetic has precision issues: 0.1 + 0.2 doesn't equal exactly 0.3 as a <code>double</code>.</p>
+    <pre><span class="tp">int</span> num = 100;
+<span class="tp">double</span> d = num; <span class="cm">// 100.0, no problem, int -> double is implicit (widening) casting, safe</span></pre>
+    <pre><span class="tp">double</span> pi = 3.14159;
+<span class="tp">int</span> approx = (<span class="tp">int</span>) pi; <span class="cm">// 3, explicit (narrowing) casting, loses the decimal part, risky</span></pre>
+    <pre><span class="tp">int</span> num2 = 25;
+String binary = Integer.toBinaryString(num2); <span class="cm">// "11001"</span></pre>
+    <p>Converts an integer to its binary representation.</p>
+    <pre>String binaryStr = <span class="tp">"11001"</span>;
+<span class="tp">int</span> num3 = Integer.parseInt(binaryStr, 2); <span class="cm">// 25</span></pre>
+    <p>Converts binary back to an integer.</p>
+  </div></div>
+  <div class="rule basics" id="strings"><div class="t">Strings</div><div class="b">
+    <pre>String str1 = <span class="tp">"Hello, World!"</span>;</pre>
+    <p>String literals are automatically pooled: identical literals share the same instance, which saves memory by reusing existing string values.</p>
+    <pre>String str2 = <span class="kw">new</span> String(<span class="tp">"Hello, World!"</span>);</pre>
+    <p>This creates a new object in heap memory even if an identical string already exists in the pool. Not recommended unless you specifically need that.</p>
+    <pre>String name = <span class="tp">"Java"</span>;
+name = name + <span class="tp">" 17"</span>; <span class="cm">// creates a new String object ("Java 17"), the old one is discarded</span></pre>
+    <p>Strings are immutable, they cannot be changed after creation. Any modification creates a new object rather than altering the original. Use <code>StringBuilder</code> for efficiency when modifying strings frequently.</p>
+    <pre>String text = <span class="tp">"Hello"</span>;
+text.length();  <span class="cm">// 5</span>
+text.charAt(1); <span class="cm">// 'e'</span></pre>
+    <pre>String s = <span class="tp">"Java Programming"</span>;
+s.substring(5);    <span class="cm">// "Programming"</span>
+s.substring(0, 4); <span class="cm">// "Java" (exclusive end index)</span></pre>
+    <p>Extracts substrings.</p>
+    <pre>String word = <span class="tp">"Java"</span>;
+word.toUpperCase(); <span class="cm">// JAVA</span>
+word.toLowerCase(); <span class="cm">// java</span></pre>
+    <pre>String sentence = <span class="tp">"I love Java!"</span>;
+sentence.indexOf(<span class="tp">"Java"</span>);  <span class="cm">// 7</span>
+sentence.contains(<span class="tp">"love"</span>); <span class="cm">// true</span></pre>
+    <pre>String file = <span class="tp">"document.pdf"</span>;
+file.startsWith(<span class="tp">"doc"</span>); <span class="cm">// true</span>
+file.endsWith(<span class="tp">".pdf"</span>);  <span class="cm">// true</span></pre>
+    <pre>String text2 = <span class="tp">"I like Java"</span>;
+text2.replace(<span class="tp">"Java"</span>, <span class="tp">"Python"</span>); <span class="cm">// "I like Python"</span></pre>
+    <pre>String csv = <span class="tp">"Apple,Banana,Cherry"</span>;
+String[] fruits = csv.split(<span class="tp">","</span>);
+fruits[1]; <span class="cm">// "Banana"</span></pre>
+    <pre>String[] words = {<span class="tp">"Java"</span>, <span class="tp">"Python"</span>, <span class="tp">"C++"</span>};
+String result = String.join(<span class="tp">", "</span>, words); <span class="cm">// "Java, Python, C++", only works with String[]</span></pre>
+    <pre>String a = <span class="tp">"Java"</span>, b = <span class="tp">"Java"</span>;
+a.equals(b); <span class="cm">// true, case-sensitive; use .equalsIgnoreCase() otherwise</span></pre>
+    <pre>String a2 = <span class="tp">"Hello"</span>;
+String b2 = <span class="kw">new</span> String(<span class="tp">"Hello"</span>);
+a2 == b2; <span class="cm">// false, different objects in memory; == isn't reliable for comparing values</span></pre>
+    <pre><span class="cm">// Method 1</span>
+String result1 = first + <span class="tp">" "</span> + second;
+<span class="cm">// Method 2</span>
+String result2 = first.concat(<span class="tp">" "</span>).concat(second);
+<span class="cm">// Method 3, faster for many concatenations</span>
+StringBuilder sb = <span class="kw">new</span> StringBuilder(first);
+sb.append(<span class="tp">" World"</span>);</pre>
+    <p>Concatenation can be done with <code>+</code>, <code>concat()</code>, or <code>StringBuilder</code>; <code>StringBuilder</code> is faster for multiple concatenations.</p>
+    <pre>String formatted = String.format(<span class="tp">"Hello %s, your score is %d"</span>, <span class="tp">"Alice"</span>, 90);
+<span class="cm">// "Hello Alice, your score is 90"</span></pre>
+    <p><code>%s</code> string, <code>%d</code> integer, <code>%f</code> float/double, <code>%.2f</code> float with 2 decimal places.</p>
+    <pre>String a3 = <span class="tp">"Java"</span>, b3 = <span class="tp">"Java"</span>;
+System.out.println(a3 == b3); <span class="cm">// true, both refer to the same object in the String Pool</span>
+
+String c3 = <span class="kw">new</span> String(<span class="tp">"Java"</span>).intern();
+System.out.println(a3 == c3); <span class="cm">// true, intern() moves it into the pool</span></pre>
+    <p>The String Pool avoids duplicate objects, saving memory.</p>
+    <pre><span class="tp">char</span>[] letters = {<span class="tp">'J'</span>,<span class="tp">'a'</span>,<span class="tp">'v'</span>,<span class="tp">'a'</span>};
+String word2 = <span class="kw">new</span> String(letters); <span class="cm">// "Java"</span>
+<span class="tp">char</span>[] back = word2.toCharArray();</pre>
+    <pre>str1.isEmpty(); <span class="cm">// checks if a string is empty</span>
+str1.isBlank(); <span class="cm">// checks if it's empty or only whitespace</span>
+str1.trim();    <span class="cm">// removes whitespace from both sides</span></pre>
+    <pre>String message = <span class="tp">"""
+    Hello,
+    This is a multi-line string.
+    It preserves line breaks and formatting!
+    """</span>;</pre>
+    <p>A text block (Java 15+) is a multi-line string enclosed in triple double quotes. No need to escape newlines or double quotes, indentation is handled smartly, and line breaks are preserved automatically. The opening and closing <code>"""</code> must each be on their own line. Great for HTML, SQL, or JSON literals.</p>
+  </div></div>
+
+  <div class="rule basics" id="characters"><div class="t">Characters</div><div class="b">
+    <pre><span class="tp">char</span> ch = <span class="tp">'A'</span>;
+Character chObj = ch;  <span class="cm">// autoboxing</span>
+<span class="tp">char</span> again = chObj; <span class="cm">// unboxing</span></pre>
+    <p><code>Character</code> is the wrapper class for the primitive <code>char</code>, letting you treat characters as objects, useful for collections (<code>List&lt;Character&gt;</code>) or the class's utility methods.</p>
+    <pre>Character.isLetter(<span class="tp">'A'</span>);        <span class="cm">// true</span>
+Character.isDigit(<span class="tp">'3'</span>);         <span class="cm">// true</span>
+Character.isLetterOrDigit(<span class="tp">'7'</span>); <span class="cm">// true</span>
+Character.isWhitespace(<span class="tp">' '</span>);     <span class="cm">// true</span>
+Character.isUpperCase(<span class="tp">'Z'</span>);      <span class="cm">// true</span>
+Character.toUpperCase(<span class="tp">'a'</span>);      <span class="cm">// 'A'</span>
+Character.getNumericValue(<span class="tp">'5'</span>);  <span class="cm">// 5</span></pre>
+  </div></div>
+
+  <div class="rule basics" id="arrays"><div class="t">Arrays</div><div class="b">
+    <p>An array is a fixed-size data structure storing multiple elements of the same type in contiguous memory.</p>
+    <pre><span class="tp">int</span>[] numbers; <span class="cm">// declared, no memory allocated yet</span></pre>
+    <pre><span class="tp">int</span>[] numbers2 = <span class="kw">new</span> <span class="tp">int</span>[5]; <span class="cm">// 5 elements, default values: 0</span></pre>
+    <pre><span class="tp">int</span>[] numbers3 = {10, 20, 30, 40, 50}; <span class="cm">// declared and initialized in one step</span></pre>
+    <pre><span class="tp">int</span>[] arr = {5, 10, 15};
+arr[0];     <span class="cm">// 5</span>
+arr[1] = 20; <span class="cm">// modifies index 1</span></pre>
+    <p>Zero-based indexing (0 is the first element); an out-of-bounds index throws <code>ArrayIndexOutOfBoundsException</code>.</p>
+    <pre><span class="tp">int</span>[] numbers4 = {10, 20, 30, 40};
+numbers4.length; <span class="cm">// 4, the number of elements, not the last index</span></pre>
+    <pre><span class="cm">// 2D array</span>
+<span class="tp">int</span>[][] matrix = { {1,2,3}, {4,5,6} };
+matrix[1][2]; <span class="cm">// 6</span></pre>
+    <pre>Arrays.sort(numbers);
+<span class="tp">int</span>[] copy = Arrays.copyOf(original, original.length);
+Arrays.fill(arr, 100);
+Arrays.binarySearch(sortedArr, 30);
+Arrays.toString(numbers); <span class="cm">// use Arrays.deepToString() for multi-dimensional arrays</span></pre>
+    <pre>ArrayList&lt;Integer&gt; list = <span class="kw">new</span> ArrayList&lt;&gt;();
+list.add(10); list.add(20); list.add(30); <span class="cm">// [10, 20, 30]</span></pre>
+    <p>Since arrays have a fixed size, an <code>ArrayList</code> is used for dynamic resizing, more flexible than a plain array.</p>
+    <pre><span class="kw">public static void</span> printArray(<span class="tp">int</span>[] arr){
+  <span class="kw">for</span> (<span class="tp">int</span> num : arr) System.out.print(num + <span class="tp">" "</span>);
+}</pre>
+    <pre><span class="kw">public static int</span>[] createArray(){
+  <span class="kw">return new int</span>[]{10, 20, 30};
+}</pre>
+    <pre><span class="tp">int</span>[] arr1 = {1,2,3}, arr2 = {1,2,3};
+arr1 == arr2;             <span class="cm">// false, compares references</span>
+Arrays.equals(arr1, arr2); <span class="cm">// true, compares elements</span></pre>
+    <p>Use <code>Arrays.equals()</code> instead of <code>==</code> to compare arrays; for multi-dimensional arrays use <code>Arrays.deepEquals()</code>, since <code>Arrays.equals()</code> only compares the outer array's references.</p>
+  </div></div>
+
+  <!-- ===================== COLLECTIONS ===================== -->
+  <div class="layer-banner collections">Collections</div>
+
+  <div class="rule collections" id="collections"><div class="t">Collections overview</div><div class="b">
+    <p>A collection is a container for objects: a way to group and manage multiple elements as a single unit (a list of names, a set of IDs, a map of user data). The Java Collections Framework (java.util) makes it easy to work with these data structures.</p>
+    <table class="ref">
+      <tr><th>Interface</th><th>Represents</th><th>Example classes</th></tr>
+      <tr><td>Collection</td><td>The root interface</td><td>-</td></tr>
+      <tr><td>List</td><td>Ordered collection, duplicates OK</td><td>ArrayList, LinkedList</td></tr>
+      <tr><td>Set</td><td>Unique elements, no duplicates</td><td>HashSet, TreeSet, LinkedHashSet</td></tr>
+      <tr><td>Queue</td><td>Elements in a specific order (FIFO)</td><td>LinkedList, PriorityQueue</td></tr>
+      <tr><td>Map (not part of Collection)</td><td>Key-value pairs</td><td>HashMap, TreeMap, LinkedHashMap</td></tr>
+    </table>
+    <pre>add(element); remove(element); contains(element);
+isEmpty(); size(); clear();</pre>
+    <p>These operations come from the <code>Collection</code> interface itself.</p>
+  </div></div>
+
+  <div class="rule collections" id="arraylists"><div class="t">ArrayLists</div><div class="b">
+    <p>An <code>ArrayList</code> is a resizable array from <code>java.util</code>. Unlike a normal array, it grows or shrinks dynamically as elements are added or removed. It stores objects only, though autoboxing helps with primitives.</p>
+    <pre>ArrayList&lt;String&gt; names = <span class="kw">new</span> ArrayList&lt;&gt;();
+ArrayList&lt;String&gt; names2 = <span class="kw">new</span> ArrayList&lt;String&gt;(); <span class="cm">// explicit, less common</span></pre>
+    <pre><span class="cm">// Java 9+</span>
+List&lt;Integer&gt; numbers = <span class="kw">new</span> ArrayList&lt;&gt;(List.of(1,2,3,4)); <span class="cm">// mutable copy</span></pre>
+    <pre>names.add(<span class="tp">"Alice"</span>);
+String first = names.get(0);      <span class="cm">// "Alice"</span>
+names.set(1, <span class="tp">"Charlie"</span>);      <span class="cm">// replaces element at index 1</span>
+names.remove(0);
+<span class="tp">int</span> size = names.size();
+<span class="tp">boolean</span> isEmpty = names.isEmpty();
+names.contains(<span class="tp">"Alice"</span>);
+names.indexOf(<span class="tp">"Charlie"</span>); <span class="cm">// index, or -1</span>
+names.clear();</pre>
+    <pre><span class="cm">// Traditional for loop</span>
+<span class="kw">for</span> (<span class="tp">int</span> i=0; i&lt;names.size(); i++) System.out.println(names.get(i));
+<span class="cm">// Enhanced for loop</span>
+<span class="kw">for</span> (String name : names) System.out.println(name);</pre>
+    <pre>String[] array = {<span class="tp">"a"</span>,<span class="tp">"b"</span>,<span class="tp">"c"</span>};
+ArrayList&lt;String&gt; list = <span class="kw">new</span> ArrayList&lt;&gt;(Arrays.asList(array)); <span class="cm">// array to ArrayList</span>
+String[] newArray = list.toArray(<span class="kw">new</span> String[0]);         <span class="cm">// ArrayList to array</span></pre>
+    <pre>Collections.sort(numbers);                          <span class="cm">// ascending</span>
+Collections.sort(numbers, Collections.reverseOrder()); <span class="cm">// descending</span>
+names.sort((a,b) -&gt; Integer.compare(a.length(), b.length())); <span class="cm">// custom comparator, e.g. by length</span></pre>
+    <pre>people.sort((p1,p2) -&gt; Integer.compare(p1.age, p2.age)); <span class="cm">// sorting custom objects by a field</span></pre>
+  </div></div>
+
+  <div class="rule collections" id="linkedlists"><div class="t">LinkedLists</div><div class="b">
+    <p>A <code>LinkedList</code> is a doubly-linked list implementation of <code>List</code> and <code>Deque</code>. Unlike <code>ArrayList</code>, where elements sit in one contiguous memory block, a <code>LinkedList</code> stores each element as a node pointing to the next and previous ones.</p>
+    <pre>List&lt;String&gt; names = <span class="kw">new</span> LinkedList&lt;&gt;(); <span class="cm">// interface type, recommended</span></pre>
+    <pre>names.add(<span class="tp">"Alice"</span>);      <span class="cm">// add at end</span>
+names.addFirst(<span class="tp">"Bob"</span>);  <span class="cm">// add at beginning</span>
+names.addLast(<span class="tp">"Charlie"</span>);</pre>
+    <pre>String first = names.get(0);
+String last = names.getLast();
+names.set(1, <span class="tp">"Daniel"</span>);
+names.remove();      <span class="cm">// removes first</span>
+names.removeFirst(); names.removeLast();</pre>
+    <pre><span class="cm">// Enhanced for-loop</span>
+<span class="kw">for</span> (String name : names) System.out.println(name);
+<span class="cm">// With an iterator</span>
+Iterator&lt;String&gt; it = names.iterator();
+<span class="kw">while</span> (it.hasNext()) System.out.println(it.next());</pre>
+  </div></div>
+
+  <div class="rule collections" id="hashsets"><div class="t">HashSets</div><div class="b">
+    <p>A <code>HashSet</code> implements <code>Set</code> and stores elements in no particular order, using a hash table. No duplicates are allowed: it internally uses a <code>HashMap</code>, uses each element's hash code to decide where to store it, and silently ignores duplicates.</p>
+    <pre>Set&lt;String&gt; names = <span class="kw">new</span> HashSet&lt;&gt;(); <span class="cm">// recommended: interface type</span></pre>
+    <pre>names.add(<span class="tp">"Alice"</span>); names.add(<span class="tp">"Bob"</span>);
+names.add(<span class="tp">"Alice"</span>); <span class="cm">// duplicate, won't be added</span>
+names.remove(<span class="tp">"Bob"</span>);
+names.contains(<span class="tp">"Alice"</span>);
+names.size(); names.clear(); names.isEmpty();</pre>
+    <pre>List&lt;String&gt; list = Arrays.asList(<span class="tp">"a"</span>,<span class="tp">"b"</span>,<span class="tp">"a"</span>);
+Set&lt;String&gt; set = <span class="kw">new</span> HashSet&lt;&gt;(list); <span class="cm">// removes the duplicate "a"</span>
+List&lt;String&gt; newList = <span class="kw">new</span> ArrayList&lt;&gt;(set); <span class="cm">// back to a list, if you need indexing</span></pre>
+  </div></div>
+
+  <div class="rule collections" id="treesets"><div class="t">TreeSets</div><div class="b">
+    <p>A <code>TreeSet</code> is a sorted set that automatically keeps its elements in ascending order by default, and ensures uniqueness. It's implemented with a Red-Black Tree, so add/remove/search all run in O(log n). Nulls aren't allowed.</p>
+    <pre>TreeSet&lt;String&gt; names = <span class="kw">new</span> TreeSet&lt;&gt;();
+names.add(<span class="tp">"Alice"</span>); names.add(<span class="tp">"Charlie"</span>); names.add(<span class="tp">"Bob"</span>);
+names.add(<span class="tp">"Alice"</span>); <span class="cm">// duplicate, won't be added</span>
+<span class="cm">// [Alice, Bob, Charlie]</span>
+
+names.higher(<span class="tp">"Bob"</span>);    <span class="cm">// "Charlie", next bigger element</span>
+names.lower(<span class="tp">"Charlie"</span>); <span class="cm">// "Bob", next smaller element</span>
+names.first();        <span class="cm">// "Alice", smallest</span>
+names.last();         <span class="cm">// "Charlie", largest</span></pre>
+    <pre>TreeSet&lt;String&gt; reverseOrder = <span class="kw">new</span> TreeSet&lt;&gt;(Collections.reverseOrder());
+reverseOrder.add(<span class="tp">"Java"</span>); reverseOrder.add(<span class="tp">"Python"</span>); reverseOrder.add(<span class="tp">"C++"</span>);
+<span class="cm">// [Python, Java, C++]</span></pre>
+    <p>TreeSet elements can be sorted in reverse order or with a custom comparator.</p>
+  </div></div>
+
+  <div class="rule collections" id="linkedhashsets"><div class="t">LinkedHashSets</div><div class="b">
+    <p>A <code>LinkedHashSet</code> only stores unique elements (like a <code>HashSet</code>), but maintains insertion order and offers constant-time performance for add/remove/contains.</p>
+    <pre>LinkedHashSet&lt;String&gt; languages = <span class="kw">new</span> LinkedHashSet&lt;&gt;();
+languages.add(<span class="tp">"Java"</span>); languages.add(<span class="tp">"Python"</span>); languages.add(<span class="tp">"C++"</span>);
+languages.add(<span class="tp">"Java"</span>); <span class="cm">// won't be added again</span>
+<span class="cm">// [Java, Python, C++]</span></pre>
+    <pre>Iterator&lt;String&gt; iterator = languages.iterator();
+<span class="kw">while</span> (iterator.hasNext()){
+  String lang = iterator.next();
+}</pre>
+    <p>Using an iterator gives more control, e.g. removing items while iterating.</p>
+    <pre>List&lt;String&gt; reversed = <span class="kw">new</span> ArrayList&lt;&gt;(languages);
+Collections.reverse(reversed);</pre>
+    <p><code>LinkedHashSet</code> doesn't support reverse iteration natively, since it isn't index-based like a list. Convert it to a list (as above), or use <code>LinkedList</code>/<code>TreeSet</code> instead.</p>
+  </div></div>
+
+  <div class="rule collections" id="priorityqueues"><div class="t">PriorityQueues</div><div class="b">
+    <p>A <code>PriorityQueue</code> orders elements by priority, not just insertion order: natural ordering by default (lowest first), or a custom <code>Comparator</code>. It implements <code>Queue</code> and uses a binary heap internally, think of it like a to-do list that always hands you the most important task first. Not thread-safe (use <code>PriorityBlockingQueue</code> for that); nulls aren't allowed, but duplicates are.</p>
+    <pre>PriorityQueue&lt;Integer&gt; pq = <span class="kw">new</span> PriorityQueue&lt;&gt;();
+pq.add(10); pq.add(5); pq.add(20); <span class="cm">// [5, 10, 20] internally organized</span>
+pq.offer(15); <span class="cm">// like add(), but returns false instead of throwing on failure</span></pre>
+    <pre>pq.peek(); <span class="cm">// 5, highest priority (lowest value), without removing</span>
+pq.poll(); <span class="cm">// 5, removes and returns it</span>
+pq.remove(15); <span class="cm">// removes a specific element</span>
+pq.contains(10); pq.isEmpty(); pq.size(); pq.clear();</pre>
+    <pre><span class="kw">while</span> (!pq.isEmpty()) System.out.println(pq.poll()); <span class="cm">// priority order, but empties the queue</span></pre>
+    <pre>PriorityQueue&lt;Integer&gt; copy = <span class="kw">new</span> PriorityQueue&lt;&gt;(pq); <span class="cm">// clone before polling to keep the original intact</span></pre>
+  </div></div>
+
+  <div class="rule collections" id="hashmaps"><div class="t">HashMaps</div><div class="b">
+    <p>A <code>HashMap&lt;K,V&gt;</code> lets you store key-value pairs. It computes a hash code from the key to decide which bucket to store the value in; if two keys hash to the same bucket, a linked list or tree resolves the collision.</p>
+    <pre>Map&lt;String,Integer&gt; map = Map.of(<span class="tp">"apple"</span>,3, <span class="tp">"banana"</span>,5, <span class="tp">"orange"</span>,2); <span class="cm">// immutable</span>
+
+Map&lt;String,Integer&gt; map2 = <span class="kw">new</span> HashMap&lt;&gt;();
+map2.put(<span class="tp">"apple"</span>, 2);
+map2.put(<span class="tp">"apple"</span>, 3); <span class="cm">// overwrites the previous value</span></pre>
+    <pre>map2.get(<span class="tp">"apple"</span>);          <span class="cm">// 3</span>
+map2.containsKey(<span class="tp">"apple"</span>);   <span class="cm">// true</span>
+map2.containsValue(3);      <span class="cm">// true</span>
+map2.remove(<span class="tp">"apple"</span>);
+map2.size(); map2.clear();</pre>
+    <pre><span class="kw">for</span> (String key : map.keySet()) { }
+<span class="kw">for</span> (Integer value : map.values()) { }
+<span class="kw">for</span> (Map.Entry&lt;String,Integer&gt; entry : map.entrySet()) {
+  System.out.println(entry.getKey() + <span class="tp">" = "</span> + entry.getValue());
+}</pre>
+  </div></div>
+
+  <div class="rule collections" id="treemaps"><div class="t">TreeMaps</div><div class="b">
+    <p>A <code>TreeMap</code> stores key-value pairs like a <code>HashMap</code>, but automatically sorts the keys in natural order (alphabetically or numerically). It's implemented with a Red-Black Tree and implements <code>NavigableMap</code> (which extends <code>SortedMap</code> and <code>Map</code>).</p>
+    <pre>TreeMap&lt;String,Integer&gt; map = <span class="kw">new</span> TreeMap&lt;&gt;();
+map.put(<span class="tp">"Banana"</span>,2); map.put(<span class="tp">"Apple"</span>,5); map.put(<span class="tp">"Cherry"</span>,3);
+map.put(<span class="tp">"Date"</span>,4);
+map.put(<span class="tp">"Apple"</span>,10); <span class="cm">// updates the value for "Apple"</span></pre>
+    <pre>map.get(<span class="tp">"Cherry"</span>);       <span class="cm">// 3</span>
+map.remove(<span class="tp">"Banana"</span>);
+map.containsKey(<span class="tp">"Apple"</span>); map.containsValue(4);
+map.size(); map.isEmpty(); map.clear();</pre>
+    <pre>map.keySet();   <span class="cm">// sorted: [Apple, Cherry, Date]</span>
+map.values();   <span class="cm">// in key order</span>
+map.firstKey(); <span class="cm">// smallest key: "Apple"</span>
+map.lastKey();  <span class="cm">// largest key: "Date"</span>
+map.higherKey(<span class="tp">"Cherry"</span>); <span class="cm">// next key after: "Date"</span>
+map.lowerKey(<span class="tp">"Cherry"</span>);  <span class="cm">// previous key before: "Apple"</span></pre>
+  </div></div>
+
+  <div class="rule collections" id="linkedhashmaps"><div class="t">LinkedHashMaps</div><div class="b">
+    <p>A <code>LinkedHashMap</code> stores key-value pairs like a <code>HashMap</code> but maintains insertion order. It allows null keys/values, offers O(1) <code>get()</code>/<code>put()</code>, and has an optional access-order mode, useful for LRU caches.</p>
+    <pre>LinkedHashMap&lt;String,Integer&gt; map = <span class="kw">new</span> LinkedHashMap&lt;&gt;();
+map.put(<span class="tp">"Apple"</span>,1); map.put(<span class="tp">"Banana"</span>,2); map.put(<span class="tp">"Cherry"</span>,3);
+map.put(<span class="tp">"Date"</span>,4);
+map.put(<span class="tp">"Apple"</span>,5); <span class="cm">// updates the value for "Apple"</span></pre>
+    <pre>map.get(<span class="tp">"Banana"</span>);   <span class="cm">// 2</span>
+map.remove(<span class="tp">"Cherry"</span>);
+map.containsKey(<span class="tp">"Apple"</span>); map.containsValue(5);
+map.size(); map.isEmpty();</pre>
+    <pre><span class="cm">// iterates in insertion order</span>
+<span class="kw">for</span> (String key : map.keySet()) { }
+<span class="kw">for</span> (Integer value : map.values()) { }
+<span class="kw">for</span> (<span class="kw">var</span> entry : map.entrySet()) { }</pre>
+    <pre>LinkedHashMap&lt;String,Integer&gt; accessMap =
+  <span class="kw">new</span> LinkedHashMap&lt;&gt;(16, 0.75f, <span class="kw">true</span>);
+accessMap.get(<span class="tp">"Banana"</span>); <span class="cm">// moves "Banana" to the end</span></pre>
+    <ul>
+      <li><strong>16</strong>: initial capacity, how many buckets the map starts with internally. Doesn't cap how many entries you can add, it just reduces early resizing.</li>
+      <li><strong>0.75f</strong>: load factor, the map resizes (doubles) once it's 75% full. Lower means more memory but faster access; higher is more compact but can cost performance. 0.75f is the default and recommended in most cases.</li>
+      <li><strong>true</strong>: ordering mode, <code>true</code> = access order (a <code>get()</code> or <code>put()</code> moves an entry to the end), <code>false</code> = insertion order. Access order is what makes an LRU cache easy to build.</li>
+    </ul>
+  </div></div>
+
+  <div class="rule collections" id="stacks"><div class="t">Stacks</div><div class="b">
+    <p>A <code>Stack</code> is a linear structure where you add and remove elements from the top only: the most recently added element is the first one removed (LIFO, Last In First Out). Think undo history, a browser's back button, or nested function calls. Using <code>Deque</code> (like <code>ArrayDeque</code>) instead is often recommended for better performance and flexibility.</p>
+    <pre>Stack&lt;String&gt; stack = <span class="kw">new</span> Stack&lt;&gt;();
+stack.push(<span class="tp">"Java"</span>); stack.push(<span class="tp">"Python"</span>); stack.push(<span class="tp">"C++"</span>);</pre>
+    <pre>stack.pop();  <span class="cm">// removes and returns "C++"</span>
+stack.peek(); <span class="cm">// returns the top element without removing it</span>
+stack.isEmpty(); stack.size();</pre>
+    <pre><span class="tp">int</span> position = stack.search(<span class="tp">"Java"</span>); <span class="cm">// 1-based position from the top</span>
+<span class="tp">int</span> notFound = stack.search(<span class="tp">"Ruby"</span>);  <span class="cm">// -1, not found</span></pre>
+  </div></div>
+  <!-- ===================== CONTROL FLOW ===================== -->
+  <div class="layer-banner control">Control flow</div>
+
+  <div class="rule control" id="conditionals"><div class="t">Conditional statements</div><div class="b">
+    <pre><span class="tp">int</span> age = 18;
+<span class="kw">if</span> (age &gt;= 18) System.out.println(<span class="tp">"You're an adult."</span>);</pre>
+    <pre><span class="tp">int</span> age2 = 16;
+<span class="kw">if</span> (age2 &gt;= 18) System.out.println(<span class="tp">"Adult"</span>);
+<span class="kw">else</span> System.out.println(<span class="tp">"Child"</span>);</pre>
+    <pre><span class="tp">int</span> score = 75;
+<span class="kw">if</span> (score &gt;= 90) System.out.println(<span class="tp">"Grade A"</span>);
+<span class="kw">else if</span> (score &gt;= 80) System.out.println(<span class="tp">"Grade B"</span>);
+<span class="kw">else if</span> (score &gt;= 70) System.out.println(<span class="tp">"Grade C"</span>);
+<span class="kw">else</span> System.out.println(<span class="tp">"Fail"</span>);</pre>
+    <pre><span class="tp">int</span> age3 = 20;
+String result = (age3 &gt;= 18) ? <span class="tp">"Adult"</span> : <span class="tp">"Minor"</span>; <span class="cm">// "Adult"</span></pre>
+    <p>The ternary operator <code>?:</code> is a compact way to write a simple if-else.</p>
+    <pre><span class="tp">int</span> day = 3;
+<span class="kw">switch</span> (day) {
+  <span class="kw">case</span> 1: System.out.println(<span class="tp">"Monday"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> 2: System.out.println(<span class="tp">"Tuesday"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> 3: System.out.println(<span class="tp">"Wednesday"</span>); <span class="kw">break</span>;
+  <span class="kw">default</span>: System.out.println(<span class="tp">"Another day"</span>);
+}</pre>
+    <p>A <code>switch</code> is efficient for checking a variable against many discrete values. <code>break</code> prevents fall-through into the next case; <code>default</code> is optional and runs when nothing matches.</p>
+    <pre><span class="tp">int</span> day2 = 3;
+String result2 = <span class="kw">switch</span> (day2) {
+  <span class="kw">case</span> 1 -&gt; <span class="tp">"Monday"</span>;
+  <span class="kw">case</span> 2 -&gt; <span class="tp">"Tuesday"</span>;
+  <span class="kw">case</span> 3 -&gt; {
+    System.out.println(<span class="tp">"Logging: mid-week"</span>);
+    <span class="kw">yield</span> <span class="tp">"Wednesday"</span>;
+  }
+  <span class="kw">case</span> 6, 7 -&gt; <span class="tp">"Weekend"</span>;
+  <span class="kw">default</span> -&gt; <span class="tp">"Unknown"</span>;
+};</pre>
+    <p>The enhanced <code>switch</code> (Java 14+) has cleaner syntax, no <code>break</code> needed, and works as an expression that returns a value directly. <code>yield</code> returns a value from a block, useful when more logic is needed first.</p>
+  </div></div>
+
+  <div class="rule control" id="loops"><div class="t">Loops</div><div class="b">
+    <pre><span class="kw">for</span> (<span class="tp">int</span> i = 0; i &lt; 5; i++) {
+  System.out.println(<span class="tp">"i = "</span> + i);
+}</pre>
+    <p>A <code>for</code> loop is used when you know how many times to repeat something: <code>i = 0</code> initialization, <code>i &lt; 5</code> condition, <code>i++</code> update.</p>
+    <pre><span class="tp">int</span> i = 0;
+<span class="kw">while</span> (i &lt; 5) {
+  System.out.println(<span class="tp">"i = "</span> + i);
+  i++;
+}</pre>
+    <p>A <code>while</code> loop runs while a condition holds, without knowing the count ahead of time. It checks the condition before each iteration.</p>
+    <pre><span class="tp">int</span> i2 = 0;
+<span class="kw">do</span> {
+  System.out.println(<span class="tp">"i = "</span> + i2);
+  i2++;
+} <span class="kw">while</span> (i2 &lt; 5);</pre>
+    <p>A <code>do-while</code> is like <code>while</code>, but always runs at least once since the condition is checked after the first pass.</p>
+    <pre>String[] names = {<span class="tp">"Alice"</span>,<span class="tp">"Bob"</span>,<span class="tp">"Charlie"</span>};
+<span class="kw">for</span> (String name : names) {
+  System.out.println(name);
+}</pre>
+    <p>The enhanced for-each loop is great for arrays or collections: simpler and cleaner, with no index management, but read-only (elements can't be reassigned directly, unless the element itself is mutable).</p>
+    <pre><span class="kw">for</span> (<span class="kw">var</span> p : people) {
+  p.age++; <span class="cm">// can't reassign the loop variable, but can mutate the object it refers to</span>
+}</pre>
+    <pre><span class="kw">for</span> (<span class="tp">int</span> i3 = 0; i3 &lt; 10; i3++) {
+  <span class="kw">if</span> (i3 == 5) <span class="kw">break</span>;    <span class="cm">// exits the loop immediately</span>
+}
+<span class="kw">for</span> (<span class="tp">int</span> i4 = 0; i4 &lt; 5; i4++) {
+  <span class="kw">if</span> (i4 == 2) <span class="kw">continue</span>; <span class="cm">// skips to the next iteration</span>
+}</pre>
+  </div></div>
+
+  <!-- ===================== OOP ===================== -->
+  <div class="layer-banner oop">OOP</div>
+
+  <div class="rule oop" id="classes"><div class="t">Classes and objects</div><div class="b">
+    <pre><span class="kw">public class</span> Car {
+  <span class="cm">// Fields (variables that store data)</span>
+  String brand;
+  <span class="tp">int</span> year;
+
+  <span class="cm">// Constructor (special method to initialize objects)</span>
+  <span class="kw">public</span> Car(String brand, <span class="tp">int</span> year) {
+    <span class="kw">this</span>.brand = brand; <span class="cm">// "this" refers to the current object</span>
+    <span class="kw">this</span>.year = year;
+  }
+
+  <span class="cm">// Method (functions that perform actions)</span>
+  <span class="kw">public void</span> startEngine() {
+    System.out.println(brand + <span class="tp">" engine started."</span>);
+  }
+}</pre>
+    <p>A class is a blueprint for creating objects: it defines the fields (attributes) and methods (behaviors) that instances built from it will have.</p>
+    <pre>Car myCar = <span class="kw">new</span> Car(<span class="tp">"Toyota"</span>, 2020); <span class="cm">// object of class Car</span>
+myCar.startEngine(); <span class="cm">// calling a method on the object</span></pre>
+    <p>An object is an instance of a class, a specific thing built using the class.</p>
+  </div></div>
+
+  <div class="rule oop" id="modifiers"><div class="t">Access modifiers</div><div class="b">
+    <pre><span class="kw">class</span> Counter {
+  <span class="kw">static int</span> count = 0; <span class="cm">// one shared counter</span>
+  Counter(){ count++; }
+}
+Counter a = <span class="kw">new</span> Counter();
+Counter b = <span class="kw">new</span> Counter();
+Counter.count; <span class="cm">// 2</span></pre>
+    <p><code>static</code> makes a field or method belong to the class itself, not to individual instances: a static field is shared by every object, and a static method can be called without creating an object.</p>
+    <pre><span class="kw">public class</span> Car {
+  <span class="kw">public</span> String brand;
+  <span class="kw">public void</span> drive(){ System.out.println(<span class="tp">"Driving..."</span>); }
+}</pre>
+    <p><code>public</code> makes a class, method, constructor, or variable accessible from any other class, regardless of package, useful for anything meant to be globally available across the whole application.</p>
+    <pre><span class="kw">public class</span> BankAccount {
+  <span class="kw">private double</span> balance;
+  <span class="kw">public void</span> deposit(<span class="tp">double</span> amount){ balance += amount; }
+  <span class="kw">private void</span> logTransaction(String msg){ System.out.println(<span class="tp">"LOG: "</span> + msg); }
+}</pre>
+    <p><code>private</code> restricts access to only within the declaring class. It's how encapsulation is enforced, keeping internal details like fields hidden from other classes; commonly used for fields and helper methods that shouldn't be touched from outside.</p>
+    <pre><span class="kw">class</span> PackageClass {
+  <span class="kw">void</span> display(){ System.out.println(<span class="tp">"Default access"</span>); }
+}</pre>
+    <p>No modifier at all means default (package-private) access: visible only within the same package, not even to subclasses in other packages. Useful for limiting access to a package's internal components without going fully <code>public</code>.</p>
+    <pre><span class="kw">class</span> Animal {
+  <span class="kw">protected void</span> eat(){ System.out.println(<span class="tp">"Animal eats"</span>); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="kw">public void</span> bark(){
+    eat(); <span class="cm">// allowed: protected method in the superclass</span>
+    System.out.println(<span class="tp">"Barks"</span>);
+  }
+}</pre>
+    <p><code>protected</code> allows access within the same package and from subclasses even in other packages. Commonly used in inheritance so derived classes can reuse or override behavior while still keeping unrelated classes out.</p>
+  </div></div>
+
+  <div class="rule oop" id="gettersetters"><div class="t">Getters and setters</div><div class="b">
+    <p>Getters and setters access and update a class's private fields. They're part of encapsulation: keep fields private and expose controlled access instead, in order to protect internal data, control read/write access, add validation logic, and hide implementation details from callers.</p>
+    <pre><span class="kw">public class</span> Person {
+  <span class="kw">private</span> String name;
+
+  <span class="kw">public</span> String getName(){ <span class="kw">return</span> name; }
+
+  <span class="kw">public void</span> setName(String newName){
+    <span class="kw">if</span> (newName != <span class="kw">null</span> && !newName.isEmpty()) {
+      <span class="kw">this</span>.name = newName;
+    } <span class="kw">else</span> {
+      System.out.println(<span class="tp">"Invalid name"</span>);
+    }
+  }
+}
+
+Person p = <span class="kw">new</span> Person();
+p.setName(<span class="tp">"Alice"</span>);
+System.out.println(p.getName()); <span class="cm">// Alice</span></pre>
+    <p>Good practice: make fields private, provide public get/set methods, add validation in setters where it matters, and name them consistently as <code>getFieldName()</code>/<code>setFieldName()</code>.</p>
+  </div></div>
+
+  <div class="rule oop" id="inheritance"><div class="t">Inheritance</div><div class="b">
+    <p>Inheritance lets a subclass (child class) inherit fields and methods from a superclass (parent class). It promotes code reuse and models "is-a" relationships. A class can only extend one class (Java supports single inheritance only); <code>super</code> is used to call a parent constructor or access parent members.</p>
+    <pre><span class="kw">class</span> Animal {
+  <span class="kw">void</span> eat(){ System.out.println(<span class="tp">"This animal eats food."</span>); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="kw">void</span> bark(){ System.out.println(<span class="tp">"The dog barks."</span>); }
+}
+
+Dog myDog = <span class="kw">new</span> Dog();
+myDog.eat();  <span class="cm">// inherited from Animal</span>
+myDog.bark(); <span class="cm">// defined in Dog</span></pre>
+    <pre><span class="kw">class</span> Animal2 {
+  <span class="kw">void</span> sound(){ System.out.println(<span class="tp">"Animal makes a sound."</span>); }
+}
+<span class="kw">class</span> Cat <span class="kw">extends</span> Animal2 {
+  <span class="cm">@Override</span>
+  <span class="kw">void</span> sound(){ System.out.println(<span class="tp">"Cat meows."</span>); }
+}</pre>
+    <p>Subclasses can override inherited methods with <code>@Override</code>.</p>
+  </div></div>
+
+  <div class="rule oop" id="superkw"><div class="t">super keyword</div><div class="b">
+    <p><code>super</code> refers to the immediate parent class of a subclass, useful anywhere you work with inheritance.</p>
+    <pre><span class="kw">class</span> Animal {
+  Animal(String name){ System.out.println(<span class="tp">"Animal name: "</span> + name); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  Dog(){
+    <span class="kw">super</span>(<span class="tp">"Buddy"</span>); <span class="cm">// calls the Animal constructor</span>
+    System.out.println(<span class="tp">"Dog constructor"</span>);
+  }
+}</pre>
+    <p><code>super(...)</code> calls a parent constructor. Through Java 23 it had to be the first statement in the subclass constructor; flexible constructor bodies (previewed since Java 22) relax this, and as of Java 25 the feature is final, so <code>super(...)</code> no longer has to come first, as long as earlier statements don't touch the uninitialized instance.</p>
+    <pre><span class="kw">class</span> Animal2 {
+  <span class="kw">void</span> speak(){ System.out.println(<span class="tp">"Animal speaks"</span>); }
+}
+<span class="kw">class</span> Dog2 <span class="kw">extends</span> Animal2 {
+  <span class="kw">void</span> speak(){
+    <span class="kw">super</span>.speak(); <span class="cm">// calls Animal's speak()</span>
+    System.out.println(<span class="tp">"Dog barks"</span>);
+  }
+}</pre>
+    <p>If a subclass overrides a method, <code>super.methodName()</code> explicitly calls the parent's version.</p>
+    <pre><span class="kw">class</span> Animal3 {
+  String type = <span class="tp">"Animal"</span>;
+}
+<span class="kw">class</span> Dog3 <span class="kw">extends</span> Animal3 {
+  String type = <span class="tp">"Dog"</span>;
+  <span class="kw">void</span> printType(){
+    System.out.println(<span class="kw">super</span>.type); <span class="cm">// Animal</span>
+    System.out.println(<span class="kw">this</span>.type);  <span class="cm">// Dog</span>
+  }
+}</pre>
+    <p>If a parent field is hidden by a subclass field of the same name, <code>super.fieldName</code> accesses the parent's version.</p>
+  </div></div>
+
+  <div class="rule oop" id="ctoroverload"><div class="t">Constructor overloading</div><div class="b">
+    <p>Constructor overloading means having several constructors in the same class, each with a different parameter list, allowing different ways to initialize an object.</p>
+    <pre><span class="kw">public class</span> Book {
+  <span class="kw">private</span> String title, author;
+  <span class="kw">private int</span> year;
+  <span class="kw">private double</span> price;
+
+  <span class="kw">public</span> Book(){ <span class="cm">// no parameters</span>
+    <span class="kw">this</span>.title = <span class="tp">"Untitled"</span>; <span class="kw">this</span>.author = <span class="tp">"Unknown"</span>;
+  }
+  <span class="kw">public</span> Book(String title, String author){ <span class="cm">// title and author</span>
+    <span class="kw">this</span>.title = title; <span class="kw">this</span>.author = author;
+  }
+  <span class="kw">public</span> Book(String title, String author, <span class="tp">int</span> year){ <span class="cm">// + year</span>
+    <span class="kw">this</span>(title, author); <span class="kw">this</span>.year = year;
+  }
+  <span class="kw">public</span> Book(String title, String author, <span class="tp">int</span> year, <span class="tp">double</span> price){ <span class="cm">// all fields</span>
+    <span class="kw">this</span>(title, author, year); <span class="kw">this</span>.price = price;
+  }
+}
+
+Book b1 = <span class="kw">new</span> Book();
+Book b2 = <span class="kw">new</span> Book(<span class="tp">"1984"</span>, <span class="tp">"George Orwell"</span>);
+Book b4 = <span class="kw">new</span> Book(<span class="tp">"Clean Code"</span>, <span class="tp">"Robert C. Martin"</span>, 2008, 35.99);</pre>
+  </div></div>
+
+  <div class="rule oop" id="methodoverload"><div class="t">Method overloading</div><div class="b">
+    <p>Method overloading means multiple methods can share a name but have different parameter lists within the same class, giving several ways to call the "same" method. It isn't based on return type alone, you cannot overload by only changing the return type.</p>
+    <pre><span class="kw">public class</span> Calculator {
+  <span class="kw">public int</span> add(){ <span class="kw">return</span> 0; }                          <span class="cm">// no parameters</span>
+  <span class="kw">public int</span> add(<span class="tp">int</span> a){ <span class="kw">return</span> a; }                     <span class="cm">// one int</span>
+  <span class="kw">public int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b){ <span class="kw">return</span> a + b; }         <span class="cm">// two ints</span>
+  <span class="kw">public double</span> add(<span class="tp">double</span> a, <span class="tp">double</span> b){ <span class="kw">return</span> a + b; } <span class="cm">// two doubles</span>
+  <span class="kw">public double</span> add(<span class="tp">int</span> a, <span class="tp">double</span> b){ <span class="kw">return</span> a + b; }    <span class="cm">// mixed</span>
+}
+
+Calculator calc = <span class="kw">new</span> Calculator();
+calc.add(10, 20);  <span class="cm">// two ints</span>
+calc.add(5.5, 6.3); <span class="cm">// two doubles</span></pre>
+  </div></div>
+
+  <div class="rule oop" id="methodoverride"><div class="t">Method overriding</div><div class="b">
+    <p>Method overriding happens when a subclass provides a new implementation for a method already defined in its superclass, with the same name, parameter list, and a compatible return type, used to customize behavior. <code>@Override</code> tells the compiler "I'm overriding a parent method", catching typos in the name or signature.</p>
+    <pre><span class="kw">class</span> Animal {
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Animal makes a sound"</span>); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="cm">@Override</span>
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Dog barks"</span>); }
+}
+
+Animal myDog = <span class="kw">new</span> Dog(); <span class="cm">// polymorphism</span>
+myDog.makeSound(); <span class="cm">// "Dog barks": even though myDog is typed as Animal, Dog's version runs at runtime</span></pre>
+    <pre><span class="kw">class</span> Cat <span class="kw">extends</span> Animal {
+  <span class="kw">void</span> makesound(){ <span class="cm">// misspelled, this is NOT an override</span>
+    System.out.println(<span class="tp">"Cat meows"</span>);
+  }
+}</pre>
+    <p>Without <code>@Override</code>, a typo like this compiles fine, since it's just treated as a brand-new method rather than an override. Adding <code>@Override</code> to the misspelled version would turn it into a compile-time error.</p>
+  </div></div>
+
+  <div class="rule oop" id="abstractclasses"><div class="t">Abstract classes</div><div class="b">
+    <p>An abstract class cannot be instantiated directly; it must be subclassed to be used. Declared with the <code>abstract</code> keyword, it acts as a blueprint for its subclasses, useful when a group of related classes should share a common interface and some behavior, while other parts must be filled in per subclass. It can contain abstract methods (no body), concrete methods, constructors, fields, and static blocks.</p>
+    <pre><span class="kw">abstract class</span> Animal {
+  <span class="kw">abstract void</span> makeSound(); <span class="cm">// abstract method, no body</span>
+  <span class="kw">void</span> breathe(){ System.out.println(<span class="tp">"Breathing..."</span>); } <span class="cm">// concrete method</span>
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="cm">@Override</span>
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Woof!"</span>); }
+}
+
+<span class="cm">// Animal a = new Animal(); // cannot instantiate an abstract class</span>
+Animal dog = <span class="kw">new</span> Dog(); <span class="cm">// can use the abstract type</span>
+dog.makeSound(); dog.breathe();</pre>
+  </div></div>
+
+  <div class="rule oop" id="interfaces"><div class="t">Interfaces</div><div class="b">
+    <p>An interface is a contract specifying what a class must do, not how. It declares abstract method signatures (plus optionally default or static methods) without implementing the abstract ones; implementing classes must provide concrete bodies for all of them. Since a class can implement several interfaces at once, interfaces are how Java approximates multiple inheritance. They can hold abstract methods (by default), default methods (with a body), static methods, private helper methods, and public static final constants.</p>
+    <pre><span class="kw">interface</span> Animal {
+  <span class="kw">void</span> makeSound(); <span class="cm">// abstract by default</span>
+}
+<span class="kw">class</span> Dog <span class="kw">implements</span> Animal {
+  <span class="cm">@Override</span>
+  <span class="kw">public void</span> makeSound(){ System.out.println(<span class="tp">"Woof!"</span>); }
+}</pre>
+    <pre><span class="kw">interface</span> Flyable { <span class="kw">void</span> fly(); }
+<span class="kw">interface</span> Swimmable { <span class="kw">void</span> swim(); }
+<span class="kw">class</span> Duck <span class="kw">implements</span> Flyable, Swimmable {
+  <span class="kw">public void</span> fly(){ System.out.println(<span class="tp">"Duck flies."</span>); }
+  <span class="kw">public void</span> swim(){ System.out.println(<span class="tp">"Duck swims."</span>); }
+}</pre>
+  </div></div>
+
+  <div class="rule oop" id="anonymous"><div class="t">Anonymous classes</div><div class="b">
+    <p>An anonymous class has no name, defined and instantiated in a single expression. Typically used for a quick, one-off implementation of an interface or subclass, especially when it's only needed once.</p>
+    <pre><span class="kw">interface</span> Greetable { <span class="kw">void</span> greet(); }
+
+Greetable greeter = <span class="kw">new</span> Greetable(){
+  <span class="cm">@Override</span>
+  <span class="kw">public void</span> greet(){ System.out.println(<span class="tp">"Hello from an anonymous class!"</span>); }
+};
+greeter.greet();</pre>
+    <pre><span class="kw">class</span> Animal {
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Some sound"</span>); }
+}
+
+Animal myAnimal = <span class="kw">new</span> Animal(){
+  <span class="cm">@Override</span>
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Anonymous Dog barks!"</span>); }
+};</pre>
+    <p>Anonymous classes can also extend a concrete class, not just implement an interface.</p>
+  </div></div>
+
+  <div class="rule oop" id="sealed"><div class="t">Sealed classes</div><div class="b">
+    <p>A sealed class (Java 17+) restricts which other classes may extend or implement it, giving stronger encapsulation, safer and more predictable inheritance, clearer class hierarchies, and better support for pattern matching (Java 21+). Before sealed classes, anyone could extend an open class, making it hard to reason about every possible subclass, especially for pattern matching or API design.</p>
+    <pre><span class="kw">public sealed class</span> Shape <span class="kw">permits</span> Circle, Rectangle, Triangle {}</pre>
+    <p>A sealed class must list which classes may extend it via <code>permits</code>; any other attempt to extend it is a compile-time error.</p>
+    <pre><span class="cm">// final: no one can extend it further</span>
+<span class="kw">public final class</span> Circle <span class="kw">extends</span> Shape {}
+<span class="cm">// sealed: can still restrict its own subclasses</span>
+<span class="kw">public sealed class</span> Rectangle <span class="kw">extends</span> Shape <span class="kw">permits</span> Square {}
+<span class="cm">// non-sealed: opens back up, anyone can extend it</span>
+<span class="kw">public non-sealed class</span> Triangle <span class="kw">extends</span> Shape {}</pre>
+    <p>Every direct subclass of a sealed class must be marked <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>, giving fine-grained control over further extension.</p>
+    <pre>String describe(Shape s){
+  <span class="kw">return switch</span> (s) {
+    <span class="kw">case</span> Circle c -&gt; <span class="tp">"Circle"</span>;
+    <span class="kw">case</span> Square sq -&gt; <span class="tp">"Square"</span>;
+    <span class="kw">case</span> Triangle t -&gt; <span class="tp">"Triangle"</span>;
+  };
+}</pre>
+    <p>Because the compiler knows every possible subclass of a sealed hierarchy, a <code>switch</code> over them can be exhaustive with no <code>default</code> needed.</p>
+  </div></div>
+
+  <div class="rule oop" id="records"><div class="t">Records</div><div class="b">
+    <p>A record (Java 16+) is a special class designed to hold immutable data: Java generates the constructor, accessors, <code>equals()</code>, <code>hashCode()</code>, and <code>toString()</code> automatically. Think of it as a concise, built-in way to write data-carrier classes (sometimes called DTOs or value objects).</p>
+    <pre><span class="cm">// Old way: lots of boilerplate</span>
+<span class="kw">public class</span> Person {
+  <span class="kw">private final</span> String name;
+  <span class="kw">private final int</span> age;
+  <span class="kw">public</span> Person(String name, <span class="tp">int</span> age){ <span class="kw">this</span>.name=name; <span class="kw">this</span>.age=age; }
+  <span class="kw">public</span> String name(){ <span class="kw">return</span> name; }
+  <span class="kw">public int</span> age(){ <span class="kw">return</span> age; }
+  <span class="cm">// equals(), hashCode(), toString() all hand-written...</span>
+}
+
+<span class="cm">// With records:</span>
+<span class="kw">public record</span> Person(String name, <span class="tp">int</span> age) {}</pre>
+    <p>A record automatically gets a canonical constructor, read-only accessor methods matching the field names (<code>name()</code>, <code>age()</code>, not <code>getName()</code>), <code>equals()</code>/<code>hashCode()</code> based on all its components, a <code>toString()</code> like <code>Person[name=Alice, age=30]</code>, and fields that are final (records are immutable by default).</p>
+    <pre><span class="kw">public record</span> Point(<span class="tp">int</span> x, <span class="tp">int</span> y) <span class="kw">implements</span> Drawable {}</pre>
+    <p>Records can implement interfaces, but can't add mutable fields or setters, and can't extend another class (they implicitly extend <code>java.lang.Record</code>).</p>
+    <pre><span class="kw">public record</span> Person(String name, <span class="tp">int</span> age) {
+  <span class="kw">public</span> String greet(){ <span class="kw">return</span> <span class="tp">"Hello, I'm "</span> + name; } <span class="cm">// custom logic is allowed</span>
+}</pre>
+    <pre><span class="kw">public record</span> Person2(String name, <span class="tp">int</span> age) {
+  <span class="kw">public</span> Person2 { <span class="cm">// compact constructor, for validation</span>
+    <span class="kw">if</span> (age &lt; 0) <span class="kw">throw new</span> IllegalArgumentException(<span class="tp">"Age cannot be negative"</span>);
+  }
+}</pre>
+    <p>A compact constructor lets you add validation; Java still assigns the fields for you unless you write out the full canonical constructor yourself.</p>
+    <pre><span class="kw">var</span> p2 = <span class="kw">new</span> Person(p.name(), p.age() + 1); <span class="cm">// records are immutable, so "changing" a value means creating a new one</span></pre>
+  </div></div>
+
+  <div class="rule oop" id="relationships"><div class="t">Inheritance vs Association vs Aggregation vs Composition</div><div class="b">
+    <pre><span class="kw">class</span> Animal {
+  <span class="kw">void</span> makeSound(){ System.out.println(<span class="tp">"Generic sound"</span>); }
+}
+<span class="kw">class</span> Dog <span class="kw">extends</span> Animal {
+  <span class="kw">void</span> bark(){ System.out.println(<span class="tp">"Bark!"</span>); }
+}</pre>
+    <p><strong>Inheritance ("is-a")</strong>: a subclass inherits fields and methods from a superclass. Useful when one class is a more specific version of another, but it's tight coupling, Java only allows a single parent class, and it's not a fit for every relationship.</p>
+    <pre><span class="kw">class</span> Doctor {
+  String name;
+  <span class="kw">void</span> diagnose(Patient patient){
+    System.out.println(<span class="tp">"Doctor "</span> + name + <span class="tp">" is diagnosing "</span> + patient.name + <span class="tp">"."</span>);
+  }
+}</pre>
+    <p><strong>Association ("uses-a")</strong>: one object uses or connects to another without implying ownership, usually by holding a reference. It can be one-directional (only one side knows about the other) or bidirectional.</p>
+    <pre><span class="kw">class</span> Car {
+  Engine engine; <span class="cm">// aggregation</span>
+  Car(Engine engine){ <span class="kw">this</span>.engine = engine; }
+}</pre>
+    <p><strong>Aggregation ("has-a", weak ownership)</strong>: a class holds a reference to another whose lifetime is independent of the owner. An <code>Engine</code> can be shared across multiple <code>Car</code>s, and can outlive any one of them.</p>
+    <pre><span class="kw">class</span> Human {
+  <span class="kw">private</span> Heart heart = <span class="kw">new</span> Heart(); <span class="cm">// composition</span>
+  <span class="kw">void</span> live(){ heart.beat(); }
+}</pre>
+    <p><strong>Composition ("part-of", strong ownership)</strong>: a class creates and controls the lifecycle of another internally; the part cannot exist independently. If the <code>Human</code> is destroyed, its <code>Heart</code> goes with it, a stronger coupling than aggregation.</p>
+    <table class="ref">
+      <tr><th>Relationship</th><th>Object lifespan</th><th>Coupling</th><th>Example</th></tr>
+      <tr><td>Inheritance (is-a)</td><td>Subclass depends on superclass</td><td>Tight</td><td>A Dog is an Animal</td></tr>
+      <tr><td>Association (uses-a)</td><td>Independent</td><td>Loose</td><td>A Doctor is diagnosing a Patient</td></tr>
+      <tr><td>Aggregation (has-a)</td><td>Independent</td><td>Loose</td><td>A Car has an Engine</td></tr>
+      <tr><td>Composition (part-of)</td><td>Dependent</td><td>Strong</td><td>A Heart is part of a Human</td></tr>
+    </table>
+  </div></div>
+
+  <div class="rule oop" id="finalkw"><div class="t">final keyword</div><div class="b">
+    <p><code>final</code> restricts modification, with a different effect depending on where it's used.</p>
+    <pre><span class="kw">final int</span> MAX_USERS = 100;
+<span class="cm">// MAX_USERS = 200; // compilation error</span>
+
+<span class="kw">final</span> StringBuilder sb = <span class="kw">new</span> StringBuilder(<span class="tp">"Hello"</span>);
+sb.append(<span class="tp">" World"</span>); <span class="cm">// contents can still change</span>
+<span class="cm">// sb = new StringBuilder(); // cannot reassign the reference itself</span></pre>
+    <p>A final variable can only be assigned once; it's effectively a constant. For object references, the reference itself can't be reassigned, but the object it points to can still change.</p>
+    <pre><span class="kw">final class</span> Utility {
+  <span class="kw">static void</span> sayHi(){ System.out.println(<span class="tp">"Hi!"</span>); }
+}
+<span class="cm">// class MyUtility extends Utility {} // error: cannot inherit from a final class</span></pre>
+    <p>A final class cannot be extended, often used for security or performance (like <code>String</code>).</p>
+    <pre><span class="kw">class</span> Parent {
+  <span class="kw">final void</span> display(){ System.out.println(<span class="tp">"This cannot be overridden"</span>); }
+}
+<span class="cm">// class Child extends Parent { void display() {} } // not allowed, compile error</span></pre>
+    <p>A final method cannot be overridden by a subclass, useful for preventing changes to important logic.</p>
+  </div></div>
+
+  <div class="rule oop" id="wrappers"><div class="t">Wrapper classes and autoboxing</div><div class="b">
+    <p>Primitive types like <code>int</code>, <code>char</code>, <code>boolean</code> aren't objects. Wrapper classes give each one an object representation, so primitives can be used where objects are required, like collections (<code>List&lt;Integer&gt;</code>, since <code>List&lt;int&gt;</code> is invalid). They also provide utility methods (<code>Integer.parseInt("123")</code>, <code>Double.isNaN(x)</code>) and, unlike primitives, support <code>null</code>.</p>
+    <table class="ref">
+      <tr><th>Primitive</th><th>Wrapper</th></tr>
+      <tr><td>byte</td><td>Byte</td></tr>
+      <tr><td>short</td><td>Short</td></tr>
+      <tr><td>int</td><td>Integer</td></tr>
+      <tr><td>long</td><td>Long</td></tr>
+      <tr><td>float</td><td>Float</td></tr>
+      <tr><td>double</td><td>Double</td></tr>
+      <tr><td>char</td><td>Character</td></tr>
+      <tr><td>boolean</td><td>Boolean</td></tr>
+    </table>
+    <pre><span class="tp">int</span> num = 5;
+Integer boxed = num; <span class="cm">// autoboxing: int -> Integer, automatic</span></pre>
+    <pre>Integer boxed2 = 10;
+<span class="tp">int</span> num2 = boxed2; <span class="cm">// unboxing: Integer -> int, automatic</span></pre>
+    <pre>List&lt;Integer&gt; numbers = <span class="kw">new</span> ArrayList&lt;&gt;();
+numbers.add(5);        <span class="cm">// autoboxed</span>
+<span class="tp">int</span> x = numbers.get(0); <span class="cm">// unboxed</span></pre>
+    <pre>Integer x2 = <span class="kw">null</span>;
+<span class="tp">int</span> y = x2; <span class="cm">// NullPointerException</span></pre>
+    <p>Autoboxing/unboxing is convenient, but has a performance cost since boxing creates objects, and it's easy to get bitten by a <code>null</code> unboxing to a primitive.</p>
+  </div></div>
+  <!-- ===================== OPERATORS & I/O ===================== -->
+  <div class="layer-banner io">Operators &amp; I/O</div>
+
+  <div class="rule io" id="operators"><div class="t">Expressions and operators</div><div class="b">
+    <table class="ref">
+      <tr><th>Category</th><th>Operators</th></tr>
+      <tr><td>Arithmetic</td><td>+  -  *  /  %</td></tr>
+      <tr><td>Assignment</td><td>=  +=  -=  *=  /=  %=</td></tr>
+      <tr><td>Relational</td><td>==  !=  &gt;  &lt;  &gt;=  &lt;=</td></tr>
+      <tr><td>Logical</td><td>&amp;&amp;  ||  !</td></tr>
+      <tr><td>Unary</td><td>+  -  ++  --  !</td></tr>
+      <tr><td>Bitwise</td><td>&amp;  |  ^  ~  &lt;&lt;  &gt;&gt;  &gt;&gt;&gt;</td></tr>
+    </table>
+    <p>Arithmetic operators do basic math; assignment operators assign (and combine an operation with assignment); relational/comparison operators compare values and return a boolean; logical operators combine boolean expressions; unary operators act on a single operand; bitwise operators work directly on bits (more advanced, used less often).</p>
+    <pre><span class="tp">int</span> result = (a &gt; b) ? a : b;</pre>
+    <p>The ternary operator is basically a short if-else expression.</p>
+    <pre><span class="kw">if</span> (obj <span class="kw">instanceof</span> String) {
+  System.out.println(<span class="tp">"It's a String!"</span>);
+}</pre>
+    <p><code>instanceof</code> checks if an object is an instance of a given class.</p>
+    <pre><span class="kw">if</span> (obj <span class="kw">instanceof</span> String s) {
+  System.out.println(s.toUpperCase());
+}</pre>
+    <p>Pattern matching for <code>instanceof</code> (Java 16+) binds the checked value to a variable in the same expression.</p>
+    <pre><span class="tp">int</span> x = (<span class="tp">int</span>) 5.5; <span class="cm">// explicit casting</span></pre>
+  </div></div>
+
+  <div class="rule io" id="userio"><div class="t">User input/output</div><div class="b">
+    <pre>Scanner scanner = <span class="kw">new</span> Scanner(System.in);
+
+System.out.print(<span class="tp">"Enter your name: "</span>);
+String name = scanner.nextLine(); <span class="cm">// reads a line of text</span>
+
+System.out.print(<span class="tp">"Enter your age: "</span>);
+<span class="tp">int</span> age = scanner.nextInt(); <span class="cm">// reads an integer</span>
+
+scanner.close();</pre>
+    <p><code>Scanner</code> (java.util) conveniently reads formatted input from <code>System.in</code>, files, or strings.</p>
+    <table class="ref">
+      <tr><th>Method</th><th>Reads</th><th>Example input</th></tr>
+      <tr><td>next()</td><td>One word (until a space)</td><td>"hello"</td></tr>
+      <tr><td>nextLine()</td><td>The entire line</td><td>"hello world"</td></tr>
+      <tr><td>nextInt()</td><td>An int</td><td>42</td></tr>
+      <tr><td>nextDouble()</td><td>A double</td><td>3.14</td></tr>
+      <tr><td>nextBoolean()</td><td>A boolean</td><td>true / false</td></tr>
+    </table>
+    <pre><span class="tp">int</span> age2 = scanner.nextInt();
+scanner.nextLine(); <span class="cm">// consumes the leftover newline</span>
+String name2 = scanner.nextLine();</pre>
+    <p>Always close the <code>Scanner</code> when done. If <code>nextInt()</code> (or similar) is followed by <code>nextLine()</code>, add an extra <code>nextLine()</code> first to consume the leftover newline.</p>
+    <pre>System.out.print(<span class="tp">"Hello "</span>);   <span class="cm">// same line</span>
+System.out.println(<span class="tp">"World!"</span>); <span class="cm">// with a newline</span>
+System.out.printf(<span class="tp">"Age: %d\n"</span>, 30); <span class="cm">// formatted</span></pre>
+    <p><code>System.out</code> is a <code>PrintStream</code> representing standard output, usually the console.</p>
+  </div></div>
+
+  <div class="rule io" id="casting"><div class="t">Type casting</div><div class="b">
+    <p>Type casting converts a variable from one data type to another: widening (implicit) casting, or narrowing (explicit) casting.</p>
+    <pre><span class="tp">int</span> myInt = 42;
+<span class="tp">double</span> myDouble = myInt; <span class="cm">// automatic casting, 42.0</span></pre>
+    <p>Widening casting converts a smaller type into a larger one automatically, and it's safe since no data is lost. Order: <code>byte &rarr; short &rarr; int &rarr; long &rarr; float &rarr; double</code>.</p>
+    <pre><span class="tp">double</span> myDouble2 = 9.78;
+<span class="tp">int</span> myInt2 = (<span class="tp">int</span>) myDouble2; <span class="cm">// explicit casting, 9 (decimal part lost)</span></pre>
+    <p>Narrowing casting converts a larger type into a smaller one manually, and it's risky since it can lose data or precision.</p>
+    <pre>String s = <span class="tp">"123"</span>;
+<span class="tp">int</span> x = Integer.parseInt(s); <span class="cm">// this is parsing, not casting</span></pre>
+    <p>Converting between non-compatible types, like <code>String</code> to <code>int</code>, requires parsing rather than casting.</p>
+  </div></div>
+
+  <div class="rule io" id="exceptions"><div class="t">Exception handling</div><div class="b">
+    <p>An exception is an object representing an error that disrupts the normal flow of the program.</p>
+    <pre><span class="kw">try</span> {
+  <span class="tp">int</span> a = 10 / 0;
+} <span class="kw">catch</span> (ArithmeticException e) {
+  System.out.println(<span class="tp">"Cannot divide by zero!"</span>);
+}</pre>
+    <pre><span class="kw">try</span> {
+  <span class="cm">// risky code</span>
+} <span class="kw">catch</span> (Exception e) {
+  <span class="cm">// handle error</span>
+} <span class="kw">finally</span> {
+  <span class="cm">// always executed</span>
+}</pre>
+    <p>The optional <code>finally</code> block always runs, whether or not an exception was thrown.</p>
+    <table class="ref">
+      <tr><th>Exception</th><th>Typical cause</th></tr>
+      <tr><td>ArithmeticException</td><td>e.g. divide by zero</td></tr>
+      <tr><td>NullPointerException</td><td>Object not initialized</td></tr>
+      <tr><td>ArrayIndexOutOfBoundsException</td><td>Invalid array index</td></tr>
+      <tr><td>IOException</td><td>Input/output failure (files, streams)</td></tr>
+      <tr><td>NumberFormatException</td><td>Invalid string-to-number conversion</td></tr>
+    </table>
+    <pre><span class="kw">throw new</span> IllegalArgumentException(<span class="tp">"Invalid value"</span>);</pre>
+    <p>You can throw your own exceptions.</p>
+    <pre><span class="kw">public void</span> readFile() <span class="kw">throws</span> IOException { <span class="cm">/* reading file */</span> }</pre>
+    <p>A method can declare that it might throw a checked exception with <code>throws</code>.</p>
+    <pre><span class="kw">import</span> java.io.*;
+
+<span class="kw">try</span> {
+  FileReader fr = <span class="kw">new</span> FileReader(<span class="tp">"file.txt"</span>); <span class="cm">// may throw FileNotFoundException</span>
+} <span class="kw">catch</span> (FileNotFoundException e) {
+  System.out.println(<span class="tp">"File not found!"</span>);
+}</pre>
+    <p>Checked exceptions are checked by the compiler: you must handle them with try-catch or declare them with <code>throws</code>, or you'll get a compile-time error.</p>
+    <pre><span class="tp">int</span> a2 = 10 / 0; <span class="cm">// ArithmeticException, unchecked</span></pre>
+    <p>Unchecked exceptions happen at runtime and aren't checked by the compiler; you don't have to handle them (though you can), e.g. <code>NullPointerException</code>, <code>ArrayIndexOutOfBoundsException</code>, <code>IllegalArgumentException</code>. Rule of thumb: use checked exceptions when recovery is likely (file not found, network issues), and unchecked exceptions for programming bugs (invalid arguments, nulls).</p>
+  </div></div>
+
+  <div class="rule io" id="classicio"><div class="t">Classic I/O</div><div class="b">
+    <pre><span class="kw">import</span> java.io.*;
+
+<span class="kw">try</span> {
+  FileReader fr = <span class="kw">new</span> FileReader(<span class="tp">"input.txt"</span>);
+  BufferedReader br = <span class="kw">new</span> BufferedReader(fr);
+  String line;
+  <span class="kw">while</span> ((line = br.readLine()) != <span class="kw">null</span>) {
+    System.out.println(line);
+  }
+  br.close(); <span class="cm">// closes both BufferedReader and FileReader</span>
+} <span class="kw">catch</span> (IOException e) { e.printStackTrace(); }</pre>
+    <p><code>FileReader</code> plus <code>BufferedReader</code> read a text file efficiently, line by line.</p>
+    <pre>FileWriter fw = <span class="kw">new</span> FileWriter(<span class="tp">"output.txt"</span>);
+PrintWriter pw = <span class="kw">new</span> PrintWriter(fw);
+pw.println(<span class="tp">"Hello from Java!"</span>);
+pw.close(); <span class="cm">// also closes the FileWriter</span></pre>
+    <p><code>FileWriter</code> writes characters to a file; <code>PrintWriter</code> adds formatting methods like <code>println()</code>.</p>
+    <pre>FileWriter fw2 = <span class="kw">new</span> FileWriter(<span class="tp">"output.txt"</span>, <span class="kw">true</span>); <span class="cm">// true = append mode</span></pre>
+    <pre><span class="kw">try</span> (BufferedReader br2 = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="tp">"input.txt"</span>))) {
+  <span class="cm">// try-with-resources: the file closes automatically</span>
+} <span class="kw">catch</span> (IOException e) { e.printStackTrace(); }</pre>
+    <pre>File file = <span class="kw">new</span> File(<span class="tp">"example.txt"</span>);
+file.exists();   <span class="cm">// checks if a file exists</span>
+file.delete();   <span class="cm">// deletes it, silently fails and returns false if missing or in use</span>
+file.renameTo(<span class="kw">new</span> File(<span class="tp">"newName.txt"</span>)); <span class="cm">// renames or moves it</span></pre>
+    <pre>File directory = <span class="kw">new</span> File(<span class="tp">"newFolder"</span>);
+directory.mkdir();  <span class="cm">// creates a single directory</span>
+<span class="kw">new</span> File(<span class="tp">"parent/child/grandchild"</span>).mkdirs(); <span class="cm">// creates nested directories as needed</span></pre>
+    <p>Deleting a directory with <code>.delete()</code> only works if it's empty; deleting a non-empty one requires recursively deleting its contents first.</p>
+    <pre>file.isFile();      <span class="cm">// checks if a path is a file</span>
+file.isDirectory(); <span class="cm">// or a directory</span>
+dir.list();         <span class="cm">// lists the contents of a directory</span></pre>
+  </div></div>
+
+  <div class="rule io" id="nio"><div class="t">Java NIO</div><div class="b">
+    <p>NIO (New Input/Output), introduced in Java 1.4 and expanded in Java 7 with <code>java.nio.file</code>, offers non-blocking I/O for scalability, buffers/channels instead of streams, and a simpler way to work with files and directories.</p>
+    <pre>Path path = Paths.get(<span class="tp">"input.txt"</span>);
+List&lt;String&gt; lines = Files.readAllLines(path);</pre>
+    <pre>Path path2 = Paths.get(<span class="tp">"output.txt"</span>);
+Files.write(path2, Arrays.asList(<span class="tp">"Hello"</span>, <span class="tp">"Java NIO is great!"</span>));</pre>
+    <pre>Files.write(Paths.get(<span class="tp">"output.txt"</span>), Arrays.asList(<span class="tp">"New line appended."</span>), StandardOpenOption.APPEND);</pre>
+    <pre>Files.exists(path);              <span class="cm">// checks whether a file/directory exists</span>
+Files.delete(path);               <span class="cm">// deletes a file or empty directory (throws if missing)</span>
+Files.deleteIfExists(path);       <span class="cm">// avoids the exception if it doesn't exist</span>
+Files.move(source, target, StandardCopyOption.REPLACE_EXISTING); <span class="cm">// renames/moves</span>
+Files.createDirectory(dir);       <span class="cm">// creates a single directory</span>
+Files.createDirectories(nested);  <span class="cm">// creates nested directories</span></pre>
+    <pre>Files.walk(directory)
+  .sorted(Comparator.reverseOrder()) <span class="cm">// children before parent</span>
+  .forEach(p -&gt; { <span class="kw">try</span> { Files.delete(p); } <span class="kw">catch</span> (IOException ignored) {} });</pre>
+    <p>Recursively deletes a directory: <code>Files.walk()</code> paired with <code>Files.delete()</code>.</p>
+    <pre>Files.isDirectory(path); Files.isRegularFile(path); <span class="cm">// checks what kind of path it is</span>
+
+<span class="kw">try</span> (DirectoryStream&lt;Path&gt; stream = Files.newDirectoryStream(dir)) {
+  <span class="kw">for</span> (Path entry : stream) System.out.println(entry.getFileName());
+}</pre>
+  </div></div>
+
+  <div class="rule io" id="serialization"><div class="t">Serialization</div><div class="b">
+    <p>Serialization converts a Java object into a byte stream, so it can be saved to a file, sent over a network, stored in a database, or deep-cloned. Deserialization reverses the process.</p>
+    <pre><span class="kw">import</span> java.io.Serializable;
+
+<span class="kw">public class</span> Person <span class="kw">implements</span> Serializable {
+  <span class="kw">private</span> String name;
+  <span class="kw">private int</span> age;
+}</pre>
+    <p>A class must implement the marker interface <code>Serializable</code> (no methods) to be serializable.</p>
+    <pre><span class="kw">try</span> (ObjectOutputStream out = <span class="kw">new</span> ObjectOutputStream(<span class="kw">new</span> FileOutputStream(<span class="tp">"person.ser"</span>))) {
+  out.writeObject(<span class="kw">new</span> Person(<span class="tp">"Alice"</span>, 30));
+}</pre>
+    <pre><span class="kw">try</span> (ObjectInputStream in = <span class="kw">new</span> ObjectInputStream(<span class="kw">new</span> FileInputStream(<span class="tp">"person.ser"</span>))) {
+  Person p = (Person) in.readObject();
+} <span class="kw">catch</span> (IOException | ClassNotFoundException e) { e.printStackTrace(); }</pre>
+    <p>Fields marked <code>transient</code> (e.g. <code>private transient String password;</code>) are skipped during serialization; every non-transient field must itself be serializable. A <code>serialVersionUID</code> can be defined for version control; if the class changes and the ID no longer matches, deserialization can fail.</p>
+  </div></div>
+
+  <div class="rule io" id="printf"><div class="t">Printf</div><div class="b">
+    <pre>String name = <span class="tp">"Alice"</span>;
+<span class="tp">int</span> age = 25;
+System.out.printf(<span class="tp">"My name is %s and I am %d years old.%n"</span>, name, age);
+<span class="cm">// My name is Alice and I am 25 years old.</span></pre>
+    <p><code>%s</code> string, <code>%d</code> integer, <code>%n</code> newline (portable alternative to <code>\n</code>).</p>
+    <table class="ref">
+      <tr><th>Type</th><th>Specifier</th><th>Example</th><th>Output</th></tr>
+      <tr><td>String</td><td>%s</td><td>"Hello"</td><td>Hello</td></tr>
+      <tr><td>Integer</td><td>%d</td><td>42</td><td>42</td></tr>
+      <tr><td>Floating-point</td><td>%f</td><td>3.14159</td><td>3.141590</td></tr>
+      <tr><td>Boolean</td><td>%b</td><td>true</td><td>true</td></tr>
+      <tr><td>Character</td><td>%c</td><td>'A'</td><td>A</td></tr>
+    </table>
+    <pre>System.out.printf(<span class="tp">"Pi: %.2f%n"</span>, Math.PI); <span class="cm">// Pi: 3.14</span></pre>
+    <p>You can control precision (decimal places).</p>
+    <pre>System.out.printf(<span class="tp">"|%10s|%n"</span>, <span class="tp">"Java"</span>); <span class="cm">// right-align in 10 spaces</span>
+System.out.printf(<span class="tp">"|%-10s|%n"</span>, <span class="tp">"Java"</span>); <span class="cm">// left-align in 10 spaces</span></pre>
+    <pre>System.out.printf(<span class="tp">"Padded number: %03d%n"</span>, 7); <span class="cm">// Padded number: 007</span></pre>
+    <pre>System.out.printf(<span class="tp">"Item: %-10s Price: $%5.2f Qty: %d%n"</span>, <span class="tp">"Coffee"</span>, 3.5, 2);</pre>
+    <p>Multiple format specifiers can be combined in one call.</p>
+    <pre>String formatted = String.format(<span class="tp">"Hello %s, you have %d new messages."</span>, <span class="tp">"Alice"</span>, 3);</pre>
+    <p><code>String.format()</code> builds a formatted string without printing it.</p>
+  </div></div>
+
+  <div class="rule io" id="varargs"><div class="t">Varargs</div><div class="b">
+    <p>Varargs (variable arguments), written as <code>type...</code>, let a method accept a variable number of arguments instead of a fixed count.</p>
+    <pre><span class="kw">public static void</span> printNumbers(<span class="tp">int</span>... numbers){
+  <span class="kw">for</span> (<span class="tp">int</span> n : numbers) System.out.println(n);
+  System.out.println(<span class="tp">"Total numbers: "</span> + numbers.length);
+}
+printNumbers(1, 2, 3);
+printNumbers(); <span class="cm">// works with zero arguments too</span></pre>
+    <pre><span class="cm">// This:</span>
+printNumbers(1, 2, 3);
+<span class="cm">// is the same as:</span>
+printNumbers(<span class="kw">new int</span>[]{1, 2, 3});</pre>
+    <p>Behind the scenes, Java treats a varargs parameter as an array.</p>
+    <pre><span class="cm">// Valid:</span>
+<span class="kw">void</span> example(String name, <span class="tp">int</span>... scores){}
+<span class="cm">// Invalid, varargs must be last:</span>
+<span class="cm">// void example(int... scores, String name) {}</span></pre>
+    <p>Only one varargs parameter is allowed per method, and it must be the last one.</p>
+    <pre><span class="kw">public static void</span> greet(String greeting, String... names){
+  <span class="kw">for</span> (String name : names) System.out.println(greeting + <span class="tp">", "</span> + name + <span class="tp">"!"</span>);
+}
+greet(<span class="tp">"Hello"</span>, <span class="tp">"Alice"</span>, <span class="tp">"Bob"</span>, <span class="tp">"Charlie"</span>);</pre>
+    <pre><span class="tp">int</span>[] nums = {4, 5, 6};
+printNumbers(nums); <span class="cm">// an existing array can be passed directly, same as printNumbers(4, 5, 6)</span></pre>
+    <pre><span class="kw">public static void</span> log(String format, Object... args){
+  System.out.printf(<span class="tp">"[LOG] "</span> + format + <span class="tp">"%n"</span>, args);
+}
+log(<span class="tp">"User %s logged in at %s"</span>, <span class="tp">"Alice"</span>, <span class="tp">"10:00 AM"</span>);</pre>
+  </div></div>
+
+  <!-- ===================== FUNCTIONAL JAVA ===================== -->
+  <div class="layer-banner func">Functional Java</div>
+
+  <div class="rule func" id="lambdas"><div class="t">Lambda expressions</div><div class="b">
+    <p>A lambda expression is a shorter way to write an anonymous function, a block of code you can pass around and execute later. Before Java 8, one-line logic required a verbose anonymous inner class; lambdas write the same logic in a single, concise expression.</p>
+    <pre><span class="cm">// Without lambda:</span>
+names.forEach(<span class="kw">new</span> Consumer&lt;String&gt;(){
+  <span class="cm">@Override</span>
+  <span class="kw">public void</span> accept(String name){ System.out.println(name); }
+});
+<span class="cm">// With lambda:</span>
+names.forEach(name -&gt; System.out.println(name));</pre>
+    <pre>List&lt;Integer&gt; numbers = Arrays.asList(1,2,3,4,5);
+numbers.stream()
+  .filter(n -&gt; n % 2 == 0) <span class="cm">// keep even numbers</span>
+  .map(n -&gt; n * n)          <span class="cm">// square them</span>
+  .forEach(n -&gt; System.out.println(n)); <span class="cm">// 4, 16</span></pre>
+    <p>Lambdas really shine together with Streams.</p>
+    <table class="ref">
+      <tr><th>Syntax</th><th>Example</th><th>Meaning</th></tr>
+      <tr><td>No parameters</td><td>() -&gt; 42</td><td>Returns 42</td></tr>
+      <tr><td>One parameter</td><td>x -&gt; x * 2</td><td>Takes x, returns x * 2</td></tr>
+      <tr><td>Multiple parameters</td><td>(a, b) -&gt; a + b</td><td>Adds two numbers</td></tr>
+      <tr><td>Block body</td><td>(x, y) -&gt; { int sum = x + y; return sum; }</td><td>Multi-line body</td></tr>
+    </table>
+    <pre>Predicate&lt;Integer&gt; isEven = n -&gt; n % 2 == 0;
+isEven.test(4); <span class="cm">// true</span></pre>
+    <p>Lambdas can be stored in variables.</p>
+    <pre><span class="tp">int</span> base = 10; <span class="cm">// effectively final, never reassigned</span>
+Runnable r = () -&gt; System.out.println(<span class="tp">"Base value: "</span> + base); <span class="cm">// works fine</span>
+
+<span class="cm">// base = 20; // this would cause a compile error:</span>
+<span class="cm">// "Variable used in lambda expression should be final or effectively final"</span></pre>
+    <p>A lambda can read local variables from its enclosing scope, but can't modify them; they must be effectively final (never reassigned after being set). Lambdas capture variables by value, so if the value could change, Java can't guarantee consistency inside the lambda.</p>
+    <pre>AtomicInteger counter = <span class="kw">new</span> AtomicInteger(0);
+Runnable r2 = () -&gt; {
+  counter.incrementAndGet();
+  System.out.println(<span class="tp">"Counter: "</span> + counter.get());
+};
+r2.run(); r2.run(); <span class="cm">// Counter: 1, Counter: 2</span></pre>
+    <p>To actually mutate a value from inside a lambda, wrap it in a mutable container like <code>AtomicInteger</code>: the reference stays effectively final, but its contents can change.</p>
+  </div></div>
+
+  <div class="rule func" id="functionalinterfaces"><div class="t">Functional interfaces</div><div class="b">
+    <p>A functional interface has exactly one abstract method, designed to be implemented with a lambda or method reference. It's the bridge between object-oriented and functional programming in Java, and underlies the Streams API, event handling, and more.</p>
+    <pre><span class="cm">@FunctionalInterface</span>
+<span class="kw">interface</span> Greeting {
+  <span class="kw">void</span> sayHello(String name);
+}
+Greeting greet = (name) -&gt; System.out.println(<span class="tp">"Hello, "</span> + name + <span class="tp">"!"</span>);</pre>
+    <pre><span class="cm">@FunctionalInterface</span>
+<span class="kw">interface</span> Calculator {
+  <span class="tp">int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b);
+  <span class="cm">// int subtract(int a, int b); // would cause an error</span>
+}</pre>
+    <p><code>@FunctionalInterface</code> is optional but recommended: it tells the compiler to enforce that the interface has only one abstract method, catching accidental extras at compile time.</p>
+    <table class="ref">
+      <tr><th>Interface</th><th>Method</th><th>Purpose</th></tr>
+      <tr><td>Consumer&lt;T&gt;</td><td>void accept(T t)</td><td>Performs an action on a value</td></tr>
+      <tr><td>Supplier&lt;T&gt;</td><td>T get()</td><td>Supplies a value, no input</td></tr>
+      <tr><td>Function&lt;T,R&gt;</td><td>R apply(T t)</td><td>Transforms T into R</td></tr>
+      <tr><td>Predicate&lt;T&gt;</td><td>boolean test(T t)</td><td>Tests a condition</td></tr>
+      <tr><td>BiFunction&lt;T,U,R&gt;</td><td>R apply(T t, U u)</td><td>Two inputs, one output</td></tr>
+    </table>
+    <pre>Predicate&lt;Integer&gt; isEven = n -&gt; n % 2 == 0;
+Function&lt;String,Integer&gt; length = s -&gt; s.length();
+Consumer&lt;String&gt; printer = s -&gt; System.out.println(<span class="tp">"Hello, "</span> + s);
+Supplier&lt;Double&gt; randomValue = () -&gt; Math.random();</pre>
+  </div></div>
+
+  <div class="rule func" id="streams"><div class="t">Streams API</div><div class="b">
+    <p>A stream is a sequence of elements supporting sequential and parallel aggregate operations. It doesn't store data itself, it's a pipeline for processing data.</p>
+    <table class="ref">
+      <tr><th>Operation</th><th>Description</th></tr>
+      <tr><td>filter()</td><td>Keeps elements matching a condition</td></tr>
+      <tr><td>map()</td><td>Transforms each element</td></tr>
+      <tr><td>sorted()</td><td>Sorts elements</td></tr>
+      <tr><td>forEach()</td><td>Performs an action per element</td></tr>
+      <tr><td>collect()</td><td>Gathers the result into a collection or value</td></tr>
+      <tr><td>reduce()</td><td>Aggregates elements into a single result</td></tr>
+      <tr><td>count()</td><td>Counts the elements</td></tr>
+    </table>
+    <pre>List&lt;String&gt; names = Arrays.asList(<span class="tp">"Alice"</span>,<span class="tp">"Bob"</span>,<span class="tp">"Charlie"</span>,<span class="tp">"David"</span>);
+List&lt;String&gt; result = names.stream()
+  .filter(name -&gt; name.startsWith(<span class="tp">"C"</span>))
+  .map(String::toUpperCase)
+  .sorted()
+  .collect(Collectors.toList());
+<span class="cm">// [CHARLIE]</span></pre>
+    <pre>List&lt;Integer&gt; squares = numbers.stream().map(n -&gt; n * n).collect(Collectors.toList());
+<span class="tp">long</span> count = numbers.stream().filter(n -&gt; n &gt; 3).count();
+<span class="tp">int</span> sum = numbers.stream().reduce(0, (a,b) -&gt; a + b); <span class="cm">// or .reduce(Integer::sum)</span></pre>
+    <pre>Map&lt;Integer,List&lt;String&gt;&gt; groupedByLength = names.stream()
+  .collect(Collectors.groupingBy(String::length));</pre>
+    <p><code>collect()</code> can group results into a <code>List</code>, <code>Set</code>, or <code>Map</code>.</p>
+    <pre>List&lt;String&gt; result2 = names.parallelStream().map(String::toUpperCase).collect(Collectors.toList());</pre>
+    <p>Parallel streams can use multiple cores, but aren't always faster, best for large, CPU-bound tasks.</p>
+    <table class="ref">
+      <tr><th>Collection</th><th>Stream</th></tr>
+      <tr><td>Stores data</td><td>Doesn't store data</td></tr>
+      <tr><td>Can be modified</td><td>Immutable (usually)</td></tr>
+      <tr><td>Eager evaluation</td><td>Lazy evaluation</td></tr>
+      <tr><td>External iteration (for/while)</td><td>Internal iteration (e.g. forEach())</td></tr>
+    </table>
+  </div></div>
+
+  <div class="rule func" id="optional"><div class="t">Optional class</div><div class="b">
+    <p><code>Optional&lt;T&gt;</code> (Java 8+) is a container that may or may not hold a non-null value: instead of returning <code>null</code> for a missing value, it gives you an explicit, safe wrapper.</p>
+    <pre>Optional&lt;String&gt; opt1 = Optional.of(<span class="tp">"Hello"</span>);     <span class="cm">// value present</span>
+Optional&lt;String&gt; opt2 = Optional.empty();          <span class="cm">// no value</span>
+Optional&lt;String&gt; opt3 = Optional.ofNullable(<span class="kw">null</span>); <span class="cm">// may or may not be null</span></pre>
+    <p><code>of()</code> throws <code>NullPointerException</code> if given <code>null</code>; <code>ofNullable()</code> safely produces an empty <code>Optional</code> instead; <code>empty()</code> creates an empty one directly.</p>
+    <pre><span class="kw">if</span> (name.isPresent()) {
+  System.out.println(<span class="tp">"Value: "</span> + name.get());
+}</pre>
+    <p>Calling <code>.get()</code> directly is discouraged unless you're sure a value is present; the safer alternatives below are usually better.</p>
+    <pre>Optional.ofNullable(<span class="kw">null</span>).orElse(<span class="tp">"Default"</span>);                        <span class="cm">// fallback value</span>
+Optional.ofNullable(<span class="kw">null</span>).orElseGet(() -&gt; <span class="tp">"Computed Default"</span>);      <span class="cm">// fallback via a Supplier, computed only if needed</span>
+Optional.ofNullable(<span class="kw">null</span>).orElseThrow(() -&gt; <span class="kw">new</span> IllegalArgumentException()); <span class="cm">// throws if missing</span></pre>
+    <pre>Optional&lt;String&gt; name2 = Optional.of(<span class="tp">"java"</span>);
+Optional&lt;String&gt; upper = name2.map(String::toUpperCase); <span class="cm">// transforms the value if present</span></pre>
+    <pre>Optional&lt;String&gt; upper2 = name2.flatMap(n -&gt; Optional.of(n.toUpperCase()));</pre>
+    <p><code>flatMap()</code> is used when the mapping function itself returns an <code>Optional</code>.</p>
+    <pre>name2 = name2.filter(n -&gt; n.startsWith(<span class="tp">"J"</span>)); <span class="cm">// keeps the value only if it matches a condition</span></pre>
+    <pre><span class="cm">// Without Optional:</span>
+<span class="kw">if</span> (person != <span class="kw">null</span> && person.getAddress() != <span class="kw">null</span>) {
+  <span class="kw">return</span> person.getAddress().getCity();
+} <span class="kw">else return</span> <span class="tp">"Unknown"</span>;
+
+<span class="cm">// With Optional:</span>
+String city = Optional.ofNullable(person)
+  .map(Person::getAddress)
+  .map(Address::getCity)
+  .orElse(<span class="tp">"Unknown"</span>);</pre>
+    <p>Chaining <code>Optional</code> avoids nested null checks entirely, no <code>NullPointerException</code>, no messy conditionals.</p>
+  </div></div>
+
+  <div class="rule func" id="methodrefs"><div class="t">Method references</div><div class="b">
+    <p>A method reference is shorthand for a lambda that just calls an existing method.</p>
+    <pre><span class="cm">// Without method reference:</span>
+list.forEach(name -&gt; System.out.println(name));
+<span class="cm">// With method reference:</span>
+list.forEach(System.out::println);</pre>
+    <pre>numbers.sort(Integer::compare); <span class="cm">// reference to a static method: ClassName::staticMethodName</span></pre>
+    <pre>Printer printer = <span class="kw">new</span> Printer();
+names.forEach(printer::printName); <span class="cm">// reference to an instance method of a particular object: instance::instanceMethodName</span></pre>
+    <pre>names.sort(String::compareToIgnoreCase); <span class="cm">// reference to an instance method of an arbitrary object: ClassName::instanceMethodName</span></pre>
+    <pre>Supplier&lt;StringBuilder&gt; builderSupplier = StringBuilder::new; <span class="cm">// reference to a constructor: ClassName::new</span></pre>
+    <pre>names.stream()
+  .map(String::toUpperCase)
+  .sorted(String::compareTo)
+  .forEach(System.out::println);</pre>
+    <p>Method references combine naturally with Streams.</p>
+  </div></div>
+
+  <div class="rule func" id="var"><div class="t">var (Java 10+)</div><div class="b">
+    <pre><span class="cm">// Without var:</span>
+String message = <span class="tp">"Hello, Java!"</span>;
+<span class="cm">// With var:</span>
+<span class="kw">var</span> message2 = <span class="tp">"Hello, Java!"</span>;</pre>
+    <p><code>var</code> (Java 10+) lets the compiler infer a local variable's type from context; Java remains statically typed, the variable behaves exactly as if the type had been written explicitly.</p>
+    <pre><span class="cm">// var name; // error, type can't be inferred without initialization</span>
+<span class="kw">var</span> name = <span class="tp">"Java"</span>; <span class="cm">// OK</span></pre>
+    <p>A <code>var</code> variable must be initialized immediately.</p>
+    <pre><span class="kw">class</span> Example {
+  <span class="cm">// var field = 10; // not allowed</span>
+}</pre>
+    <p><code>var</code> can't be used for fields or method parameters, only for local variables inside methods, constructors, or blocks.</p>
+    <pre><span class="cm">// var data = null; // compiler can't infer a type from null alone</span></pre>
+    <pre><span class="kw">var</span> num = 42;        <span class="cm">// int</span>
+<span class="kw">var</span> pi = 3.14;       <span class="cm">// double</span>
+<span class="kw">var</span> isReady = <span class="kw">true</span>; <span class="cm">// boolean</span>
+<span class="kw">var</span> text = <span class="tp">"Hello"</span>;  <span class="cm">// String</span>
+<span class="kw">var</span> list = <span class="kw">new</span> ArrayList&lt;String&gt;(); <span class="cm">// ArrayList&lt;String&gt;</span></pre>
+    <pre><span class="kw">for</span> (<span class="kw">var</span> entry : map.entrySet()) {
+  System.out.println(entry.getKey() + <span class="tp">" -> "</span> + entry.getValue());
+}</pre>
+    <p><code>var</code> is handy for reducing redundancy when the type is obvious, e.g. in loops and streams, but is best avoided when the inferred type isn't clear, since that hurts readability.</p>
+  </div></div>
+  <!-- ===================== CONCURRENCY ===================== -->
+  <div class="layer-banner conc">Concurrency</div>
+
+  <div class="rule conc" id="concurrency"><div class="t">Concurrency &amp; Multithreading</div><div class="b">
+    <p>Multithreading is the most common way to achieve concurrency in Java. A thread is a lightweight unit of execution: a process can run several threads, each independent, but all sharing the same heap (so they can access shared objects) while keeping separate call stacks. One program might use one thread for user input and another for background work.</p>
+    <pre><span class="kw">class</span> MyThread <span class="kw">extends</span> Thread {
+  <span class="kw">public void</span> run(){ System.out.println(<span class="tp">"Thread running: "</span> + Thread.currentThread().getName()); }
+}
+<span class="kw">new</span> MyThread().start(); <span class="cm">// never call run() directly, that runs on the current thread</span></pre>
+    <pre><span class="kw">class</span> MyRunnable <span class="kw">implements</span> Runnable {
+  <span class="kw">public void</span> run(){ System.out.println(<span class="tp">"Running in thread: "</span> + Thread.currentThread().getName()); }
+}
+<span class="kw">new</span> Thread(<span class="kw">new</span> MyRunnable()).start();</pre>
+    <p>Implementing <code>Runnable</code> is generally preferred over extending <code>Thread</code>, since it leaves the class free to extend something else.</p>
+    <pre>Thread t1 = <span class="kw">new</span> Thread(() -&gt; System.out.println(<span class="tp">"Running in thread: "</span> + Thread.currentThread().getName()));
+t1.start();</pre>
+    <p>A lambda (Java 8+) is the cleanest, most common way to start a thread today.</p>
+    <p>A thread moves through several states: <strong>NEW</strong> (created, not started), <strong>RUNNABLE</strong> (ready, waiting for CPU), <strong>RUNNING</strong> (executing), <strong>BLOCKED</strong>/<strong>WAITING</strong> (waiting on a resource or another thread), <strong>TERMINATED</strong> (finished).</p>
+    <pre>Thread worker = <span class="kw">new</span> Thread(() -&gt; {
+  <span class="kw">try</span> { Thread.sleep(1000); } <span class="kw">catch</span> (InterruptedException ignored) {}
+  System.out.println(<span class="tp">"Worker thread done!"</span>);
+});
+worker.start();
+worker.join(); <span class="cm">// current thread waits until 'worker' finishes</span></pre>
+    <p><code>Thread.sleep(ms)</code> pauses the current thread without releasing any locks it holds, and can throw <code>InterruptedException</code>. <code>join()</code> makes the caller wait for another thread to finish, commonly used to ensure background work completes before the program exits.</p>
+    <pre>t1.interrupt(); <span class="cm">// signals a thread to stop; if it's sleeping/waiting, it throws InterruptedException</span>
+t1.isAlive();   <span class="cm">// true once started, false before starting or after finishing</span></pre>
+    <pre><span class="kw">class</span> Counter {
+  <span class="kw">private int</span> count = 0;
+  <span class="kw">public synchronized void</span> increment(){ count++; }
+}</pre>
+    <p>Since threads share memory, multiple threads modifying the same data at once causes race conditions. <code>synchronized</code> ensures only one thread at a time can run <code>increment()</code>.</p>
+    <pre><span class="kw">private static volatile boolean</span> running = <span class="kw">true</span>;</pre>
+    <p><code>volatile</code> ensures a variable shared across threads is always read from main memory, so changes are visible immediately, useful for a simple shared flag (like <code>running</code>) where you need visibility but not a compound operation like <code>++</code>.</p>
+    <pre>ExecutorService executor = Executors.newFixedThreadPool(3); <span class="cm">// pool of 3 reusable threads</span>
+<span class="kw">for</span> (<span class="tp">int</span> i = 1; i &lt;= 5; i++) {
+  <span class="tp">int</span> taskId = i;
+  executor.submit(() -&gt; System.out.println(<span class="tp">"Running task "</span> + taskId));
+}
+executor.shutdown(); <span class="cm">// stops accepting new tasks once submitted ones finish</span></pre>
+    <p>An <code>ExecutorService</code> manages thread creation, reuse, and shutdown for you, instead of creating threads manually.</p>
+    <pre>Callable&lt;Integer&gt; task = () -&gt; { Thread.sleep(1000); <span class="kw">return</span> 42; };
+Future&lt;Integer&gt; result = executor.submit(task);
+result.get(); <span class="cm">// blocks until the task completes, returns 42</span></pre>
+    <p>A <code>Callable</code> is like a <code>Runnable</code> but returns a value (and can throw exceptions); the <code>Future</code> represents that pending result, and can also be polled with <code>isDone()</code> or cancelled with <code>cancel(true)</code>.</p>
+    <pre>CountDownLatch latch = <span class="kw">new</span> CountDownLatch(3);
+<span class="kw">for</span> (<span class="tp">int</span> i = 1; i &lt;= 3; i++) {
+  <span class="kw">new</span> Thread(() -&gt; { <span class="cm">/* work */</span> latch.countDown(); }).start();
+}
+latch.await(); <span class="cm">// blocks until the count reaches zero</span></pre>
+    <p><code>CountDownLatch</code> lets one or more threads wait until a set number of other threads finish.</p>
+    <pre>Semaphore semaphore = <span class="kw">new</span> Semaphore(2); <span class="cm">// only 2 permits available at once</span>
+semaphore.acquire(); <span class="cm">// blocks if no permit is free</span>
+<span class="kw">try</span> { <span class="cm">/* work */</span> } <span class="kw">finally</span> { semaphore.release(); }</pre>
+    <p>A <code>Semaphore</code> limits how many threads can access a resource simultaneously, useful for capping something like database connections.</p>
+    <pre>ReentrantLock lock = <span class="kw">new</span> ReentrantLock();
+<span class="kw">if</span> (lock.tryLock()) {
+  <span class="kw">try</span> { <span class="cm">/* work */</span> } <span class="kw">finally</span> { lock.unlock(); } <span class="cm">// always unlock in a finally block</span>
+}</pre>
+    <p><code>ReentrantLock</code> is a more flexible alternative to <code>synchronized</code>: explicit lock/unlock, fairness options, and non-blocking <code>tryLock()</code>.</p>
+    <pre>Object lock2 = <span class="kw">new</span> Object();
+<span class="kw">synchronized</span> (lock2) {
+  lock2.wait(); <span class="cm">// releases the lock and pauses until notified</span>
+}
+<span class="cm">// on another thread:</span>
+<span class="kw">synchronized</span> (lock2) { lock2.notify(); }    <span class="cm">// wakes one waiting thread</span>
+<span class="kw">synchronized</span> (lock2) { lock2.notifyAll(); } <span class="cm">// wakes every waiting thread</span></pre>
+    <p><code>wait()</code>/<code>notify()</code>/<code>notifyAll()</code> are the low-level coordination primitives behind higher-level tools like locks and latches.</p>
+  </div></div>
+  <div class="rule conc" id="parallelism"><div class="t">Parallelism</div><div class="b">
+    <p>Parallelism happens when multiple threads run on multiple CPU cores at the same time. The number of available cores can be checked at runtime.</p>
+    <pre><span class="tp">int</span> cores = Runtime.getRuntime().availableProcessors();
+System.out.println(<span class="tp">"Available cores: "</span> + cores);</pre>
+    <pre>ExecutorService pool = Executors.newFixedThreadPool(4);
+<span class="kw">for</span> (<span class="tp">int</span> i = 0; i &lt; 4; i++) {
+  pool.submit(() -&gt; System.out.println(Thread.currentThread().getName() + <span class="tp">" working"</span>));
+}
+pool.shutdown();</pre>
+    <p>A fixed-size <code>ExecutorService</code> thread pool: on a machine with 4+ cores, these tasks can genuinely run at the same time, not just interleaved.</p>
+    <pre>List&lt;Integer&gt; numbers = List.of(1,2,3,4,5);
+<span class="tp">int</span> sum = numbers.parallelStream()
+  .mapToInt(Integer::intValue)
+  .sum();</pre>
+    <p>Parallel streams are the simplest way to get parallelism: Java automatically splits the work across threads using a shared <code>ForkJoinPool</code> behind the scenes.</p>
+    <pre><span class="kw">class</span> SumTask <span class="kw">extends</span> RecursiveTask&lt;Long&gt; {
+  <span class="kw">private final long</span>[] numbers; <span class="kw">private final int</span> start, end;
+  SumTask(<span class="tp">long</span>[] numbers, <span class="tp">int</span> start, <span class="tp">int</span> end){
+    <span class="kw">this</span>.numbers=numbers; <span class="kw">this</span>.start=start; <span class="kw">this</span>.end=end;
+  }
+  <span class="kw">protected</span> Long compute(){
+    <span class="kw">if</span> (end - start &lt;= 1000) {
+      <span class="tp">long</span> sum = 0;
+      <span class="kw">for</span> (<span class="tp">int</span> i=start;i&lt;end;i++) sum += numbers[i];
+      <span class="kw">return</span> sum;
+    }
+    <span class="tp">int</span> mid = (start+end)/2;
+    SumTask left = <span class="kw">new</span> SumTask(numbers, start, mid);
+    SumTask right = <span class="kw">new</span> SumTask(numbers, mid, end);
+    left.fork();
+    <span class="kw">return</span> right.compute() + left.join();
+  }
+}</pre>
+    <p>For recursive tasks (splitting a big job into smaller ones), the Fork/Join framework can be used directly; it's what <code>parallelStream()</code> is built on top of.</p>
+  </div></div>
+
+  <!-- ===================== ADVANCED ===================== -->
+  <div class="layer-banner adv">Advanced</div>
+
+  <div class="rule adv" id="generics"><div class="t">Generics</div><div class="b">
+    <p>Generics (Java 5+) let a class, interface, or method work with any type while still keeping compile-time type safety, eliminating manual casting and catching type mismatches before runtime.</p>
+    <pre><span class="cm">// Without generics: mixing types compiles, but crashes at runtime</span>
+List list = <span class="kw">new</span> ArrayList();
+list.add(<span class="tp">"Java"</span>); list.add(42);
+String s = (String) list.get(1); <span class="cm">// ClassCastException at runtime</span>
+
+<span class="cm">// With generics: the compiler catches the mistake immediately</span>
+List&lt;String&gt; names = <span class="kw">new</span> ArrayList&lt;&gt;();
+names.add(<span class="tp">"Java"</span>);
+<span class="cm">// names.add(42); // won't even compile</span></pre>
+    <pre><span class="kw">class</span> Box&lt;T&gt; { <span class="cm">// T is a type parameter</span>
+  <span class="kw">private</span> T value;
+  <span class="kw">public void</span> set(T value){ <span class="kw">this</span>.value = value; }
+  <span class="kw">public</span> T get(){ <span class="kw">return</span> value; }
+}</pre>
+    <pre><span class="kw">public static</span> &lt;T&gt; <span class="kw">void</span> printTwice(T value){
+  System.out.println(value);
+  System.out.println(value);
+}</pre>
+    <p>Methods can be generic too, even inside a non-generic class; the type is usually inferred automatically at the call site.</p>
+    <pre><span class="kw">class</span> Calculator&lt;T <span class="kw">extends</span> Number&gt; {
+  <span class="kw">public double</span> add(T a, T b){ <span class="kw">return</span> a.doubleValue() + b.doubleValue(); }
+}
+<span class="cm">// Calculator<String> would be invalid: String doesn't extend Number</span></pre>
+    <p>Bounds (<code>T extends Number</code>) restrict which types a generic parameter accepts.</p>
+    <pre><span class="kw">static void</span> printList(List&lt;?&gt; list){
+  <span class="kw">for</span> (Object o : list) System.out.println(o);
+}</pre>
+    <p>Wildcards: <code>?</code> any type, <code>? extends T</code> any subtype of <code>T</code>, <code>? super T</code> any supertype of <code>T</code>.</p>
+    <pre><span class="kw">class</span> Response&lt;T&gt; {
+  <span class="kw">boolean</span> success; String message; T data;
+  Response(<span class="tp">boolean</span> success, String message, T data){
+    <span class="kw">this</span>.success=success; <span class="kw">this</span>.message=message; <span class="kw">this</span>.data=data;
+  }
+}
+Response&lt;User&gt; userResponse = <span class="kw">new</span> Response&lt;&gt;(<span class="kw">true</span>, <span class="tp">"User fetched"</span>, <span class="kw">new</span> User());</pre>
+    <p>A common real use: instead of writing a separate <code>Response</code> class per endpoint (<code>User</code>, <code>Product</code>, <code>Order</code>...), one generic <code>Response&lt;T&gt;</code> adapts to any of them with full compile-time safety.</p>
+  </div></div>
+
+  <div class="rule adv" id="annotations"><div class="t">Annotations</div><div class="b">
+    <p>An annotation is metadata attached to code with an <code>@</code> symbol: it doesn't change what the code does directly, but the compiler, tools, or frameworks can read it at compile time or runtime.</p>
+    <pre><span class="cm">@Override</span>
+<span class="kw">public</span> String toString(){ <span class="kw">return</span> <span class="tp">"Hello!"</span>; }</pre>
+    <table class="ref">
+      <tr><th>Annotation</th><th>Purpose</th></tr>
+      <tr><td>@Override</td><td>Ensures the method overrides a superclass method</td></tr>
+      <tr><td>@Deprecated</td><td>Marks a method or class as outdated</td></tr>
+      <tr><td>@SuppressWarnings</td><td>Tells the compiler to ignore certain warnings</td></tr>
+      <tr><td>@FunctionalInterface</td><td>Ensures an interface has exactly one abstract method</td></tr>
+      <tr><td>@SafeVarargs</td><td>Suppresses warnings for generic varargs methods</td></tr>
+    </table>
+    <pre><span class="kw">import</span> java.lang.annotation.*;
+
+<span class="cm">@Retention</span>(RetentionPolicy.RUNTIME) <span class="cm">// SOURCE, CLASS, or RUNTIME: how long it's kept</span>
+<span class="cm">@Target</span>(ElementType.METHOD)       <span class="cm">// where it can be used</span>
+<span class="kw">public @interface</span> RunNTimes {
+  <span class="tp">int</span> value() <span class="kw">default</span> 1; <span class="cm">// configurable element</span>
+}</pre>
+    <p>Custom annotations are defined with <code>@interface</code>. This is the same mechanism frameworks like Spring and JUnit build on: they scan for annotated methods with reflection and act on them.</p>
+  </div></div>
+
+  <div class="rule adv" id="reflection"><div class="t">Reflection</div><div class="b">
+    <p>Reflection lets a program inspect and manipulate classes, methods, fields, and constructors at runtime, even without knowing their names at compile time, which is how frameworks like Spring, JUnit, and Hibernate work under the hood.</p>
+    <pre>Class&lt;?&gt; clazz = Class.forName(<span class="tp">"java.util.ArrayList"</span>); <span class="cm">// loads the class at runtime</span>
+<span class="kw">for</span> (Method m : clazz.getDeclaredMethods()) {
+  System.out.println(m.getName());
+}</pre>
+    <p>Similar calls exist for <code>getDeclaredFields()</code> and <code>getDeclaredConstructors()</code>.</p>
+    <pre><span class="kw">class</span> Person {
+  <span class="kw">private</span> String name;
+  Person(String name){ <span class="kw">this</span>.name = name; }
+}
+
+Person p = <span class="kw">new</span> Person(<span class="tp">"Alice"</span>);
+Field field = Person.<span class="kw">class</span>.getDeclaredField(<span class="tp">"name"</span>);
+field.setAccessible(<span class="kw">true</span>); <span class="cm">// bypasses the private access check</span>
+field.set(p, <span class="tp">"Bob"</span>);
+System.out.println(field.get(p)); <span class="cm">// "Bob"</span></pre>
+    <p><code>setAccessible(true)</code> lets reflection read or modify private fields and invoke private methods, things that are normally impossible from outside the class.</p>
+  </div></div>
+
+  <div class="rule adv" id="enums"><div class="t">Enums</div><div class="b">
+    <p>An enum is a special type representing a fixed set of constants; internally, enums are classes with fields, constructors (always private), and methods. Good fits: days of the week, directions, status codes, user roles. Not a good fit: dynamic values that change at runtime.</p>
+    <pre><span class="kw">enum</span> Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
+Day today = Day.MONDAY;
+<span class="kw">if</span> (today == Day.MONDAY) System.out.println(<span class="tp">"Start of week"</span>);</pre>
+    <pre><span class="kw">enum</span> Status {
+  SUCCESS(200), NOT_FOUND(404), SERVER_ERROR(500);
+  <span class="kw">private final int</span> code;
+  Status(<span class="tp">int</span> code){ <span class="kw">this</span>.code = code; }
+  <span class="tp">int</span> getCode(){ <span class="kw">return</span> code; }
+}</pre>
+    <p>Enum constants can carry their own fields, set through a private constructor.</p>
+    <pre><span class="kw">enum</span> Operation {
+  ADD { <span class="kw">public double</span> apply(<span class="tp">double</span> a, <span class="tp">double</span> b){ <span class="kw">return</span> a+b; } },
+  MULTIPLY { <span class="kw">public double</span> apply(<span class="tp">double</span> a, <span class="tp">double</span> b){ <span class="kw">return</span> a*b; } };
+  <span class="kw">public abstract double</span> apply(<span class="tp">double</span> a, <span class="tp">double</span> b);
+}</pre>
+    <pre>Day.values();          <span class="cm">// array of all constants</span>
+Day.valueOf(<span class="tp">"MONDAY"</span>);  <span class="cm">// string -> constant</span>
+Day.FRIDAY.name();     <span class="cm">// "FRIDAY"</span>
+Day.MONDAY.ordinal();  <span class="cm">// 0, its index</span>
+
+<span class="kw">switch</span> (today) {
+  <span class="kw">case</span> MONDAY -&gt; System.out.println(<span class="tp">"Back to work!"</span>);
+  <span class="kw">case</span> FRIDAY -&gt; System.out.println(<span class="tp">"Almost weekend!"</span>);
+  <span class="kw">default</span> -&gt; System.out.println(<span class="tp">"Some other day"</span>);
+}</pre>
+    <pre><span class="kw">interface</span> Printable { <span class="kw">void</span> print(); }
+<span class="kw">enum</span> Color <span class="kw">implements</span> Printable {
+  RED, GREEN, BLUE;
+  <span class="kw">public void</span> print(){ System.out.println(<span class="kw">this</span>.name()); }
+}</pre>
+    <p>Enums cannot extend a class (they already implicitly extend <code>Enum</code>), but they can implement interfaces.</p>
+  </div></div>
+
+  <div class="rule adv" id="innerclasses"><div class="t">Inner/nested classes</div><div class="b">
+    <pre><span class="kw">class</span> Outer {
+  <span class="kw">static class</span> Nested {
+    <span class="kw">void</span> print(){ System.out.println(<span class="tp">"Inside static nested class"</span>); }
+  }
+}
+<span class="kw">new</span> Outer.Nested().print();</pre>
+    <p>Static nested classes don't need an instance of the outer class, and cannot access the outer class's instance members directly.</p>
+    <pre><span class="kw">class</span> Outer {
+  <span class="kw">private</span> String message = <span class="tp">"Hello from Outer"</span>;
+  <span class="kw">class</span> Inner {
+    <span class="kw">void</span> print(){ System.out.println(message); } <span class="cm">// can access outer fields</span>
+  }
+}
+Outer outer = <span class="kw">new</span> Outer();
+Outer.Inner inner = outer.<span class="kw">new</span> Inner();</pre>
+    <p>A non-static (member) inner class can access all of the outer class's members, including private ones, but must be created from an outer instance.</p>
+    <pre><span class="kw">class</span> Outer {
+  <span class="kw">void</span> doSomething(){
+    <span class="kw">class</span> LocalInner {
+      <span class="kw">void</span> print(){ System.out.println(<span class="tp">"I'm inside a method!"</span>); }
+    }
+    <span class="kw">new</span> LocalInner().print();
+  }
+}</pre>
+    <p>A local inner class is scoped to a single method, often for a small helper; it can access <code>final</code> or effectively-final local variables.</p>
+    <pre>Runnable r = <span class="kw">new</span> Runnable(){
+  <span class="cm">@Override</span>
+  <span class="kw">public void</span> run(){ System.out.println(<span class="tp">"Running in anonymous inner class!"</span>); }
+};
+<span class="kw">new</span> Thread(r).start();</pre>
+    <p>Anonymous inner classes have no name, often used for <code>Runnable</code> tasks, event handlers, or a quick interface implementation. Modern Java often reaches for a lambda instead.</p>
+  </div></div>
+
+  <div class="rule adv" id="packages"><div class="t">Packages and imports</div><div class="b">
+    <p>A package groups related classes, interfaces, and sub-packages, avoiding name collisions and organizing large projects by function.</p>
+    <table class="ref">
+      <tr><th>Package</th><th>Contains</th></tr>
+      <tr><td>java.util</td><td>Collections, Scanner, Random, etc.</td></tr>
+      <tr><td>java.io</td><td>File I/O</td></tr>
+      <tr><td>java.nio.file</td><td>Modern file I/O</td></tr>
+      <tr><td>java.net</td><td>Networking</td></tr>
+      <tr><td>java.time</td><td>Date/time API</td></tr>
+    </table>
+    <pre><span class="kw">package</span> com.example.project.utils;
+
+<span class="kw">public class</span> MathHelper {
+  <span class="kw">public static int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b){ <span class="kw">return</span> a + b; }
+}</pre>
+    <p>A user-defined package must match its folder structure, so this file lives at <code>com/example/project/utils/MathHelper.java</code>.</p>
+    <pre><span class="cm">// Without import:</span>
+java.util.ArrayList list = <span class="kw">new</span> java.util.ArrayList();
+<span class="cm">// With import:</span>
+<span class="kw">import</span> java.util.ArrayList;
+ArrayList list = <span class="kw">new</span> ArrayList();</pre>
+    <pre><span class="kw">import</span> java.util.List;   <span class="cm">// single-type import</span>
+<span class="kw">import</span> java.util.*;      <span class="cm">// wildcard: every class in java.util, but NOT sub-packages</span>
+<span class="kw">import static</span> java.lang.Math.*;
+<span class="tp">double</span> x = sqrt(16); <span class="cm">// instead of Math.sqrt(16), thanks to the static import</span></pre>
+  </div></div>
+
+  <div class="rule adv" id="modules"><div class="t">Java modules (JPMS)</div><div class="b">
+    <p>(Java 9+) The Java Platform Module System groups related packages into named, strongly-encapsulated modules: you expose only what you explicitly choose, instead of every public class in a package being visible to everyone.</p>
+    <pre><span class="kw">module</span> my.module {
+  <span class="kw">requires</span> other.module;
+  <span class="kw">exports</span> com.example.api;
+}</pre>
+    <p>The <code>module-info.java</code> descriptor names the module, lists its dependencies, and controls which of its packages are exposed. Packages that aren't exported are completely hidden, as if they don't exist to other modules.</p>
+    <pre><span class="kw">requires</span> java.sql;
+<span class="kw">requires</span> utils.module;
+<span class="kw">opens</span> com.example.model; <span class="cm">// allows runtime reflection on this package</span>
+<span class="kw">requires transitive</span> other.module; <span class="cm">// anyone requiring this module also gets other.module</span></pre>
+    <p><code>opens</code> matters for frameworks like Spring or Jackson: without it, reflection-based access (e.g. reading JSON into an object) fails.</p>
+    <pre><span class="kw">uses</span> com.example.PaymentProcessor;
+<span class="kw">provides</span> com.example.PaymentProcessor
+  <span class="kw">with</span> com.example.StripeProcessor;</pre>
+    <p><code>uses</code>/<code>provides ... with</code> support the <code>ServiceLoader</code> mechanism, enabling a modular, pluggable application architecture.</p>
+  </div></div>
+
+  <!-- ===================== TOOLING ===================== -->
+  <div class="layer-banner tool">Tooling</div>
+
+  <div class="rule tool" id="testing"><div class="t">Unit testing</div><div class="b">
+    <pre><span class="kw">public class</span> Calculator {
+  <span class="kw">public int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b){ <span class="kw">return</span> a + b; }
+}
+
+<span class="kw">import</span> org.junit.jupiter.api.Test;
+<span class="kw">import static</span> org.junit.jupiter.api.Assertions.assertEquals;
+
+<span class="kw">class</span> CalculatorTest {
+  <span class="cm">@Test</span>
+  <span class="kw">void</span> testAdd(){ assertEquals(4, <span class="kw">new</span> Calculator().add(2,2)); }
+}</pre>
+    <table class="ref">
+      <tr><th>Annotation</th><th>Runs</th></tr>
+      <tr><td>@Test</td><td>Marks a method as a test</td></tr>
+      <tr><td>@BeforeEach</td><td>Before every test method, for setup</td></tr>
+      <tr><td>@AfterEach</td><td>After every test, for cleanup</td></tr>
+      <tr><td>@BeforeAll / @AfterAll</td><td>Once before/after all tests (must be static)</td></tr>
+      <tr><td>@Disabled</td><td>Skips the test</td></tr>
+    </table>
+    <pre><span class="kw">class</span> CalculatorTest {
+  <span class="kw">private</span> Calculator calc;
+  <span class="cm">@BeforeEach</span>
+  <span class="kw">void</span> setup(){ calc = <span class="kw">new</span> Calculator(); }
+
+  <span class="cm">@Test</span>
+  <span class="kw">void</span> testAdd(){ assertEquals(7, calc.add(3,4)); }
+}</pre>
+    <pre><span class="cm">@Test</span>
+<span class="kw">void</span> testDivideByZero(){
+  assertThrows(ArithmeticException.<span class="kw">class</span>, () -&gt; { <span class="tp">int</span> result = 10 / 0; });
+}</pre>
+    <p>Core assertions: <code>assertEquals</code>, <code>assertNotEquals</code>, <code>assertTrue</code>/<code>assertFalse</code>, <code>assertNull</code>/<code>assertNotNull</code>, <code>assertThrows</code>.</p>
+    <pre><span class="cm">@Mock</span>
+UserRepository repo;
+
+<span class="cm">@Test</span>
+<span class="kw">void</span> testFetchUser(){
+  when(repo.findName()).thenReturn(<span class="tp">"Alice"</span>);
+  assertEquals(<span class="tp">"Alice"</span>, repo.findName());
+}</pre>
+    <p>When a class depends on something external, that dependency is "mocked" instead of used for real; Mockito is the most common mocking library. Maven projects conventionally keep real code in <code>src/main/java</code> and tests in <code>src/test/java</code>, with a <code>ClassName</code> tested by a <code>ClassNameTest</code>.</p>
+  </div></div>
+
+  <div class="rule tool" id="datetime"><div class="t">Date &amp; time</div><div class="b">
+    <p>Java has an old, legacy API (<code>java.util.Date</code>, <code>Calendar</code>, <code>SimpleDateFormat</code>, which isn't thread-safe) and the modern <code>java.time</code> API from Java 8, which is immutable, thread-safe, and much easier to use. Always prefer <code>java.time</code> in new code.</p>
+    <table class="ref">
+      <tr><th>Class</th><th>Represents</th></tr>
+      <tr><td>LocalDate</td><td>Date only: 2025-01-01</td></tr>
+      <tr><td>LocalTime</td><td>Time only: 15:30:20</td></tr>
+      <tr><td>LocalDateTime</td><td>Date + time: 2025-01-01T10:00</td></tr>
+      <tr><td>ZonedDateTime</td><td>Date + time + time zone</td></tr>
+      <tr><td>Instant</td><td>A single moment in time (timestamp), always UTC</td></tr>
+    </table>
+    <pre>LocalDate date = LocalDate.now();
+LocalTime time = LocalTime.now();
+LocalDateTime dateTime = LocalDateTime.now();
+Instant timestamp = Instant.now(); <span class="cm">// UTC, trailing Z means Zulu time</span>
+ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of(<span class="tp">"Europe/Berlin"</span>));</pre>
+    <pre>String formatted = LocalDate.now().format(DateTimeFormatter.ofPattern(<span class="tp">"dd-MM-yyyy"</span>));
+
+LocalDate parsed = LocalDate.parse(<span class="tp">"2025-10-20"</span>); <span class="cm">// default ISO format</span>
+DateTimeFormatter f = DateTimeFormatter.ofPattern(<span class="tp">"dd/MM/yyyy"</span>);
+LocalDate custom = LocalDate.parse(<span class="tp">"20/10/2025"</span>, f);</pre>
+    <pre>LocalDate nextWeek = LocalDate.now().plusDays(7);
+LocalTime twoHoursAgo = LocalTime.now().minusHours(2);
+
+Period p = Period.between(LocalDate.of(2020,1,1), LocalDate.now());
+p.getYears();
+
+Duration d = Duration.between(Instant.now(), Instant.now().plusSeconds(100));
+d.getSeconds();</pre>
+    <p><code>Period</code> measures date-based amounts (years, months, days); <code>Duration</code> measures time-based amounts (seconds, hours).</p>
+    <pre><span class="tp">long</span> millis = Instant.now().toEpochMilli();
+Instant fromMillis = Instant.ofEpochMilli(1700000000000L);
+LocalDateTime ldt = LocalDateTime.ofInstant(fromMillis, ZoneId.systemDefault());
+
+<span class="cm">// Bridging old and new APIs:</span>
+Instant fromDate = <span class="kw">new</span> Date().toInstant();
+Date backToDate = Date.from(fromDate);</pre>
+  </div></div>
+
+  <div class="rule tool" id="buildtools"><div class="t">Build tools</div><div class="b">
+    <p>Build tools automate compiling, dependency management, testing, packaging, and deployment. Maven and Gradle are the two major ones in the Java ecosystem.</p>
+    <pre>&lt;project&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;demo-app&lt;/artifactId&gt;
+  &lt;version&gt;1.0&lt;/version&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.google.code.gson&lt;/groupId&gt;
+      &lt;artifactId&gt;gson&lt;/artifactId&gt;
+      &lt;version&gt;2.10&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+&lt;/project&gt;</pre>
+    <p><strong>Maven</strong> (<code>pom.xml</code>) uses XML, favors convention-over-configuration, and follows a fixed build lifecycle, with a large plugin ecosystem and strong dependency management.</p>
+    <pre>plugins { id <span class="tp">'java'</span> }
+repositories { mavenCentral() }
+dependencies {
+  implementation <span class="tp">'com.google.code.gson:gson:2.10'</span>
+}</pre>
+    <p><strong>Gradle</strong> uses a Groovy or Kotlin DSL instead of XML, and is generally faster (incremental compilation) and more customizable, popular for large or complex projects.</p>
+  </div></div>
+
+  <div class="rule tool" id="javadoc"><div class="t">Javadoc</div><div class="b">
+    <p>Javadoc is a documentation tool built into the JDK: write comments directly in the code, then generate browsable HTML documentation from them. It's the standard way to document Java classes, methods, and fields.</p>
+    <pre><span class="cm">/**
+ * A simple utility class for mathematical operations.
+ *
+ * @author John
+ * @version 1.0
+ * @since 2024
+ */</span>
+<span class="kw">public class</span> MathUtils {
+  <span class="cm">/**
+   * Adds two integers.
+   * @param a the first number
+   * @param b the second number
+   * @return the sum of a and b
+   */</span>
+  <span class="kw">public static int</span> add(<span class="tp">int</span> a, <span class="tp">int</span> b){ <span class="kw">return</span> a + b; }
+}</pre>
+    <table class="ref">
+      <tr><th>Tag</th><th>Documents</th></tr>
+      <tr><td>@param</td><td>A method parameter</td></tr>
+      <tr><td>@return</td><td>The return value</td></tr>
+      <tr><td>@throws / @exception</td><td>What exceptions can be thrown</td></tr>
+      <tr><td>@author</td><td>The author</td></tr>
+      <tr><td>@version</td><td>Version info</td></tr>
+      <tr><td>@deprecated</td><td>Marks the element as outdated</td></tr>
+    </table>
+    <pre>javadoc MathUtils.java                          <span class="cm">// generates HTML docs next to the file</span>
+javadoc -d docs -sourcepath src com.example.myapp <span class="cm">// generates into a docs/ folder</span></pre>
+  </div></div>
+
+  <div class="rule tool" id="timers"><div class="t">Timers</div><div class="b">
+    <pre>Timer timer = <span class="kw">new</span> Timer();
+TimerTask task = <span class="kw">new</span> TimerTask(){
+  <span class="kw">public void</span> run(){ System.out.println(<span class="tp">"Tick"</span>); }
+};
+timer.scheduleAtFixedRate(task, 0, 1000); <span class="cm">// every 1 second</span></pre>
+    <p>The classic <code>Timer</code>/<code>TimerTask</code> runs on a single thread, so a long-running task blocks every other scheduled task. Not ideal for modern applications.</p>
+    <pre>ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+scheduler.scheduleAtFixedRate(
+  () -&gt; System.out.println(<span class="tp">"Tick"</span>), 0, 2, TimeUnit.SECONDS);</pre>
+    <p><code>ScheduledExecutorService</code> is the modern replacement: it's backed by a thread pool, so it can run multiple tasks without one blocking another, and gives more predictable timing.</p>
+  </div></div>
+
+  <div class="rule tool" id="monitoring"><div class="t">Monitoring</div><div class="b">
+    <pre>Runtime runtime = Runtime.getRuntime();
+runtime.totalMemory(); <span class="cm">// bytes currently reserved from the OS</span>
+runtime.freeMemory();  <span class="cm">// unused bytes inside that reserved space</span>
+runtime.maxMemory();   <span class="cm">// max the JVM is allowed to use</span></pre>
+    <pre><span class="tp">long</span> start = System.currentTimeMillis();
+Thread.sleep(200);
+<span class="tp">long</span> end = System.currentTimeMillis();
+System.out.println(<span class="tp">"Elapsed: "</span> + (end-start) + <span class="tp">" ms"</span>);</pre>
+    <p><code>System.currentTimeMillis()</code> is good for logging timestamps and measuring durations of a millisecond or longer, but its resolution is system-dependent, so it's not precise enough for profiling.</p>
+    <pre><span class="tp">long</span> start = System.nanoTime();
+<span class="kw">for</span> (<span class="tp">int</span> i=0;i&lt;1_000_000;i++);
+<span class="tp">long</span> end = System.nanoTime();
+System.out.println(<span class="tp">"Elapsed: "</span> + (end-start) + <span class="tp">" ns"</span>);</pre>
+    <p><code>System.nanoTime()</code> is a monotonic clock meant only for measuring elapsed time (never as a real timestamp), useful for benchmarking and profiling short operations.</p>
+  </div></div>
+
+  <div class="rule tool" id="shell"><div class="t">Shell commands</div><div class="b">
+    <pre><span class="kw">try</span> {
+  Process process = Runtime.getRuntime().exec(<span class="tp">"ls -l"</span>);
+  process.waitFor();
+  BufferedReader reader = <span class="kw">new</span> BufferedReader(
+    <span class="kw">new</span> InputStreamReader(process.getInputStream()));
+} <span class="kw">catch</span> (IOException e) { e.printStackTrace(); }</pre>
+    <p><code>Runtime.exec()</code> is simple but doesn't handle arguments well unless passed as an array, and is less flexible overall.</p>
+    <pre>ProcessBuilder pb = <span class="kw">new</span> ProcessBuilder(<span class="tp">"ls"</span>, <span class="tp">"-l"</span>);
+pb.redirectErrorStream(<span class="kw">true</span>); <span class="cm">// merges stderr into stdout</span>
+Process process = pb.start();</pre>
+    <p><code>ProcessBuilder</code> gives more control: environment variables, working directory, and output redirection.</p>
+    <pre><span class="cm">// Linux/macOS:</span>
+<span class="kw">new</span> ProcessBuilder(<span class="tp">"bash"</span>, <span class="tp">"-c"</span>, <span class="tp">"echo Hello world"</span>);
+<span class="cm">// Windows:</span>
+<span class="kw">new</span> ProcessBuilder(<span class="tp">"cmd.exe"</span>, <span class="tp">"/c"</span>, <span class="tp">"echo Hello world"</span>);</pre>
+    <pre><span class="tp">int</span> exitCode = process.waitFor(); <span class="cm">// 0 = success, nonzero = failure</span></pre>
+    <pre>ProcessBuilder pb = <span class="kw">new</span> ProcessBuilder(<span class="tp">"ls"</span>);
+pb.directory(<span class="kw">new</span> File(<span class="tp">"/home/user/projects"</span>)); <span class="cm">// working directory</span>
+pb.environment().put(<span class="tp">"MY_VAR"</span>, <span class="tp">"123"</span>);          <span class="cm">// environment variables</span></pre>
+  </div></div>
+
+  <footer>Source: <a href="https://it-cheat-sheets-21aa0a.gitlab.io/java-cheat-sheet.html" target="_blank" rel="noopener">it-cheat-sheets-21aa0a.gitlab.io: Java Cheat Sheet</a></footer>
+
+</main>
+</body>
+</html>

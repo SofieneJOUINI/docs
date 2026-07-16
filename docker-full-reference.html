@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Docker: Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#2B2620; --ink-soft:#5A5245;
+    --basics:#FF6B5E; --basics-bg:#FFF0ED;
+    --images:#F2921D; --images-bg:#FFF3E1;
+    --containers:#1FA398; --containers-bg:#EAFAF7;
+    --dockerfiles:#8A5CF6; --dockerfiles-bg:#F3EEFF;
+    --volumes:#2B6CB0; --volumes-bg:#EAF2FA;
+    --networks:#3C6E71; --networks-bg:#EEF3F2;
+    --compose:#C0392B; --compose-bg:#FBEAE9;
+    --cleanup:#5A5245; --cleanup-bg:#EFE9DA;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;}
+  #toc h1{font-family:'Kalam',cursive;font-size:1.3rem;margin:0 0 4px;line-height:1.15;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.78rem;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:6px;margin-bottom:1px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;margin:14px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.basics{background:var(--basics);} #toc .grp.images{background:var(--images);}
+  #toc .grp.containers{background:var(--containers);} #toc .grp.dockerfiles{background:var(--dockerfiles);}
+  #toc .grp.volumes{background:var(--volumes);} #toc .grp.networks{background:var(--networks);}
+  #toc .grp.compose{background:var(--compose);} #toc .grp.cleanup{background:var(--cleanup);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:960px;}
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.3rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+
+  .layer-banner{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:#fff;padding:9px 18px;border-radius:8px;margin:30px 0 14px;}
+  .layer-banner.basics{background:var(--basics);} .layer-banner.images{background:var(--images);}
+  .layer-banner.containers{background:var(--containers);} .layer-banner.dockerfiles{background:var(--dockerfiles);}
+  .layer-banner.volumes{background:var(--volumes);} .layer-banner.networks{background:var(--networks);}
+  .layer-banner.compose{background:var(--compose);} .layer-banner.cleanup{background:var(--cleanup);}
+
+  .rule{scroll-margin-top:14px;border:2px solid var(--ink);border-radius:10px;margin-bottom:14px;overflow:hidden;background:#fff;}
+  .rule .t{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;padding:8px 14px;color:#fff;}
+  .rule.basics .t{background:var(--basics);} .rule.basics .b{background:var(--basics-bg);}
+  .rule.images .t{background:var(--images);} .rule.images .b{background:var(--images-bg);}
+  .rule.containers .t{background:var(--containers);} .rule.containers .b{background:var(--containers-bg);}
+  .rule.dockerfiles .t{background:var(--dockerfiles);} .rule.dockerfiles .b{background:var(--dockerfiles-bg);}
+  .rule.volumes .t{background:var(--volumes);} .rule.volumes .b{background:var(--volumes-bg);}
+  .rule.networks .t{background:var(--networks);} .rule.networks .b{background:var(--networks-bg);}
+  .rule.compose .t{background:var(--compose);} .rule.compose .b{background:var(--compose-bg);}
+  .rule.cleanup .t{background:var(--cleanup);} .rule.cleanup .b{background:var(--cleanup-bg);}
+  .rule .b{padding:10px 14px 12px;}
+  .rule ul{font-size:.82rem;line-height:1.55;margin:0 0 8px;padding-left:18px;}
+  .rule li{margin-bottom:3px;}
+  .rule p{font-size:.82rem;line-height:1.55;margin:0 0 8px;}
+  pre{margin:0 0 8px;padding:9px 12px;background:#282420;color:#EDE6D6;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.5;overflow-x:auto;}
+  pre:last-child{margin-bottom:0;}
+  pre .cm{color:#7d9b76;font-style:italic;} pre .kw{color:#8AB4F8;}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+  footer a{color:var(--ink-soft);}
+  @media (max-width:820px){ body{display:block;} #toc{position:relative;width:auto;height:auto;} main{padding:24px 18px 80px;} }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>Docker 🐳</h1>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp basics">Basics</div>
+  <a class="item" href="#basics">Basics</a>
+
+  <div class="grp images">Images</div>
+  <a class="item" href="#images">Images</a>
+
+  <div class="grp containers">Containers</div>
+  <a class="item" href="#containers">Containers</a>
+
+  <div class="grp dockerfiles">Dockerfiles</div>
+  <a class="item" href="#dockerfiles">Dockerfiles</a>
+
+  <div class="grp volumes">Volumes</div>
+  <a class="item" href="#volumes">Volumes</a>
+
+  <div class="grp networks">Networks</div>
+  <a class="item" href="#networks">Networks</a>
+
+  <div class="grp compose">Docker Compose</div>
+  <a class="item" href="#compose">Docker compose</a>
+
+  <div class="grp cleanup">Cleanup</div>
+  <a class="item" href="#cleanup">Cleanup</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>Docker <span>Cheat Sheet</span></h1>
+  </header>
+
+  <!-- ===================== BASICS ===================== -->
+  <div class="layer-banner basics">Basics</div>
+
+  <div class="rule basics" id="basics"><div class="t">Basics</div><div class="b">
+    <pre>docker --version</pre>
+    <p>Shows the installed Docker version.</p>
+    <pre>docker info</pre>
+    <p>Displays detailed system-wide information, including running containers, images, and storage drivers.</p>
+    <pre>docker help</pre>
+    <p>Shows the list of available Docker commands with brief descriptions. You can also use <code>docker &lt;command&gt; --help</code> for help on a specific command.</p>
+    <pre>docker &lt;command&gt; [OPTIONS]
+
+<span class="cm">// Example</span>
+docker exec -it http-server bash</pre>
+    <p>Basic Docker CLI structure.</p>
+    <p>Docker's core components:</p>
+    <ul>
+      <li><strong>Images</strong>: read-only templates used to create containers.</li>
+      <li><strong>Containers</strong>: running instances of images, isolated processes.</li>
+      <li><strong>Volumes</strong>: persistent storage shared between a container and the host.</li>
+      <li><strong>Networks</strong>: allow communication between containers.</li>
+      <li><strong>Dockerfile</strong>: a script to build Docker images.</li>
+      <li><strong>Docker Compose</strong>: a tool for defining and running multi-container Docker apps.</li>
+    </ul>
+  </div></div>
+
+  <!-- ===================== IMAGES ===================== -->
+  <div class="layer-banner images">Images</div>
+
+  <div class="rule images" id="images"><div class="t">Images</div><div class="b">
+    <pre>docker images</pre>
+    <p>Shows a list of images on your local machine, including repository, tag, image ID, and size.</p>
+    <pre>docker pull &lt;image&gt;:&lt;tag&gt;</pre>
+    <p>Pulls an image from Docker Hub. If no tag is provided, Docker uses <code>latest</code> by default.</p>
+    <pre>docker build -t &lt;name&gt;:&lt;tag&gt; &lt;path&gt;
+
+<span class="cm">// Example</span>
+docker build -t myapp:1.0 .</pre>
+    <p>Builds an image from a Dockerfile. The <code>.</code> refers to the current directory, where the Dockerfile lives.</p>
+    <pre>docker tag &lt;image_id&gt; &lt;repo/name&gt;:&lt;tag&gt;</pre>
+    <p>Adds a tag to an image. Useful for versioning, or preparing to push it to a registry.</p>
+    <pre>docker rmi &lt;image_id or name&gt;</pre>
+    <p>Removes an image. Adding <code>-f</code> forces the removal.</p>
+    <pre>docker inspect &lt;image&gt;</pre>
+    <p>Inspects image details, returning JSON output with layers, config, environment variables, etc.</p>
+    <pre>docker history &lt;image&gt;</pre>
+    <p>Shows the commands used to build the image's layers.</p>
+    <pre>docker push &lt;repo/image&gt;:&lt;tag&gt;</pre>
+    <p>Pushes an image to a registry. You need to be logged in first with <code>docker login</code>.</p>
+    <pre>docker run &lt;image&gt;</pre>
+    <p>Adds a container layer on top of the image and starts it.</p>
+  </div></div>
+
+  <!-- ===================== CONTAINERS ===================== -->
+  <div class="layer-banner containers">Containers</div>
+
+  <div class="rule containers" id="containers"><div class="t">Containers</div><div class="b">
+    <pre>docker run [OPTIONS] &lt;image&gt;</pre>
+    <p>Creates and starts a new container from the specified image. Common options:</p>
+    <ul>
+      <li><code>-d</code>: run in background (detached)</li>
+      <li><code>-it</code>: interactive + terminal (great for shells)</li>
+      <li><code>--rm</code>: automatically remove the container when it stops</li>
+      <li><code>--name</code>: give the container a name</li>
+      <li><code>-p &lt;host&gt;:&lt;container&gt;</code>: port mapping</li>
+      <li><code>-v &lt;host&gt;:&lt;container&gt;</code>: mount a volume</li>
+    </ul>
+    <pre><span class="cm">// Only running containers</span>
+docker ps
+
+<span class="cm">// All (including stopped)</span>
+docker ps -a</pre>
+    <p>Lists containers.</p>
+    <pre>docker start &lt;container&gt;</pre>
+    <p>Starts an existing (stopped) container that was created earlier, e.g. via <code>docker run</code>.</p>
+    <pre>docker stop &lt;container&gt;</pre>
+    <p>Stops a container.</p>
+    <pre>docker restart &lt;container&gt;</pre>
+    <p>Restarts a container.</p>
+    <pre>docker rm &lt;container&gt;</pre>
+    <p>Deletes a container.</p>
+    <pre>docker exec -it &lt;container&gt; &lt;command&gt;
+
+<span class="cm">// Example</span>
+docker exec -it myapp bash</pre>
+    <p>Runs a command inside a running container.</p>
+    <pre>docker attach &lt;container&gt;</pre>
+    <p>Attaches your terminal to a running container's main process, usually the one started with <code>CMD</code> or <code>ENTRYPOINT</code> in the Dockerfile. You'll see live output and can interact if it's an interactive process (like a shell or a foreground server). Detach with <code>Ctrl + P + Q</code>.</p>
+    <pre>docker logs &lt;container&gt;
+
+<span class="cm">// In real time</span>
+docker logs -f &lt;container&gt;</pre>
+    <p>Shows container logs.</p>
+    <pre>docker inspect &lt;container&gt;</pre>
+    <p>Shows detailed info in JSON format about a container, like network, mounts, config, etc.</p>
+    <pre>docker stats</pre>
+    <p>Shows real-time usage (CPU, memory, I/O) for running containers.</p>
+    <pre>docker container prune</pre>
+    <p>Removes all stopped containers.</p>
+  </div></div>
+
+  <!-- ===================== DOCKERFILES ===================== -->
+  <div class="layer-banner dockerfiles">Dockerfiles</div>
+
+  <div class="rule dockerfiles" id="dockerfiles"><div class="t">Dockerfiles</div><div class="b">
+    <p>A Dockerfile is a script that automates the creation of a Docker image by specifying the base image, what files to copy, what commands to run, and the environment configuration.</p>
+    <p>Common instructions:</p>
+    <ul>
+      <li><code>FROM</code>: the base image to use (must be the first line)</li>
+      <li><code>RUN</code>: executes commands in a new image layer</li>
+      <li><code>CMD</code>: the default command to run when the container starts</li>
+      <li><code>COPY</code>: copies files/directories from the host into the image</li>
+      <li><code>ADD</code>: like <code>COPY</code>, but can also extract tar files or download from URLs</li>
+      <li><code>WORKDIR</code>: sets the working directory inside the container</li>
+      <li><code>ENV</code>: sets environment variables</li>
+      <li><code>EXPOSE</code>: documents which port the container will listen on</li>
+      <li><code>ENTRYPOINT</code>: configures the container to run as an executable</li>
+    </ul>
+    <pre><span class="cm"># Use base image</span>
+FROM node:18
+
+<span class="cm"># Set working directory</span>
+WORKDIR /app
+
+<span class="cm"># Copy files</span>
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+<span class="cm"># Expose port</span>
+EXPOSE 3000
+
+<span class="cm"># Default command</span>
+CMD [<span class="tp">"npm"</span>, <span class="tp">"start"</span>]</pre>
+    <p>An example Dockerfile: this builds a Node.js app image starting from a clean Node.js 18 environment, installs dependencies, adds the app's source code, and runs the app on port 3000 using <code>npm start</code>.</p>
+    <pre>docker build -t myapp:1.0 .</pre>
+    <p>Builds an image.</p>
+    <pre><span class="cm"># Stage 1 - Builder</span>
+FROM node:18 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+<span class="cm"># Stage 2 - Minimal runtime</span>
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html</pre>
+    <p>An example of a multi-stage build: it uses multiple <code>FROM</code> statements in one Dockerfile, each starting a new stage, letting you copy only what's needed from earlier stages into the final image. This keeps the final image small (no dev tools, compilers, or source code), reduces the attack surface, and makes builds cleaner and more modular. In this example, the final image only contains the compiled application (e.g. Vue or React), with no Node.js or source code left in it.</p>
+  </div></div>
+
+  <!-- ===================== VOLUMES ===================== -->
+  <div class="layer-banner volumes">Volumes</div>
+
+  <div class="rule volumes" id="volumes"><div class="t">Volumes</div><div class="b">
+    <pre>docker volume create &lt;volume_name&gt;</pre>
+    <p>Creates a volume.</p>
+    <pre>docker volume ls</pre>
+    <p>Lists volumes.</p>
+    <pre>docker volume rm &lt;volume_name&gt;</pre>
+    <p>Removes a volume. Only works if the volume isn't being used by any container.</p>
+    <pre>docker volume prune</pre>
+    <p>Deletes all unused volumes.</p>
+    <pre>docker run -v &lt;volume_name&gt;:&lt;container_path&gt; &lt;image&gt;</pre>
+    <p>Uses a volume in a container.</p>
+    <pre>docker volume inspect &lt;volume_name&gt;</pre>
+    <p>Shows details of a volume, such as its path on the host, mountpoint, etc.</p>
+    <pre>docker run -v /home/user/app:/usr/src/app node</pre>
+    <p>Example of a bind mount: great for local development, since changes in the code editor reflect instantly inside the container. It's not managed by Docker.</p>
+    <pre>docker volume create pgdata
+docker run -v pgdata:/var/lib/postgresql/data postgres</pre>
+    <p>Example of a named volume: data remains even if the container is deleted, and it's easy to back up and manage via the Docker CLI since it's managed by Docker. Useful whenever you want Docker-managed, persistent, portable data.</p>
+    <pre>services:
+  frontend:
+    image: node:lts
+    volumes:
+      - myapp:/home/node/app
+volumes:
+  myapp:</pre>
+    <p>Example of how to use a volume with Docker Compose.</p>
+  </div></div>
+
+  <!-- ===================== NETWORKS ===================== -->
+  <div class="layer-banner networks">Networks</div>
+
+  <div class="rule networks" id="networks"><div class="t">Networks</div><div class="b">
+    <p>Common network types:</p>
+    <ul>
+      <li><strong>bridge</strong>: the default for standalone containers, an isolated, local container network.</li>
+      <li><strong>host</strong>: shares the host's network stack, no network isolation.</li>
+      <li><strong>none</strong>: completely isolates the container's networking stack; only the loopback device exists inside it.</li>
+      <li><strong>overlay</strong>: used for multi-host (swarm) networks, spanning across multiple Docker daemons.</li>
+      <li><strong>macvlan</strong>: assigns a MAC address to a container, so it looks like a physical device on the LAN.</li>
+    </ul>
+    <pre>docker network ls</pre>
+    <p>Lists networks.</p>
+    <pre>docker network inspect &lt;network_name&gt;</pre>
+    <p>Gives detailed information about a network: driver, scope, IP address details, the list of containers connected to it, etc.</p>
+    <pre>docker network create &lt;network_name&gt;
+
+<span class="cm">// Example</span>
+docker network create \
+  --driver bridge \
+  --subnet 192.168.100.0/24 \
+  --gateway 192.168.100.1 \
+  my_custom_net</pre>
+    <p>Creates a network.</p>
+    <pre>docker network rm &lt;network_name&gt;</pre>
+    <p>Removes a network.</p>
+    <pre>docker network create mynet
+docker run -d --name db --network mynet postgres
+docker run -d --name app --network mynet myapp</pre>
+    <p>Example of using a custom network: attaching containers to the same custom bridge network allows automatic name-based DNS resolution between them. Here, <code>app</code> can reach <code>db</code> just by using <code>db:5432</code>.</p>
+    <pre>services:
+  app:
+    image: myapp
+    networks:
+      - frontend
+  db:
+    image: postgres
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:</pre>
+    <p>Docker Compose automatically creates a custom network for the services, but you can still specify your own network if needed.</p>
+  </div></div>
+
+  <!-- ===================== DOCKER COMPOSE ===================== -->
+  <div class="layer-banner compose">Docker Compose</div>
+
+  <div class="rule compose" id="compose"><div class="t">Docker compose</div><div class="b">
+    <pre>services:
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:</pre>
+    <p>Example of a <code>docker-compose.yml</code> file: the <code>services</code> part contains each containerized app you run, <code>volumes</code> contains the shared persistent storage, and <code>networks</code> contains the custom container communication layer.</p>
+    <p>Most common commands:</p>
+    <ul>
+      <li><code>docker compose up</code>: start all services</li>
+      <li><code>docker compose up -d</code>: start in detached mode</li>
+      <li><code>docker compose down</code>: stop and remove containers, network, volumes</li>
+      <li><code>docker compose ps</code>: list running services</li>
+      <li><code>docker compose logs</code>: show logs for all services</li>
+      <li><code>docker compose build</code>: build services from Dockerfiles</li>
+      <li><code>docker compose restart</code>: restart one or more services</li>
+      <li><code>docker compose top</code>: display processes running inside containers</li>
+      <li><code>docker compose run --rm</code>: run a temporary container and remove it after it exits</li>
+    </ul>
+    <pre>docker compose -f docker-compose.yaml --env-file env.env -p stackname up -d</pre>
+    <p>Starts all services defined in <code>docker-compose.yaml</code>, using environment variables from <code>env.env</code> and <code>stackname</code> as the project name (which prefixes container, volume, and network names), running in the background since <code>-d</code> is set. A way to launch a full multi-container application with custom naming.</p>
+    <pre><span class="cm">// .env file</span>
+POSTGRES_PASSWORD=secret
+
+<span class="cm">// Reference in the Docker Compose file</span>
+environment:
+  - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}</pre>
+    <p>It's good practice to use <code>.env</code> files for secrets and configuration.</p>
+    <pre>docker compose down --volumes --rmi all --remove-orphans</pre>
+    <p>Shuts down the Compose application and removes everything related to it: containers, networks, volumes, images, and even stray orphaned containers. Essentially a full cleanup/reset of the stack.</p>
+    <pre>docker compose up --build --force-recreate</pre>
+    <p>Rebuilds the service images and recreates all containers from scratch, regardless of whether anything changed. A clean way to make sure you're running the latest build and configuration for every service.</p>
+    <pre>docker-compose down -v</pre>
+    <p>Stops the Compose app and cleans up its containers, networks, and associated volumes, without removing images or affecting other projects. Useful for resetting the app and starting fresh without leftover data.</p>
+  </div></div>
+
+  <!-- ===================== CLEANUP ===================== -->
+  <div class="layer-banner cleanup">Cleanup</div>
+
+  <div class="rule cleanup" id="cleanup"><div class="t">Cleanup</div><div class="b">
+    <pre>docker stop $(docker ps -q)</pre>
+    <p>Stops all running containers.</p>
+    <pre>docker rm $(docker ps -a -q)</pre>
+    <p>Removes all containers.</p>
+    <pre>docker image prune</pre>
+    <p>Removes all unused images.</p>
+    <pre>docker rmi $(docker images -q)</pre>
+    <p>Removes all images.</p>
+    <pre>docker volume prune</pre>
+    <p>Removes unused volumes.</p>
+    <pre>docker volume rm $(docker volume ls -q)</pre>
+    <p>Removes all volumes.</p>
+    <pre>docker network prune</pre>
+    <p>Removes unused networks.</p>
+    <pre>docker system prune</pre>
+    <p>Removes everything not in use. Add <code>-a</code> to also remove unused images, not just dangling ones (images not tagged and not referenced by any container). Add <code>--volumes</code> to clean up volumes as well.</p>
+    <pre>docker system df</pre>
+    <p>Shows the space used by containers, images, volumes, and build cache, and what's reclaimable.</p>
+  </div></div>
+
+  <footer>Source: <a href="https://it-cheat-sheets-21aa0a.gitlab.io/docker-cheat-sheet.html" target="_blank" rel="noopener">it-cheat-sheets-21aa0a.gitlab.io: Docker Cheat Sheet</a></footer>
+
+</main>
+</body>
+</html>

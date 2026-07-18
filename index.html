@@ -21,6 +21,7 @@
     --oopA:#1FA398; --oopB:#F2921D; --oopC:#8A5CF6; --oopD:#2B6CB0; --oopE:#FF6B5E;
     --javaA:#FF6B5E; --javaB:#F2921D; --javaC:#3C6E71; --javaD:#8A5CF6; --javaE:#1FA398;
     --dockerA:#FF6B5E; --dockerB:#F2921D; --dockerC:#1FA398; --dockerD:#8A5CF6; --dockerE:#2B6CB0;
+    --awsA:#FF6B5E; --awsB:#F2921D; --awsC:#1FA398; --awsD:#8A5CF6; --awsE:#2B6CB0;
   }
   *{box-sizing:border-box;}
   body{
@@ -60,7 +61,9 @@
   @media (max-width:680px){ .cards{grid-template-columns:1fr;} }
 
   .card{
-    display:block;
+    display:flex;
+    flex-direction:column;
+    height:280px;
     text-decoration:none;
     color:var(--ink);
     border:2.5px solid var(--ink);
@@ -92,6 +95,12 @@
     line-height:1.55;
     color:var(--ink-soft);
     margin:0 0 14px;
+    flex:1;
+    min-height:0;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
   }
 
   .swatches{display:flex; gap:6px; margin-bottom:14px;}
@@ -103,6 +112,7 @@
     font-size:.75rem;
     text-transform:uppercase;
     letter-spacing:.03em;
+    margin-top:auto;
     display:inline-flex;
     align-items:center;
     gap:6px;
@@ -120,6 +130,7 @@
   .card.oop{border-top:8px solid var(--oopC);}
   .card.java{border-top:8px solid var(--javaB);}
   .card.docker{border-top:8px solid var(--dockerE);}
+  .card.aws{border-top:8px solid var(--awsB);}
 
   .pagination{
     display:flex;align-items:center;justify-content:center;gap:14px;margin-top:32px;
@@ -166,7 +177,7 @@
         <span class="swatch" style="background:var(--oopD)"></span>
         <span class="swatch" style="background:var(--oopE)"></span>
       </div>
-      <p>Inheritance, Abstraction, Polymorphism &amp; Encapsulation, simple explanations with Java examples, based on javaconceptoftheday.com's Java OOP concepts cheat sheet.</p>
+      <p>Inheritance, Abstraction, Polymorphism &amp; Encapsulation, simple explanations with Java examples.</p>
       <span class="go">Open guide</span>
     </a>
 
@@ -180,7 +191,7 @@
         <span class="swatch" style="background:var(--solidD)"></span>
         <span class="swatch" style="background:var(--solidE)"></span>
       </div>
-      <p>Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation &amp; Dependency Inversion, with plain-English explanations, notes and examples.</p>
+      <p>Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation &amp; Dependency Inversion, with notes and examples.</p>
       <span class="go">Open guide</span>
     </a>
 
@@ -248,13 +259,13 @@
         <span class="swatch" style="background:var(--hexC)"></span>
         <span class="swatch" style="background:var(--hexD)"></span>
       </div>
-      <p>Domain, Application, Interface Adapters &amp; Infrastructure layers, plus the architecture diagram, invariants, ports, and Q&amp;A.</p>
+      <p>Domain, Application, Interface Adapters &amp; Infrastructure layers, plus the architecture diagram, invariants, and ports.</p>
       <span class="go">Open guide</span>
     </a>
 
     <a class="card java" href="./java.html">
       <span class="icon">☕</span>
-      <h2>Java</h2>
+      <h2>Java Cheat Sheet</h2>
       <div class="swatches">
         <span class="swatch" style="background:var(--javaA)"></span>
         <span class="swatch" style="background:var(--javaB)"></span>
@@ -268,7 +279,7 @@
 
     <a class="card docker" href="./docker.html">
       <span class="icon">🐳</span>
-      <h2>Docker</h2>
+      <h2>Docker Cheat Sheet</h2>
       <div class="swatches">
         <span class="swatch" style="background:var(--dockerA)"></span>
         <span class="swatch" style="background:var(--dockerB)"></span>
@@ -294,7 +305,19 @@
       <span class="go">Open guide</span>
     </a>
 
-
+    <a class="card aws" href="./aws.html">
+      <span class="icon">☁️</span>
+      <h2><strong style="letter-spacing:.04em;">AWS</strong> Cheat Sheet</h2>
+      <div class="swatches">
+        <span class="swatch" style="background:var(--awsA)"></span>
+        <span class="swatch" style="background:var(--awsB)"></span>
+        <span class="swatch" style="background:var(--awsC)"></span>
+        <span class="swatch" style="background:var(--awsD)"></span>
+        <span class="swatch" style="background:var(--awsE)"></span>
+      </div>
+      <p>Security &amp; Compute, Storage, Networking, Databases, Traffic &amp; Serverless, the twelve services you'll actually use, plain and simple.</p>
+      <span class="go">Open guide</span>
+    </a>
 
 
   </div>

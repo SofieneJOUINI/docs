@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AWS: Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC; --ink:#2B2620; --ink-soft:#5A5245;
+    --security:#FF6B5E; --security-bg:#FFF0ED;
+    --storage:#F2921D; --storage-bg:#FFF3E1;
+    --network:#1FA398; --network-bg:#EAFAF7;
+    --database:#8A5CF6; --database-bg:#F3EEFF;
+    --scaling:#2B6CB0; --scaling-bg:#EAF2FA;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;display:flex;}
+  code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(43,38,32,.07);padding:1px 5px;border-radius:4px;}
+
+  #toc{width:250px;flex:0 0 250px;position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 16px 40px;border-right:3px solid var(--ink);background:#fff;}
+  #toc h1{font-family:'Kalam',cursive;font-size:1.3rem;margin:0 0 4px;line-height:1.15;}
+  #toc a.back{display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;text-decoration:none;color:var(--ink);}
+  #toc a.item{display:block;font-size:.78rem;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:6px;margin-bottom:1px;}
+  #toc a.item:hover{background:#f0e9d8;}
+  #toc .grp{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;margin:14px 0 4px;padding:4px 8px;border-radius:5px;color:#fff;}
+  #toc .grp.security{background:var(--security);} #toc .grp.storage{background:var(--storage);}
+  #toc .grp.network{background:var(--network);} #toc .grp.database{background:var(--database);}
+  #toc .grp.scaling{background:var(--scaling);}
+
+  main{flex:1;min-width:0;padding:32px 44px 100px;max-width:1040px;}
+  header.hero{border-bottom:4px solid var(--ink);padding-bottom:18px;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.3rem;margin:0 0 6px;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+  header.hero p{font-size:.9rem;color:var(--ink-soft);max-width:640px;margin:0;}
+
+  .layer-banner{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;color:#fff;padding:9px 18px;border-radius:8px;margin:30px 0 14px;}
+  .layer-banner.security{background:var(--security);} .layer-banner.storage{background:var(--storage);}
+  .layer-banner.network{background:var(--network);} .layer-banner.database{background:var(--database);}
+  .layer-banner.scaling{background:var(--scaling);}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:6px;}
+
+  .card{scroll-margin-top:14px;border:2px solid var(--ink);border-radius:10px;box-shadow:4px 4px 0 var(--ink);padding:18px 20px;background:#fff;}
+  .card.security{background:var(--security-bg);border-color:var(--security);box-shadow:4px 4px 0 var(--security);}
+  .card.storage{background:var(--storage-bg);border-color:var(--storage);box-shadow:4px 4px 0 var(--storage);}
+  .card.network{background:var(--network-bg);border-color:var(--network);box-shadow:4px 4px 0 var(--network);}
+  .card.database{background:var(--database-bg);border-color:var(--database);box-shadow:4px 4px 0 var(--database);}
+  .card.scaling{background:var(--scaling-bg);border-color:var(--scaling);box-shadow:4px 4px 0 var(--scaling);}
+
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .icon-box{width:44px;height:44px;flex:0 0 44px;border-radius:10px;background:#fff;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:5px;}
+  .icon-box img{width:100%;height:100%;object-fit:contain;}
+  .icon-box.pair{gap:2px;padding:4px;}
+  .icon-box.pair img{width:50%;}
+  .card-head .tag{font-family:'Space Grotesk',sans-serif;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);}
+  .card-head h2{margin:0;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;}
+
+  .card p{font-size:.85rem;line-height:1.6;margin:0 0 10px;}
+  .card ul{font-size:.83rem;line-height:1.6;margin:0 0 10px;padding-left:18px;}
+  .card li{margin-bottom:5px;}
+
+  .example{background:rgba(255,255,255,.6);border-left:3px solid var(--ink);padding:8px 12px;border-radius:0 6px 6px 0;font-size:.8rem;line-height:1.55;margin:8px 0;}
+  .use{font-size:.8rem;color:var(--ink-soft);margin-top:10px;padding-top:10px;border-top:1px dashed rgba(43,38,32,.25);}
+  .label{font-weight:700;}
+
+  table.model{width:100%;border-collapse:collapse;margin:30px 0 10px;background:#fff;border:2px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:4px 4px 0 var(--ink);}
+  table.model th,table.model td{padding:9px 14px;border-bottom:1.5px solid var(--ink);text-align:left;font-size:.85rem;}
+  table.model th{font-family:'Space Grotesk',sans-serif;background:#F0E9D8;}
+  table.model tr:last-child td{border-bottom:none;}
+
+  footer{font-family:'Kalam',cursive;text-align:center;color:var(--ink-soft);padding:20px 0 60px;}
+  @media (max-width:820px){ body{display:block;} #toc{position:relative;width:auto;height:auto;} main{padding:24px 18px 80px;} }
+</style>
+</head>
+<body>
+
+<nav id="toc">
+  <h1>AWS ☁️</h1>
+  <a class="back" href="./index.html">← Technical Docs</a>
+
+  <div class="grp security">Security &amp; Compute</div>
+  <a class="item" href="#iam">IAM</a>
+  <a class="item" href="#ec2">EC2</a>
+
+  <div class="grp storage">Storage</div>
+  <a class="item" href="#ebs">EBS</a>
+  <a class="item" href="#efs">EFS</a>
+  <a class="item" href="#s3">S3</a>
+
+  <div class="grp network">Networking</div>
+  <a class="item" href="#vpc">VPC</a>
+  <a class="item" href="#cloudfront">CloudFront</a>
+  <a class="item" href="#route53">Route 53</a>
+
+  <div class="grp database">Databases</div>
+  <a class="item" href="#rds">RDS</a>
+  <a class="item" href="#aurora">Aurora</a>
+
+  <div class="grp scaling">Traffic &amp; Serverless</div>
+  <a class="item" href="#elb-asg">ELB &amp; Auto Scaling</a>
+  <a class="item" href="#lambda">Lambda</a>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <h1>AWS <span>Cheat Sheet</span></h1>
+  </header>
+
+  <!-- ===================== SECURITY & COMPUTE ===================== -->
+  <div class="layer-banner security">Security &amp; Compute</div>
+  <div class="grid">
+
+    <div class="card security" id="iam">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/iam.png" alt="IAM icon"></div>
+        <div><div class="tag">Security</div><h2>IAM</h2></div>
+      </div>
+      <p>Think of IAM as the bouncer standing in front of every other AWS service. Nothing happens, not an API call, not a console click, until IAM checks whether you're allowed to do it. It doesn't cost anything and covers your whole account.</p>
+      <ul>
+        <li><b>Users</b> are individual logins, usually people, sometimes with their own access keys.</li>
+        <li><b>Groups</b> let you hand the same permissions to a bunch of users at once, like "everyone on the backend team".</li>
+        <li><b>Roles</b> are permissions you borrow temporarily instead of owning. EC2 and Lambda lean on these constantly.</li>
+        <li><b>Policies</b> are just JSON documents saying what's allowed or denied on which resources.</li>
+        <li>Turn on MFA, especially for the root account. And stick to least privilege: give people only what they actually need.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a policy that only allows <code>s3:PutObject</code> and <code>s3:GetObject</code> on one bucket, handed to the developers group.</div>
+      <div class="example"><span class="label">In practice:</span> instead of pasting AWS keys into your code (please don't), give the EC2 instance a role. AWS quietly rotates short lived credentials into it, and your app never touches a long term secret.</div>
+      <div class="use">Reach for it: any time a person, app, or service needs some level of access to your AWS account. So, basically always.</div>
+    </div>
+
+    <div class="card security" id="ec2">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/ec2.png" alt="EC2 icon"></div>
+        <div><div class="tag">Compute</div><h2>EC2</h2></div>
+      </div>
+      <p>EC2 is a virtual machine you can SSH into, install whatever you want on, and treat pretty much like a normal server. AWS worries about the physical hardware underneath, you handle everything above the OS.</p>
+      <ul>
+        <li>The <b>instance type</b> decides your CPU/RAM/network mix, things like <code>t3.medium</code> for general use or <code>c7g</code> if you need raw compute.</li>
+        <li>An <b>AMI</b> is the template your instance boots from, an OS plus whatever software is baked in.</li>
+        <li><b>Security Groups</b> act as a stateful firewall right on the instance, you list which ports and sources get through.</li>
+        <li>Pricing comes in a few flavors: On-Demand (pay as you go), Reserved or Savings Plans (cheaper if you commit), and Spot (way cheaper, but AWS can take it back with short notice).</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> launch a <code>t3.medium</code> Ubuntu box, open port 443 in its Security Group, and attach an Elastic IP so the address survives a reboot.</div>
+      <div class="example"><span class="label">In practice:</span> an animation studio renders frames on Spot instances since losing one mid job just means retrying elsewhere, but keeps its public facing web servers on On-Demand for guaranteed uptime.</div>
+      <div class="use">Reach for it: whenever you need a general purpose server and want full control over the OS.</div>
+    </div>
+
+  </div>
+
+  <!-- ===================== STORAGE ===================== -->
+  <div class="layer-banner storage">Storage</div>
+  <div class="grid">
+
+    <div class="card storage" id="ebs">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/ebs.png" alt="EBS icon"></div>
+        <div><div class="tag">Block storage</div><h2>EBS</h2></div>
+      </div>
+      <p>EBS is a virtual hard disk that plugs into a single EC2 instance, same idea as a physical drive plugging into a physical computer. It's block storage, so the OS just sees a raw disk it can format however it likes. Unlike S3, which only knows how to store whole objects.</p>
+      <ul>
+        <li>Lives in one Availability Zone and normally attaches to just one instance at a time.</li>
+        <li>Outlives the instance, stop or terminate it and the volume sticks around, ready to move elsewhere in the same AZ.</li>
+        <li><b>Snapshots</b> back up the volume's state to S3 behind the scenes, and can spin up new volumes or copy across regions.</li>
+        <li>Volume types trade speed for cost: <code>gp3</code> is the default general purpose SSD, <code>io2</code> is for demanding databases, <code>st1</code>/<code>sc1</code> are cheaper spinning disk options.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a database instance keeps its root disk on <code>gp3</code> but puts the actual data files on a separate <code>io2</code> volume for better performance.</div>
+      <div class="example"><span class="label">In practice:</span> before a risky deploy, an ops team snapshots the volume first. If things break, they spin up a fresh volume from that snapshot and roll back in minutes.</div>
+      <div class="use">Reach for it: anytime an EC2 instance needs fast, persistent disk, databases, boot volumes, that kind of thing.</div>
+    </div>
+
+    <div class="card storage" id="efs">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/efs.png" alt="EFS icon"></div>
+        <div><div class="tag">File storage</div><h2>EFS</h2></div>
+      </div>
+      <p>EFS is a shared network drive that many EC2 instances, even ones in different Availability Zones, can mount at once. Where EBS is one disk tied to one server, EFS is one shared drive used by many servers, and it grows or shrinks on its own with no capacity to plan ahead of time.</p>
+      <ul>
+        <li>Hundreds of instances (or Lambda functions) can mount it simultaneously and see the same files.</li>
+        <li>Fully elastic, you pay for what you store, no pre-allocating size like with EBS.</li>
+        <li>Spans multiple AZs in a region, unlike EBS which sticks to one.</li>
+        <li>A bit slower per operation than EBS, but it's built for shared access, not raw single instance speed.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> ten web servers behind a load balancer all mount the same EFS filesystem, so a file uploaded through one server shows up instantly on the rest.</div>
+      <div class="example"><span class="label">In practice:</span> a CMS running on Auto Scaling needs every new instance to have the same media library the moment it launches, EFS handles that without any syncing.</div>
+      <div class="use">Reach for it: whenever multiple instances or functions need to read and write the same files at once.</div>
+    </div>
+
+    <div class="card storage" id="s3">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/s3.png" alt="S3 icon"></div>
+        <div><div class="tag">Object storage</div><h2>S3</h2></div>
+      </div>
+      <p>S3 stores files in buckets. It isn't a real filesystem, there's no true folder structure, just object keys that can contain slashes so they look like paths. Everything happens over HTTP, so any number of clients can read and write at once without it being tied to one machine.</p>
+      <ul>
+        <li>Rated for eleven nines of durability, your data gets copied across multiple facilities automatically.</li>
+        <li><b>Storage classes</b> trade cost for retrieval speed: Standard for frequent access, Standard-IA for infrequent, Glacier for cheap long term archiving.</li>
+        <li><b>Lifecycle rules</b> move or delete objects automatically as they age, no manual cleanup needed.</li>
+        <li>Can serve static websites directly and pairs naturally with CloudFront.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a bucket called <code>my-app-uploads</code> holding an object at <code>users/1234/avatar.png</code>. No real folder, just a key with a slash in it.</div>
+      <div class="example"><span class="label">In practice:</span> a media company leaves fresh video in Standard while editors work on it, then a lifecycle rule quietly ships anything untouched for 90 days off to Glacier.</div>
+      <div class="use">Reach for it: durable, essentially unlimited storage for backups, media, logs, static assets, or data lakes.</div>
+    </div>
+
+  </div>
+
+  <!-- ===================== NETWORKING ===================== -->
+  <div class="layer-banner network">Networking</div>
+  <div class="grid">
+
+    <div class="card network" id="vpc">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/vpc.png" alt="VPC icon"></div>
+        <div><div class="tag">Networking</div><h2>VPC</h2></div>
+      </div>
+      <p>A VPC is your own isolated slice of AWS's network, basically your private data center, only software defined. You decide the IP ranges, how it's split into subnets, and exactly what can talk to what, inside the VPC and out to the internet.</p>
+      <ul>
+        <li><b>Subnets</b> split the VPC by Availability Zone. A public subnet routes to an Internet Gateway, a private one doesn't.</li>
+        <li><b>Internet Gateway</b> gives resources in a public subnet two way internet access.</li>
+        <li><b>NAT Gateway</b> sits in a public subnet so private subnet resources can reach out (say, for updates) without being reachable from outside.</li>
+        <li><b>Route tables</b> and <b>Network ACLs</b> control traffic at the subnet level, on top of instance level Security Groups.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a load balancer sitting in a public subnet, with the app servers behind it tucked into a private subnet only reachable from the load balancer.</div>
+      <div class="example"><span class="label">In practice:</span> a fintech puts its RDS database in a private subnet with no route to the internet at all. Even a compromised app server can't reach it directly from outside the VPC.</div>
+      <div class="use">Reach for it: pretty much any AWS deployment sits inside one, it's the default networking foundation.</div>
+    </div>
+
+    <div class="card network" id="cloudfront">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/cloudfront.png" alt="CloudFront icon"></div>
+        <div><div class="tag">Content delivery</div><h2>CloudFront</h2></div>
+      </div>
+      <p>CloudFront is AWS's CDN, a global set of edge locations that cache your content physically close to your users, so requests don't have to travel all the way back to your origin every single time.</p>
+      <ul>
+        <li>The first request from a region hits the origin (S3, EC2, any HTTP server) and gets cached at the nearest edge. Everyone after that gets served from cache.</li>
+        <li>Cuts latency for users and load on your origin at the same time.</li>
+        <li>Throws in free HTTPS certs, DDoS protection via Shield, and geo restriction if you need it.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a product photo stored in an S3 bucket in Virginia gets cached at a Tokyo edge location the first time someone there requests it, everyone after that gets it almost instantly.</div>
+      <div class="example"><span class="label">In practice:</span> a streaming platform puts CloudFront in front of its video origin. Because most requests get served from edge cache, load times and origin costs both drop noticeably.</div>
+      <div class="use">Reach for it: users spread across the globe and you want faster loads with less strain on your origin.</div>
+    </div>
+
+    <div class="card network" id="route53">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/route-53.png" alt="Route 53 icon"></div>
+        <div><div class="tag">DNS</div><h2>Route 53</h2></div>
+      </div>
+      <p>Route 53 is AWS's DNS service, it turns domain names into the IP addresses computers actually use, and can register new domains too. Beyond plain DNS, it can route smartly based on where a user is, how healthy each endpoint looks, and whatever strategy you pick.</p>
+      <ul>
+        <li><b>Simple</b> routing: one record, one destination (or a fixed set).</li>
+        <li><b>Weighted</b> routing: split traffic by percentage, handy for gradual rollouts.</li>
+        <li><b>Latency based</b> routing: send each user to whichever region answers fastest for them.</li>
+        <li><b>Failover</b> routing: shift traffic to a backup automatically if health checks catch a problem.</li>
+        <li><b>Geolocation</b> routing: serve different content depending on where the request comes from.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a weighted policy sending 90% of traffic to production and 10% to a canary build being tested.</div>
+      <div class="example"><span class="label">In practice:</span> a SaaS company runs servers in the US and Europe. Latency based routing sends each visitor to whichever is faster, and if the US region fails its health check, failover routing shifts everyone to Europe until it's back.</div>
+      <div class="use">Reach for it: managing domain names or routing traffic intelligently across regions.</div>
+    </div>
+
+  </div>
+
+  <!-- ===================== DATABASES ===================== -->
+  <div class="layer-banner database">Databases</div>
+  <div class="grid">
+
+    <div class="card database" id="rds">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/rds.png" alt="RDS icon"></div>
+        <div><div class="tag">Managed database</div><h2>RDS</h2></div>
+      </div>
+      <p>RDS runs standard database engines (MySQL, PostgreSQL, MariaDB, SQL Server, Oracle) so you don't have to. Backups, patching, monitoring, failover, all handled. You still pick the engine and instance size, but you never SSH in to babysit the server itself.</p>
+      <ul>
+        <li><b>Multi-AZ</b>: AWS keeps a synchronous standby in a different AZ purely for availability. Primary fails, RDS fails over automatically, usually within a minute or two.</li>
+        <li><b>Read Replicas</b>: async, read only copies for scaling reads. They don't fail over automatically by default, a classic gotcha.</li>
+        <li>Automated backups and point in time restore come built in.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a Multi-AZ Postgres instance fails over to its standby in another AZ the moment the primary hits a hardware issue, no app changes required.</div>
+      <div class="example"><span class="label">In practice:</span> an online store adds two Read Replicas and points all the catalog browsing traffic at them, keeping the primary free to handle checkouts.</div>
+      <div class="use">Reach for it: you want a standard SQL database and don't want to manage the server underneath.</div>
+    </div>
+
+    <div class="card database" id="aurora">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/aurora.png" alt="Aurora icon"></div>
+        <div><div class="tag">Managed database</div><h2>Aurora</h2></div>
+      </div>
+      <p>Aurora is AWS's own database engine, wire compatible with MySQL and Postgres but rebuilt underneath for the cloud. Compute and storage are separated, the storage layer replicates data six ways across three Availability Zones on its own, which is what lets Aurora recover faster and scale further than plain RDS.</p>
+      <ul>
+        <li>Storage scales up to 128TB automatically, nothing to provision by hand.</li>
+        <li>Supports up to 15 read replicas with much less lag than standard RDS, and any of them can be promoted to primary during a failover.</li>
+        <li><b>Aurora Serverless</b> scales compute up and down, even to zero, based on load. Good for spiky or unpredictable workloads.</li>
+        <li>Generally faster and pricier than equivalent RDS, partly billed on storage I/O.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> an Aurora Postgres cluster with one writer and three readers sharing the same storage volume, a reader can become writer in seconds during a failover.</div>
+      <div class="example"><span class="label">In practice:</span> a SaaS product that's busy during the day and quiet overnight runs Aurora Serverless v2 so capacity scales down automatically instead of paying for a fixed size instance around the clock.</div>
+      <div class="use">Reach for it: you want MySQL or Postgres compatibility with better scaling and faster failover than RDS, and the cost bump is fine.</div>
+    </div>
+
+  </div>
+
+  <!-- ===================== TRAFFIC & SERVERLESS ===================== -->
+  <div class="layer-banner scaling">Traffic &amp; Serverless</div>
+  <div class="grid">
+
+    <div class="card scaling" id="elb-asg">
+      <div class="card-head">
+        <div class="icon-box pair"><img src="images/aws/elb.png" alt="ELB icon"><img src="images/aws/auto-scaling-group.png" alt="Auto Scaling Group icon"></div>
+        <div><div class="tag">Traffic &amp; scaling</div><h2>ELB &amp; Auto Scaling</h2></div>
+      </div>
+      <p>These two nearly always show up together. The load balancer sits in front of your servers, spreads incoming requests across them, and keeps health checking so it can route around anything that's failing. The Auto Scaling Group watches metrics like CPU and launches or kills EC2 instances to match demand, and the load balancer automatically starts sending traffic to whatever it adds.</p>
+      <ul>
+        <li><b>ALB</b> (Application Load Balancer): layer 7, routes by URL path or host, the usual pick for web apps.</li>
+        <li><b>NLB</b> (Network Load Balancer): layer 4, extremely low latency, for non-HTTP or performance heavy traffic.</li>
+        <li>An ASG defines min, desired, and max instance counts along with scaling policies, like a target CPU percentage.</li>
+        <li>Unhealthy instances get replaced automatically, so the whole thing self heals.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> an ASG set to min 2 / max 10 adds two more instances whenever average CPU crosses 70%, and the ALB starts routing to them as soon as they pass health checks.</div>
+      <div class="example"><span class="label">In practice:</span> a news site gets hit by a viral story. The ASG notices CPU climbing and launches new instances within minutes, then scales back down once things settle to keep costs sane.</div>
+      <div class="use">Reach for it: your app needs to survive a server dying and handle traffic that swings around unpredictably.</div>
+    </div>
+
+    <div class="card scaling" id="lambda">
+      <div class="card-head">
+        <div class="icon-box"><img src="images/aws/lambda.png" alt="Lambda icon"></div>
+        <div><div class="tag">Serverless</div><h2>Lambda</h2></div>
+      </div>
+      <p>Lambda runs your code in response to events, and you never touch a server. Upload a function, and AWS handles allocating compute, scaling it up for lots of simultaneous invocations, and scaling back to zero the moment there's nothing to do. You're billed by the millisecond of actual execution, not for sitting idle.</p>
+      <ul>
+        <li>Triggered by all sorts of events: HTTP requests through API Gateway, S3 uploads, scheduled EventBridge rules, SQS/SNS messages, and more.</li>
+        <li>Capped at 15 minutes per invocation, not built for long running or persistent processes.</li>
+        <li>Scales near instantly for concurrent invocations, within your account's concurrency limits.</li>
+        <li>Cold starts, that extra bit of latency on the first call after idling, are the known trade off, especially for heavier runtimes.</li>
+      </ul>
+      <div class="example"><span class="label">Example:</span> a photo upload to S3 triggers a Lambda that resizes it into a thumbnail and saves it to another bucket, no server ever sits around waiting.</div>
+      <div class="example"><span class="label">In practice:</span> a company builds its entire API out of API Gateway plus Lambda, one function per endpoint. Invocation volume spikes 50x during a big sale and Lambda just scales, no infrastructure planning needed, and cost drops back to near nothing when things are quiet.</div>
+      <div class="use">Reach for it: short, event driven tasks where you'd rather not manage servers at all.</div>
+    </div>
+
+  </div>
+
+  <table class="model">
+    <tr><th>Need</th><th>Service</th></tr>
+    <tr><td>Control who can access what</td><td>IAM</td></tr>
+    <tr><td>Run a server</td><td>EC2</td></tr>
+    <tr><td>Store files as objects</td><td>S3</td></tr>
+    <tr><td>Attach a disk to one server</td><td>EBS</td></tr>
+    <tr><td>Share files across many servers</td><td>EFS</td></tr>
+    <tr><td>Private, isolated network</td><td>VPC</td></tr>
+    <tr><td>Managed SQL database</td><td>RDS</td></tr>
+    <tr><td>Faster, more scalable managed database</td><td>Aurora</td></tr>
+    <tr><td>Handle traffic spikes, stay up</td><td>ELB + Auto Scaling</td></tr>
+    <tr><td>Run code without servers</td><td>Lambda</td></tr>
+    <tr><td>Speed up global content delivery</td><td>CloudFront</td></tr>
+    <tr><td>Manage domains and DNS routing</td><td>Route 53</td></tr>
+  </table>
+
+  <footer>Enough here to get started, look up the rest as you go.</footer>
+
+</main>
+</body>
+</html>

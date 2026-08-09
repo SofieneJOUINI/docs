@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz: Test What You Remember</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --good:#1FA398; --good-bg:#EAFAF7;
+    --bad:#FF6B5E; --bad-bg:#FFEDEA;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px, rgba(43,38,32,0.07) 1px, transparent 0);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    display:flex;
+    justify-content:center;
+    padding:40px 20px 90px;
+  }
+  .wrap{max-width:720px;width:100%;}
+
+  a.back{
+    display:inline-block;margin-bottom:18px;padding:4px 10px;border:1.5px solid var(--ink);
+    border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;
+    text-decoration:none;color:var(--ink);background:#fff;
+  }
+  a.back:hover{background:#f0e9d8;}
+
+  header.hero{text-align:left;margin-bottom:26px;}
+  header.hero h1{font-family:'Kalam',cursive;font-size:2.3rem;margin:0;transform:rotate(-0.6deg);}
+  header.hero h1 span{background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;}
+
+  .panel{
+    background:#fff;
+    border:2.5px solid var(--ink);
+    border-radius:14px;
+    box-shadow:6px 6px 0 var(--ink);
+    padding:26px;
+  }
+
+  /* ---- topic picker ---- */
+  .legend-title{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin:0 0 12px;
+  }
+  .chips{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2px 10px;
+    margin-bottom:26px;
+    min-width:0;
+  }
+  @media (max-width:560px){
+    .chips{grid-template-columns:1fr;}
+  }
+  .topic-row{
+    position:relative;display:flex;align-items:center;gap:14px;
+    padding:10px 14px;background:#fff;cursor:pointer;font-family:'Inter',sans-serif;
+    border:2px solid transparent;border-radius:10px;transition:background .12s,border-color .12s;
+    min-width:0;
+  }
+  .topic-row:hover{background:#f6f0e2;}
+  .topic-row.on{border-color:var(--ink);}
+  .topic-row input{position:absolute;opacity:0;width:1px;height:1px;}
+  .topic-row .topic-icon{font-size:19px;flex-shrink:0;width:24px;text-align:center;}
+  .topic-row .topic-text{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+  .topic-row .topic-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.86rem;color:var(--ink);}
+  .topic-row:not(.on) .topic-title{color:var(--ink-soft);}
+  .topic-row:not(.on) .topic-icon{opacity:.4;filter:grayscale(1);}
+
+  .switch{
+    flex-shrink:0;width:38px;height:22px;border-radius:999px;border:2px solid var(--ink);
+    background:#fff;position:relative;transition:background .15s;
+  }
+  .topic-row.on .switch{background:var(--accent);}
+  .switch .knob{
+    position:absolute;top:1px;left:1px;width:14px;height:14px;border-radius:50%;
+    background:var(--ink);transition:transform .15s;
+  }
+  .topic-row.on .switch .knob{transform:translateX(16px);}
+
+  .count-group{display:flex;gap:8px;flex-wrap:wrap;}
+  .count-btn{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.78rem;
+    padding:8px 16px;border-radius:8px;border:2.5px solid var(--ink);background:#fff;color:var(--ink);
+    box-shadow:3px 3px 0 var(--ink);cursor:pointer;transition:transform .12s,box-shadow .12s;
+  }
+  .count-btn.on{background:#FFE07A;}
+  .count-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+
+  .start-btn{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.85rem;
+    letter-spacing:.02em;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);border:2.5px solid var(--ink);
+    padding:13px 22px;border-radius:10px;box-shadow:3px 3px 0 var(--ink);
+    cursor:pointer;margin-top:22px;width:100%;transition:transform .12s,box-shadow .12s;
+  }
+  .start-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .start-btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+
+  /* ---- quiz screen ---- */
+  .progress-row{
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;
+    color:var(--ink-soft);margin-bottom:10px;
+  }
+  .progress-track{
+    height:8px;background:var(--paper);border:2px solid var(--ink);
+    border-radius:6px;overflow:hidden;margin:0 0 18px;
+  }
+  .progress-fill{height:100%;background:#FFE07A;transition:width .3s ease;}
+
+  .cat-tag{
+    display:inline-block;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.72rem;
+    color:#fff;background:var(--accent, var(--ink));border:2px solid var(--ink);
+    padding:5px 11px;border-radius:8px;margin-bottom:16px;
+  }
+
+  .question{
+    font-size:1.08rem;font-weight:700;font-family:'Space Grotesk',sans-serif;
+    line-height:1.4;margin:0 0 20px;
+  }
+
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{
+    text-align:left;font-family:'Inter',sans-serif;font-size:.9rem;padding:12px 15px;
+    border-radius:10px;border:2px solid var(--ink);background:#fff;color:var(--ink);
+    cursor:pointer;display:flex;gap:10px;align-items:flex-start;
+    box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s,background .1s;
+  }
+  .option:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink);background:#f6f0e2;}
+  .option .letter{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--ink-soft);flex-shrink:0;}
+  .option.correct{background:var(--good-bg);border-color:var(--good);color:#0e5c50;}
+  .option.correct .letter{color:var(--good);}
+  .option.wrong{background:var(--bad-bg);border-color:var(--bad);color:#8a2c22;}
+  .option.wrong .letter{color:var(--bad);}
+  .option:disabled{cursor:default;transform:none !important;}
+  .option.dim{opacity:.5;}
+
+  .explain{
+    margin-top:16px;padding:13px 15px;background:var(--paper);border:1.5px solid var(--ink);
+    border-radius:10px;font-size:.83rem;line-height:1.55;display:none;
+  }
+  .explain.show{display:block;}
+
+  .next-btn{
+    margin-top:18px;width:100%;font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:.82rem;text-transform:uppercase;background:var(--ink);color:var(--paper);
+    border:2.5px solid var(--ink);padding:13px;border-radius:10px;box-shadow:3px 3px 0 var(--ink);
+    cursor:pointer;display:none;transition:transform .12s,box-shadow .12s;
+  }
+  .next-btn.show{display:block;}
+  .next-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+
+  /* ---- end screen ---- */
+  .score-big{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;line-height:1;margin:8px 0 4px;}
+  .score-label{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.72rem;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);
+  }
+  .breakdown{margin-top:22px;display:flex;flex-direction:column;gap:9px;}
+  .b-row{display:flex;align-items:center;gap:10px;font-size:.83rem;}
+  .b-name{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;width:150px;flex-shrink:0;
+    font-size:.72rem;color:var(--ink-soft);
+  }
+  .b-bar-track{flex:1;height:9px;background:var(--paper);border:1.5px solid var(--ink);border-radius:5px;overflow:hidden;}
+  .b-bar-fill{display:block;height:100%;}
+  .b-frac{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.7rem;width:40px;text-align:right;color:var(--ink-soft);}
+
+  .hidden{display:none !important;}
+
+  footer.statusbar{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+    background:#fff;border:2.5px solid var(--ink);border-radius:10px;box-shadow:3px 3px 0 var(--ink);
+    font-family:'Space Grotesk',sans-serif;font-size:.68rem;font-weight:700;color:var(--ink-soft);
+    padding:8px 6px;display:flex;flex-wrap:wrap;max-width:92vw;
+  }
+  footer.statusbar span{padding:0 12px;border-left:2px solid var(--ink);}
+  footer.statusbar span:first-child{padding-left:12px;border-left:none;}
+  footer.statusbar b{color:var(--ink);}
+
+  @media (max-width:520px){
+    .b-name{width:100px;font-size:.65rem;}
+    .question{font-size:.98rem;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="./index.html">← Technical Docs</a>
+
+    <header class="hero">
+      <h1><span>Quiz</span></h1>
+    </header>
+
+    <!-- START SCREEN -->
+    <div class="panel" id="screen-start">
+      <p class="legend-title">Topics</p>
+      <div class="chips" id="chips"></div>
+
+      <p class="legend-title">Number of questions</p>
+      <div class="count-group">
+        <button class="count-btn" data-n="10">10</button>
+        <button class="count-btn" data-n="20">20</button>
+        <button class="count-btn" data-n="50">50</button>
+        <button class="count-btn" data-n="100">100</button>
+        <button class="count-btn on" data-n="all">All</button>
+      </div>
+
+      <button class="start-btn" id="startBtn">Start quiz</button>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div class="panel hidden" id="screen-quiz">
+      <div class="progress-row">
+        <span id="progressText">QUESTION 1 / 10</span>
+        <span id="streakText">STREAK 0</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+      <span class="cat-tag" id="catTag">OOP</span>
+      <p class="question" id="questionText">Question text</p>
+      <div class="options" id="optionsWrap"></div>
+      <div class="explain" id="explainBox"></div>
+      <button class="next-btn" id="nextBtn">Next question</button>
+    </div>
+
+    <!-- END SCREEN -->
+    <div class="panel hidden" id="screen-end">
+      <p class="score-label">Final tally</p>
+      <div class="score-big" id="finalScore">0 / 0</div>
+      <p class="score-label" id="finalPct">0% accuracy</p>
+      <div class="breakdown" id="breakdown"></div>
+      <button class="start-btn" id="retryBtn" style="margin-top:24px;">Run it back</button>
+    </div>
+  </div>
+
+  <footer class="statusbar">
+    <span>Q <b id="fQuestion"> - </b></span>
+    <span>SCORE <b id="fScore">0</b></span>
+    <span>TOPIC <b id="fTopic"> - </b></span>
+  </footer>
+
+<script>
+const DATA = {
+ "OOP": {icon:"🧬", label:"OOP Principles", qs:[
+ {q:"Which relationship does inheritance model between a subclass and its superclass?", o:["A child class inherits the properties and behavior of its parent class","A class hides its data behind private fields","Multiple classes share one common interface","A method can be called with different argument types"], c:0, e:"Inheritance means a subclass reuses its parent's fields and methods, and can add its own on top."},
+ {q:"How is abstraction defined here?", o:["Separating what something does from how it does it","Bundling data and operations into one unit","Letting one method take many forms","Reusing a parent's fields and methods"], c:0, e:"Abstraction here means defining an idea in one place so each subclass can implement it its own way."},
+ {q:"What changed about Java interfaces starting in Java 8?", o:["They could declare abstract methods for the first time","They gained concrete default and static methods","They stopped supporting implementation entirely","They became unable to be implemented by classes"], c:1, e:"Before Java 8, interfaces could only declare abstract methods; from Java 8 onward they can also carry concrete default and static methods."},
+ {q:"What does an abstract method contain, by definition?", o:["No implementation, just a declaration of the idea","A default implementation every subclass shares","A print statement for a generic case","Multiple overloaded versions"], c:0, e:"An abstract method declares the idea with no body at all - each subclass supplies its own implementation."},
+ {q:"What do the words \"poly\" and \"morph\" mean in polymorphism?", o:["Many, and forms","One, and shape","Same, and type","Multiple, and class"], c:0, e:"Poly means many, morph means forms - one interface or method taking many forms."},
+ {q:"How many kinds of polymorphism does Java have?", o:["One","Two - static and dynamic","Three","Four"], c:1, e:"Java polymorphism splits into two kinds here: static, resolved at compile time, and dynamic, resolved at runtime."},
+ {q:"When is it decided which overloaded method actually gets called?", o:["At compile time, before the program runs","At runtime, based on the object","After the program finishes","During garbage collection"], c:0, e:"Overload resolution happens at compile time - the compiler matches the call to a signature before the program executes."},
+ {q:"What other two names exist for method overriding?", o:["Early binding and static binding","Late binding and dynamic binding","Compile-time binding and default binding","It has no other name"], c:1, e:"Overriding gets called late binding, or dynamic binding, since the version that runs is decided at runtime."},
+ {q:"What actually determines which overridden method implementation runs?", o:["The reference type declared in code","The real object at runtime","The order methods were declared","The number of parameters"], c:1, e:"The version that runs depends on the real object at runtime, not the declared reference type - which is why overriding is called dynamic binding."},
+ {q:"What does encapsulation mean here?", o:["Bundling data and the operations on that data into a single unit","Letting a subclass redefine a method","Declaring an idea once for multiple implementations","Reusing a parent's fields"], c:0, e:"Encapsulation is defined as grouping variables and the methods that act on them into one class."},
+ {q:"In Java encapsulation, how are private fields typically accessed from outside the class?", o:["Directly, since fields are public by default","Only through the class's own public methods","Through a separate Access class","They cannot be accessed at all"], c:1, e:"Fields stay private and get reached only through the class's own getters and setters."},
+ {q:"Which OOP pillar is about reusing what a parent class already provides?", o:["Inheritance","Abstraction","Polymorphism","Encapsulation"], c:0, e:"Inheritance is the pillar built around reusing a parent's existing fields and methods."},
+ {q:"Which OOP pillar is about defining an idea once and letting each class implement it its own way?", o:["Inheritance","Abstraction","Polymorphism","Encapsulation"], c:1, e:"Abstraction means one idea, defined once, implemented differently by each class."},
+ {q:"What two constructs are used to build abstraction in Java?", o:["Abstract classes and interfaces","Enums and records","Annotations and generics","Threads and locks"], c:0, e:"Abstraction in Java gets built with abstract classes and interfaces."},
+ {q:"Static polymorphism is another name for:", o:["Method overriding","Method overloading","Interface implementation","Constructor chaining"], c:1, e:"Its overloading section is labeled directly as static polymorphism."}
+ ]},
+ "SOLID": {icon:"🧊", label:"SOLID Principles", qs:[
+ {q:"What's the practical effect of a class mixing concerns like business logic and persistence?", o:["Different teams end up editing the same file for unrelated reasons","The code automatically runs faster","It becomes easier to test by default","Nothing really changes"], c:0, e:"Merge conflicts get more frequent and version history harder to follow, since unrelated changes end up colliding in one file."},
+ {q:"If a component has many reasons to change, which principle does that break?", o:["Single Responsibility","Open/Closed","Liskov Substitution","Interface Segregation"], c:0, e:"Having more than one reason to change is a direct violation of Single Responsibility."},
+ {q:"How is achieving the Open/Closed Principle described in practice?", o:["By deleting old code entirely","Via an Interface plus the Strategy pattern","By using only static methods","By avoiding interfaces altogether"], c:1, e:"Interface + Strategy is the practical mechanism named for achieving OCP."},
+ {q:"What does the Open/Closed Principle require of software entities?", o:["Open for extension, closed for modification","Open for both extension and modification","Closed for both extension and modification","Open only for testing"], c:0, e:"OCP's rule: software entities should be open for extension but closed for modification."},
+ {q:"Who is the Liskov Substitution Principle named after?", o:["Barbara Liskov, a mathematician and computer scientist","Ada Lovelace","Grace Hopper","Robert Martin"], c:0, e:"Barbara Liskov, a mathematician and computer scientist, is credited as the principle's namesake."},
+ {q:"Under Liskov Substitution, what should a child class do with the behavior it inherits?", o:["Extend it, never narrow it down","Remove any methods it doesn't need","Replace it entirely with new behavior","Hide it from calling code"], c:0, e:"LSP expects a child class to extend behavior, never narrow it down, so substituting it for the parent never surprises calling code."},
+ {q:"What happens to calling code when a subtype narrows behavior instead of extending it, breaking LSP?", o:["It may behave unexpectedly, since it assumed the base type's guarantees","It automatically adapts to the new behavior","Nothing, LSP violations are harmless","The subtype fails to compile"], c:0, e:"If a subtype narrows behavior, code written against the base type can misbehave, since it assumed guarantees the subtype no longer honors."},
+ {q:"Interface Segregation's rule of thumb is that depending on something means:", o:["You own it outright","You're exposed to its changes","It can never change again","You must reimplement it"], c:1, e:"The rule of thumb: depending on something means you're subject to whatever changes happen to it."},
+ {q:"What problem does Interface Segregation solve for implementers of one large do-everything interface?", o:["Being forced to satisfy the whole contract, often with stub methods that do nothing","Having too few methods to implement","Needing to duplicate the interface elsewhere","Losing access to inherited fields"], c:0, e:"A do-everything interface forces every implementer to satisfy the whole contract, even parts it doesn't need - often with stub methods that just throw or sit empty."},
+ {q:"Under Interface Segregation, what happens to clients when a shared interface changes?", o:["They're forced to change too, even if they only used part of it","Nothing, clients are always insulated from interface changes","Only the interface's original author is affected","The interface automatically splits itself into smaller ones"], c:0, e:"If an interface changes, every client depending on it is forced to change too - which is why segregating interfaces protects clients from unrelated changes."},
+ {q:"What is Dependency Inversion directly linked to?", o:["Hexagonal Architecture","Design Patterns generally","Code Smells","Component Principles"], c:0, e:"A direct link between DIP and Hexagonal Architecture gets called out explicitly in the notes."},
+ {q:"Where should business logic live?", o:["In the UserService class directly","In the most stable component: the domain","In the database layer","In the UI layer"], c:1, e:"Business logic should live in the most stable component, which it identifies as the domain."},
+ {q:"What does Dependency Inversion say about the relationship between data flow and dependency flow?", o:["They don't have to point in the same direction","They must always point the same direction","Data flow doesn't apply under DIP","Dependency flow only matters for databases"], c:0, e:"DIP distinguishes data flow from dependency flow - the two don't have to point the same direction."},
+ {q:"What mechanism is named as a main way to implement Dependency Inversion?", o:["Dependency Injection","Method overloading","Garbage collection","Static typing"], c:0, e:"Dependency Injection is named as one of the main mechanisms for implementing DIP."},
+ {q:"Under Dependency Injection, how does a high-level class get the interface it needs?", o:["It receives it from the outside, rather than instantiating a concrete class itself","It creates it internally with the new keyword","It inherits it from a base class","It looks it up from a global registry"], c:0, e:"Dependency Injection means a high-level class receives the interface it needs from the outside, instead of instantiating a concrete class itself."}
+ ]},
+ "Patterns": {icon:"🧱", label:"Design Patterns", qs:[
+ {q:"What is Factory Method's core purpose?", o:["Let subclasses decide which concrete class to instantiate","Produce whole families of related objects that must match","Guarantee exactly one instance of a class exists","Construct a complex object step by step"], c:0, e:"Factory Method defers the decision of which concrete class to instantiate to subclasses."},
+ {q:"What is Abstract Factory's core purpose?", o:["Produce whole families of related objects that must match each other","Let subclasses decide which class to instantiate","Copy an existing instance instead of building from scratch","Attach new behavior by wrapping an object"], c:0, e:"Abstract Factory produces a whole family of related objects that need to stay consistent with each other."},
+ {q:"What is Singleton's core purpose?", o:["Guarantee exactly one instance of a class exists, with one global access point","Construct a complex object step by step","Split an abstraction from its implementation","Turn a request into a standalone object"], c:0, e:"Singleton restricts a class to exactly one instance, reachable through one global access point."},
+ {q:"What is Builder's core purpose?", o:["Construct a complex object step by step, without a giant constructor","Guarantee exactly one instance exists","Make two incompatible interfaces work together","Notify many dependents automatically"], c:0, e:"Builder assembles a complex object step by step, avoiding one bloated constructor with every possible parameter."},
+ {q:"What is Adapter's core purpose?", o:["Make two incompatible interfaces work together without changing either one","Attach new behavior dynamically by wrapping an object","Hide a complex subsystem behind one interface","Control access to a real object"], c:0, e:"Adapter lets two incompatible interfaces work together without modifying either one."},
+ {q:"What is Prototype's core purpose?", o:["Create new objects by copying an existing instance instead of building from scratch","Guarantee exactly one instance exists","Construct a complex object step by step","Attach new behavior by wrapping an object"], c:0, e:"Prototype creates new objects by cloning an existing, pre-configured instance rather than building one from scratch."},
+ {q:"What is Decorator's core purpose?", o:["Attach new behavior to an object dynamically, by wrapping it, instead of subclassing","Make two incompatible interfaces work together","Treat individual objects and groups the same way","Share common state across many objects"], c:0, e:"Decorator wraps an object to layer on new behavior at runtime, as an alternative to subclassing."},
+ {q:"What is Composite's core purpose?", o:["Treat individual objects and groups of objects through the same interface","Hide a complex subsystem behind one interface","Control access to a real object","Copy an existing instance instead of building from scratch"], c:0, e:"Composite lets a client call the same operation on a single object or on a whole group of them."},
+ {q:"What is Facade's core purpose?", o:["Hide a complex subsystem behind one simple, unified interface","Treat individual objects and groups the same way","Control access to a real object","Split an abstraction from its implementation"], c:0, e:"Facade hides a complex subsystem's moving parts behind one simple, unified interface."},
+ {q:"What is Proxy's core purpose?", o:["Control access to a real object: caching, permission checks, lazy loading","Hide a complex subsystem behind one interface","Share common, immutable state to save memory","Swap an algorithm's implementation at runtime"], c:0, e:"Proxy stands in front of a real object, controlling access to it for things like caching, permissions, or lazy loading."},
+ {q:"What is Flyweight's core purpose?", o:["Share common, immutable state across many objects to save memory","Control access to a real object","Split an abstraction from its implementation","Notify many dependents automatically"], c:0, e:"Flyweight shares immutable state across many objects instead of duplicating it, to save memory."},
+ {q:"What is Bridge's core purpose?", o:["Split an abstraction from its implementation so both can evolve independently","Share common state to save memory","Swap an algorithm's implementation at runtime","Turn a request into a standalone object"], c:0, e:"Bridge separates an abstraction from its implementation so each can change independently of the other."},
+ {q:"What is Strategy's core purpose?", o:["Swap an algorithm's implementation at runtime without changing the caller","Split an abstraction from its implementation","Notify many dependents automatically","Let an object change behavior when its internal state changes"], c:0, e:"Strategy lets you swap out an algorithm's implementation at runtime, without the caller needing to change."},
+ {q:"What is Observer's core purpose?", o:["Notify many dependents automatically when one object's state changes","Swap an algorithm's implementation at runtime","Turn a request into a standalone object","Pass a request along a chain of handlers"], c:0, e:"Observer automatically notifies every dependent the moment one object's state changes."},
+ {q:"What is Command's core purpose?", o:["Turn a request into a standalone object, so it can be queued, logged, or undone","Notify many dependents automatically","Pass a request along a chain of handlers","Let an object change behavior when its state changes"], c:0, e:"Command wraps a request as its own object, making it possible to queue, log, or undo later."}
+ ]},
+ "Components": {icon:"📦", label:"Component Principles", qs:[
+ {q:"What is a component?", o:["The smallest unit that can be built, released, and deployed on its own","Any single class in the codebase","A folder containing tests","A single function"], c:0, e:"A component is defined here as the smallest independently buildable, releasable, deployable unit - a package, jar, DLL, or plugin."},
+ {q:"What does the Reuse/Release Equivalence Principle (REP) require of a reusable component?", o:["It should share a common theme and be tracked/released together under a version number","It should contain as many unrelated classes as possible","It should never be versioned","It should be reused without any release process"], c:0, e:"Classes grouped into a reusable component need a shared theme, tracked and released together under a version number."},
+ {q:"What does the Common Closure Principle (CCP) group together?", o:["Classes that tend to change for the same reasons at the same time","Classes that share a common data type","Classes with the most methods","Classes owned by the same developer"], c:0, e:"CCP groups classes that change for the same reasons together, so a single requirement change only forces a redeploy of one component."},
+ {q:"What does the Common Reuse Principle (CRP) warn against?", o:["Bundling classes that aren't tightly related, forcing consumers to depend on code they don't use","Reusing any class more than once","Releasing a component without tests","Giving a component too few classes"], c:0, e:"If unrelated classes get bundled together, consumers depending on just one of them end up dragged into every change made to the others."},
+ {q:"CCP is essentially which principle applied at the component level?", o:["Single Responsibility Principle","Open/Closed Principle only","Liskov Substitution Principle","Dependency Inversion Principle"], c:0, e:"CCP gets described as SRP applied one level up, at the component boundary rather than the class boundary."},
+ {q:"What happens if component design leans too hard toward REP and CRP?", o:["A small change ends up touching a large number of components","The project releases far more often than it needs to","Nothing, it's a perfectly balanced default","Components become fully decoupled from each other"], c:0, e:"Leaning too far toward REP and CRP means a small change ripples across an unusually large number of components."},
+ {q:"How do projects typically evolve on the REP/CCP/CRP cohesion trade-off as they mature, per Martin (2017)?", o:["They start closer to REP/CRP and drift toward CCP/REP over time","They start on CCP/REP and never move","They stay fixed at one point forever","They jump straight to a perfect balance immediately"], c:0, e:"Martin (2017) observed that projects typically start leaning toward reusability and drift toward closure as they mature."},
+ {q:"What must be true of the dependency graph between components, under the Acyclic Dependencies Principle?", o:["It must be a directed acyclic graph, with no cycles","It must always be fully connected","It must have exactly one root component","It must contain at least one cycle for stability"], c:0, e:"ADP requires the dependency graph to stay acyclic - if a cycle appears, it has to be broken before release."},
+ {q:"What two ways can you break a dependency cycle under ADP?", o:["Inverting a dependency through a new interface, or extracting shared classes into a new shared component","Deleting one of the components entirely","Merging both components into a permanent monolith","Ignoring it, since cycles rarely cause problems"], c:0, e:"Two fixes are laid out: invert the dependency via a new interface, or extract the shared classes into a component both sides depend on."},
+ {q:"What should a component only depend on, per the Stable-Dependencies Principle?", o:["Components that are at least as stable as itself","Components that are more volatile than itself","Any component regardless of stability","Only components it directly tests"], c:0, e:"Depending on a volatile component drags your own component's stability down, since every change downstream now ripples into you too."},
+ {q:"What's the biggest factor in determining a component's stability?", o:["How many other components depend on it","The number of lines of code it has","Its file size on disk","How recently it was created"], c:0, e:"Size and complexity matter, but the number of dependents is the biggest factor in stability."},
+ {q:"What does the Stable-Abstractions Principle (SAP) say a stable component should also be?", o:["Abstract, so its stability doesn't block future extension","Concrete, so it's easy to understand at a glance","Volatile, so it can adapt quickly","Isolated from every other component"], c:0, e:"A stable component should also be abstract - otherwise its stability just makes it rigid instead of extensible."},
+ {q:"Why does splitting a system into independently releasable components matter most, per ADP's reasoning?", o:["Once several teams share a codebase, unclear boundaries mean one team's fix routinely breaks something another team depends on","It makes the codebase run measurably faster","It removes the need for version control entirely","It guarantees the code has zero bugs"], c:0, e:"With clear component boundaries, each team can work in its own component and choose when to adopt a new release, instead of reacting to every change immediately."},
+ {q:"What becomes of a component that is both stable and concrete?", o:["It becomes rigid","It becomes perfectly flexible","It automatically becomes abstract","It stops being usable"], c:0, e:"A stable-and-concrete component turns rigid, since it's hard to change but offers nothing abstract to extend."},
+ {q:"Why can no component be completely closed to every kind of change?", o:["Change is inevitable, so components are instead grouped around the changes they ARE closed to","Components should never be modified after creation","OCP doesn't apply to components at all","Every component must be identical in size"], c:0, e:"Since no component can be closed to everything, CCP groups classes around the specific changes a component should stay closed to, so a given modification tends to stay contained to just a few components."}
+ ]},
+ "CleanCode": {icon:"🧹", label:"Clean Code Principles", qs:[
+ {q:"What's Clean Code's rule about variable pronounceability?", o:["If you can't say a name out loud, you can't discuss it without sounding ridiculous","Names must always be exactly one syllable","Pronounceability doesn't matter, only brevity does","Names should be pronounceable only inside comments"], c:0, e:"A name that can't be said out loud makes it hard to even discuss the code with a teammate."},
+ {q:"What's Clean Code's rule about searchable names?", o:["Names must be searchable, not just readable, since we read far more code than we write","Names should never be searched, only read top to bottom","Short cryptic names are always preferred for speed","Searchability only matters for constants, not variables"], c:0, e:"Unnamed magic numbers and strings are hard to grep for or understand later, so names need to hold up under search too."},
+ {q:"What's Clean Code's rule about naming several functions that all do the same job?", o:["Use one word for one concept everywhere, instead of several near-duplicate names","Use a different synonym each time for variety","Prefix every function with get_ regardless of purpose","Never reuse a function name across files"], c:0, e:"Picking a single consistent name for one concept avoids the confusion of several near-identical functions all doing the same thing."},
+ {q:"What's Clean Code's guidance on ideal function argument count?", o:["Two or fewer ideally, since more creates a combinatorial explosion of test cases","Exactly five, for consistency","As many as needed, with no real limit","Ten or fewer, but no guidance below that"], c:0, e:"Fewer parameters make testing easier - past two or three arguments, the number of cases to cover explodes combinatorially."},
+ {q:"What's recommended if a function truly needs many inputs?", o:["Pass an object and destructure it","Always cap it at exactly two parameters no matter what","Use global variables instead","Split it into ten separate functions"], c:0, e:"Passing a single options object and destructuring it gives instant clarity on what the function actually uses."},
+ {q:"What does a boolean flag argument typically signal about a function, per Clean Code?", o:["That the function branches into two different behaviors and should be split in two","That the function is thread-safe","That the function needs more boolean arguments","That the function is well tested"], c:0, e:"A boolean flag tells the reader the function branches into two different behaviors - meaning it's doing more than one thing."},
+ {q:"What counts as a side effect in a function, per Clean Code?", o:["Anything besides taking a value in and returning a value out, like writing a file or mutating a global","Only network calls count as side effects","Only calls that throw exceptions count","Anything that takes longer than one second"], c:0, e:"Side effects are sometimes necessary, but Clean Code says to centralize where they happen instead of scattering them across many functions."},
+ {q:"What's Clean Code's recommended fix for a large switch statement branching on an object's type?", o:["Replace it with polymorphism, letting each type implement its own version","Add more cases to the switch for completeness","Convert it into nested if/else statements instead","Duplicate the switch wherever it's needed"], c:0, e:"A type-based switch is typically replaced by polymorphism - each type implements its own version of the method instead of the caller branching on type."},
+ {q:"Why does Clean Code recommend avoiding instanceof-based branching in TypeScript?", o:["TypeScript's whole value proposition is static typing, so well-typed parameters are preferred over runtime checks","instanceof runs slower than switch statements","instanceof cannot be used with classes","It's a syntax error in strict mode"], c:0, e:"Leaning on static typing instead of instanceof checks also makes refactoring easier down the line."},
+ {q:"What actually measures whether a class is small, in Clean Code terms?", o:["Responsibility, not line count","The number of private fields","How many tests it has","The number of imports it uses"], c:0, e:"Class size is judged by how many responsibilities it holds, not by how many lines it takes up."},
+ {q:"When is inheritance actually appropriate over composition, per Clean Code's guidance?", o:["When the relationship is genuinely is-a, not has-a, and a base-class change should ripple to every derived class","Whenever two classes share even one method","Always, inheritance is preferred by default","Only when using abstract classes, never interfaces"], c:0, e:"Inheritance fits when the relationship is genuinely is-a, the base class's code can be meaningfully reused, and a base-class change is meant to ripple globally."},
+ {q:"How does Clean Code paraphrase the Liskov Substitution Principle?", o:["A subclass should be swappable for its parent class without breaking correctness","A subclass must always have fewer methods than its parent","Subclasses should never override any method","Every class needs at least one subclass"], c:0, e:"In plain terms: substitute a subtype in for its parent, and the program's correctness shouldn't change."},
+ {q:"In the F.I.R.S.T. rules, what does the T stand for?", o:["Timely - write the test before the production code","Testable","Thorough","Type-safe"], c:0, e:"The F.I.R.S.T. table defines T as Timely, meaning the test should be written before the code it covers."},
+ {q:"What's the alternative to throwing errors that TypeScript's union types make ergonomic?", o:["Returning typed Result/Failure objects","Using alert() instead of throw","Logging to console and continuing silently","Ignoring the error entirely"], c:0, e:"Returning typed Result/Failure objects is mentioned as an ergonomic alternative to throwing, made possible by TypeScript's union types."},
+ {q:"What's the recommended group order for organizing imports?", o:["Polyfills, Node builtins, external modules, internal modules, then parent/sibling-directory modules","Alphabetical only, no grouping","Newest files first","Random order, grouping doesn't matter"], c:0, e:"This group order, separated by blank lines, keeps dependencies scannable at a glance."}
+ ]},
+ "Smells": {icon:"👃", label:"Code Smells & Heuristics", qs:[
+ {q:"C1 (Inappropriate Information): what should comments not be used for?", o:["Holding information that belongs in version control, like change logs and author names","Explaining tricky algorithms","Flagging TODOs","Describing edge cases"], c:0, e:"Change logs, author names, and last-modified dates clutter a file - that information belongs in version control, not comments."},
+ {q:"C5 (Commented-Out Code): why does commented-out code tend to linger in a codebase?", o:["Everyone assumes someone else needs it, so nobody deletes it","It's required by most compilers","It improves performance","It's needed for documentation generators"], c:0, e:"Nobody wants to be the one who deletes code someone else might still need, so it just accumulates."},
+ {q:"F1 (Too Many Arguments): how many arguments count as highly questionable?", o:["More than three","More than one","More than ten","Any number above zero"], c:0, e:"Argument counts rank from zero (ideal) up through three, with anything past that considered highly questionable."},
+ {q:"F3 (Flag Arguments): what does a boolean argument in a function signal?", o:["The function does more than one thing and should be split","The function is well-tested","The function needs more arguments, not fewer","The function is thread-safe"], c:0, e:"A boolean flag admits the function branches into two behaviors, and should become two functions instead."},
+ {q:"G5 (Duplication): what does every instance of duplicate code represent?", o:["A missed abstraction opportunity","A necessary safety measure","A sign the test suite is incomplete","A compiler optimization opportunity"], c:0, e:"Every duplication is treated as a missed abstraction opportunity - identical code becomes a shared method, repeated conditionals become polymorphism."},
+ {q:"G14 (Feature Envy): what does it mean when a method envies another class?", o:["It reaches into another object's accessors/mutators to do its work, and really wants to live there","It has too many private fields","It never gets called","It duplicates another method exactly"], c:0, e:"A method reaching into another object's data that much effectively wants to belong to that other class instead."},
+ {q:"G23 (Prefer Polymorphism to If/Else or Switch/Case): what's the rule of thumb for switch statements?", o:["At most one switch per type of selection, used only to construct polymorphic objects","Switch statements should never be used, ever","Use as many switches as needed for clarity","Switches are fine as long as they're under 10 cases"], c:0, e:"A given type of selection gets capped at one switch statement, whose only job is constructing the polymorphic replacements."},
+ {q:"G25 (Replace Magic Numbers with Named Constants): which constant is called a rare exception worth naming anyway?", o:["Math.PI","SECONDS_PER_DAY","MAX_INT","86400"], c:0, e:"Extremely well-known constants like Math.PI are worth a name anyway, since a typo in the raw value would otherwise be invisible."},
+ {q:"G36 (Avoid Transitive Navigation): what is this heuristic also known as?", o:["The Law of Demeter, or \"writing shy code\"","The Single Responsibility Principle","The Boy Scout Rule","The Liskov Substitution Principle"], c:0, e:"This is the Law of Demeter: never chain through a collaborator to reach that collaborator's own collaborator."},
+ {q:"J1 (Avoid Long Import Lists by Using Wildcards): what's the minor cost of wildcard imports?", o:["Occasional name collisions across packages","Slower compile times","Larger binary size","Loss of IDE autocomplete"], c:0, e:"Occasional cross-package name collisions are the accepted trade-off for weaker, less coupled dependencies."},
+ {q:"J3 (Constants versus Enums): what's recommended once a language supports enums?", o:["Prefer enums over public static final int constants","Avoid enums entirely, stick to plain ints","Use enums only for booleans","Convert all enums back to constants for performance"], c:0, e:"An enum is self-naming and can carry its own behavior, which plain int constants can't."},
+ {q:"N1 (Choose Descriptive Names): roughly what share of software's readability comes from names?", o:["Roughly 90%","Roughly 10%","Roughly 50%","Roughly 25%"], c:0, e:"Naming is put at roughly 90% of what makes software readable."},
+ {q:"N2: what problem occurs when a name commits to one implementation's specific details?", o:["The name breaks the moment a different implementation needs to satisfy the same interface","Nothing, implementation details in names are always safe","The code fails to compile immediately","It only ever affects private methods"], c:0, e:"A name shouldn't lock in one implementation's details, since it breaks the moment a different implementation has to satisfy the same contract."},
+ {q:"T9 (Tests Should Be Fast): what happens to slow tests when time gets tight?", o:["They're the first thing dropped from the suite","They automatically get parallelized","They get rewritten to be faster immediately","Nothing, slow tests are always kept"], c:0, e:"A slow test eventually stops getting run, since it's the first casualty when time is short."},
+ {q:"How are design patterns generally grouped by intent?", o:["Creational, Structural, and Behavioral","Simple, Medium, and Complex","Java, TypeScript, and Python","Frontend and Backend"], c:0, e:"Design patterns are grouped by intent into Creational, Structural, and Behavioral."}
+ ]},
+ "Hex": {icon:"🧩", label:"Hexagonal Architecture & DDD", qs:[
+ {q:"What does \"vertical slicing\" mean inside a module?", o:["Each use case gets its own folder, so things that change together live together","Splitting the domain layer into five files","Separating frontend and backend into different repos","Slicing entities by database column"], c:0, e:"Vertical slicing means giving each use case its own folder inside a module, keeping related changes together."},
+ {q:"Why should modules avoid importing directly between each other?", o:["Direct imports create tight coupling, so a message bus is used instead","It's a syntax error in most languages","It slows down compilation","It's required for microservices"], c:0, e:"Direct imports between modules create tight coupling; a message bus (commands or events) is recommended instead."},
+ {q:"Under Command-Query Separation (CQS), what should a single method never do?", o:["Both change state and return data at the same time","Take more than one parameter","Call another method","Run asynchronously"], c:0, e:"CQS means a method should either change state or return data - never both at once."},
+ {q:"What does a Port describe?", o:["What needs to happen, never how","The exact SQL used by a repository","The HTTP status codes an API returns","The internal fields of an Entity"], c:0, e:"A Port is framed as an abstraction over a technology detail - it describes the what, leaving the how to adapters."},
+ {q:"What must be true about an entity immediately upon creation?", o:["It must be valid, validated in the constructor or a factory method","It must start empty, with all fields null","It must be serializable to JSON","It must already exist in a database"], c:0, e:"Entities validate themselves at construction and fail on the first violation, so an invalid entity can never exist."},
+ {q:"What is the Aggregate Root?", o:["The entity that owns the others and is the only gateway in","Any entity chosen at random","A database table name","The first field defined in an entity"], c:0, e:"The Aggregate Root is the sole entity with global identity, owning and exposing operations on everything inside the aggregate."},
+ {q:"How should one aggregate reference another aggregate root?", o:["Only by its ID, never a direct object reference","By embedding the entire object inside it","Through a shared global variable","Aggregates should never reference each other"], c:0, e:"Cross-aggregate references stay ID-only, avoiding direct object references between aggregates."},
+ {q:"What is a Domain Event, by definition?", o:["A signal that something happened in the domain that other in-process parts should react to","A REST API endpoint","A database migration script","A UI notification popup"], c:0, e:"A Domain Event is just a message on an in-memory dispatcher, useful for keeping unrelated concerns from coupling to each other."},
+ {q:"When should Integration Events be published relative to domain events?", o:["Only after all domain events have finished executing and saved","Before any domain event starts","At the exact same time as domain events, always","Integration Events replace domain events entirely"], c:0, e:"Integration events get published only once every domain event in the flow has finished and its changes are saved."},
+ {q:"When should a Domain Service be used instead of putting logic on an entity?", o:["When logic touches two or more entities, so one entity alone would break encapsulation","Whenever the logic is more than 10 lines long","Only for logic involving the database","Never, domain services should be avoided entirely"], c:0, e:"A Domain Service comes into play specifically when logic spans multiple entities, avoiding forcing one entity to know about another's concerns."},
+ {q:"What defines a Value Object's equality?", o:["Structural equality, by value, since it has no identity","Its unique database ID","The order it was created in","Its memory address"], c:0, e:"Value Objects have no identity, so equality is judged purely by their attribute values."},
+ {q:"What's the difference between guarding and validating?", o:["Validation rejects expected bad external input; guarding throws when trusted internal data is corrupted","They mean exactly the same thing","Guarding always happens before validation","Validation only applies to numbers, guarding only to strings"], c:0, e:"Validation is an outer-boundary filter for expected bad input; guarding is the internal failsafe that throws when a bug slips through."},
+ {q:"What should the domain core avoid throwing?", o:["HTTP-flavored exceptions, since it doesn't know what's driving it","Any exception at all, ever","Only network-related exceptions","Only validation exceptions"], c:0, e:"The domain core can't assume it's being driven by HTTP specifically, so it avoids HTTP-flavored exceptions entirely."},
+ {q:"How is a Repository described, paraphrasing Martin Fowler?", o:["Something that mediates between the domain and data-mapping layers, acting like an in-memory collection","A direct wrapper around raw SQL only","A caching layer with no persistence","A tool exclusively for read-only queries"], c:0, e:"Paraphrasing Fowler, a repository behaves like an in-memory collection of domain objects."},
+ {q:"Why does DDD keep the domain model and the persistence model separate?", o:["So schema changes for performance/integrity don't force a matching refactor of domain entities","Because ORMs are always forbidden in DDD","Because domain models can't be tested otherwise","Because every database vendor requires it"], c:0, e:"Separating the two models means schema changes don't ripple into a rewrite of the domain's entities and aggregates."}
+ ]},
+ "Java": {icon:"☕", label:"Java", qs:[
+ {q:"What's the valid range for a Java byte?", o:["-128 to 127","-32,768 to 32,767","-2,147,483,648 to 2,147,483,647","0 to 255"], c:0, e:"byte's range runs -128 to 127, useful for saving memory in large arrays of small values."},
+ {q:"Which suffix does a long literal need in Java?", o:["L","f","d","b"], c:0, e:"The example shows a long literal needing an L suffix, since int isn't large enough for that value."},
+ {q:"What is a record (Java 16+) designed to hold?", o:["Immutable data, with constructor/accessors/equals/hashCode/toString auto-generated","Mutable state shared across threads","Only primitive types, never objects","Static utility methods only"], c:0, e:"Records are a concise built-in way to write immutable data-carrier classes, with the boilerplate generated automatically."},
+ {q:"What keyword does a sealed class use to list which classes may extend it?", o:["permits","extends","implements","allows"], c:0, e:"The sealed class example lists allowed subclasses using the permits keyword."},
+ {q:"What must every direct subclass of a sealed class be marked as?", o:["final, sealed, or non-sealed","abstract only","static only","private only"], c:0, e:"Every direct subclass has to declare itself final, sealed, or non-sealed, so its own extensibility stays explicit."},
+ {q:"When must a var variable be initialized?", o:["Immediately, at declaration","It can be initialized later in the method","Only inside a constructor","Never, var variables stay uninitialized"], c:0, e:"Since var infers its type from the initial value, that value has to be provided immediately."},
+ {q:"Can var be used for fields or method parameters?", o:["No, only for local variables inside methods, constructors, or blocks","Yes, for fields only","Yes, for both fields and parameters","Only for static fields"], c:0, e:"var stays strictly local - it's not allowed for fields or method parameters."},
+ {q:"What's the difference between Optional.of() and Optional.ofNullable()?", o:["of() throws NullPointerException on null; ofNullable() safely returns an empty Optional instead","They behave identically in every case","of() is deprecated in favor of ofNullable()","ofNullable() throws, of() doesn't"], c:0, e:"of() rejects null with an exception, while ofNullable() handles it gracefully by returning an empty Optional."},
+ {q:"Why is calling .get() directly on an Optional discouraged?", o:["Unless you're sure a value is present, safer alternatives are usually better","It's slower than direct field access","It only works on Optional<String>","It automatically throws even when a value is present"], c:0, e:"Direct .get() calls are discouraged except when presence is guaranteed, with safer alternatives pointed to instead."},
+ {q:"In the Streams API, what does the map() operation do?", o:["Transforms each element into another form, producing a new stream","Removes elements that don't match a condition","Aggregates elements into a single result","Counts the number of elements"], c:0, e:"map() applies a function to every element, producing a new stream of transformed values."},
+ {q:"What do Java threads share while keeping separate call stacks?", o:["The same heap, so they can access shared objects","Nothing at all, threads are fully isolated","The same call stack","Only their thread names"], c:0, e:"Threads share the heap, enabling access to shared objects, while each keeps its own independent call stack."},
+ {q:"Why is implementing Runnable generally preferred over extending Thread?", o:["It leaves the class free to extend something else","It runs measurably faster","It's required for lambda syntax","Extending Thread is deprecated in modern Java"], c:0, e:"Runnable is favored since a class can only extend one thing, and extending Thread would use up that one slot."},
+ {q:"In the Streams API, what does the reduce() operation do?", o:["Aggregates elements into a single result","Keeps elements matching a condition","Sorts elements","Counts the elements"], c:0, e:"The Streams operation table defines reduce() as aggregating a stream's elements down into one result."},
+ {q:"What's the risk of using a raw (non-generic) List that mixes types?", o:["It compiles fine but can throw a ClassCastException later at runtime","It fails to compile immediately","It runs correctly forever with no issues","It throws NullPointerException immediately"], c:0, e:"A raw List compiles without complaint but can throw a ClassCastException later, when the wrong type gets cast back out."},
+ {q:"Why do generics help catch type mistakes earlier than raw types?", o:["The compiler flags a type mismatch at compile time instead of it surfacing later at runtime","Generics only work with primitive types","Generics remove the need for type checking entirely","Generics make all code run in parallel"], c:0, e:"With a properly typed generic collection, adding the wrong type won't even compile - the mismatch gets caught immediately."}
+ ]},
+ "Docker": {icon:"🐳", label:"Docker", qs:[
+ {q:"What's the difference between docker ps and docker ps -a?", o:["docker ps shows only running containers; -a also shows stopped ones","They are identical commands","docker ps -a only works on images","docker ps shows images, not containers"], c:0, e:"Plain docker ps lists running containers only, while adding -a includes stopped ones too."},
+ {q:"What does the --rm option do when running docker run?", o:["Automatically removes the container when it stops","Removes the image after the container starts","Restarts the container on failure","Runs the container in read-only mode"], c:0, e:"--rm is listed as automatically removing the container once it stops running."},
+ {q:"What is docker attach used for?", o:["Attaching your terminal to a running container's main process to see live output","Attaching a volume to a container","Attaching a network to a container","Renaming a container"], c:0, e:"docker attach connects your terminal to the container's main process, typically the one started by CMD or ENTRYPOINT."},
+ {q:"How do you detach from a container after using docker attach?", o:["Ctrl + P + Q","Ctrl + C","Ctrl + D","Ctrl + Z"], c:0, e:"Ctrl + P + Q is the key combination given for detaching without stopping the container."},
+ {q:"Where must the FROM instruction appear in a Dockerfile?", o:["As the first line of the Dockerfile","As the last line of the Dockerfile","It's optional and can be skipped entirely","It can only appear once per project across all Dockerfiles"], c:0, e:"FROM, the base image instruction, has to be the first line of the Dockerfile."},
+ {q:"What's the difference between COPY and ADD in a Dockerfile?", o:["ADD can also extract tar files or download from URLs, unlike plain COPY","COPY is faster but deprecated","ADD only works with images, not files","They're exactly identical with no differences"], c:0, e:"ADD behaves like COPY but with extra abilities: extracting tar archives or pulling from a URL."},
+ {q:"What does EXPOSE do in a Dockerfile?", o:["Documents which port the container will listen on","Actually publishes the port to the host automatically","Opens a firewall rule on the host","Starts the container immediately"], c:0, e:"EXPOSE is documentation of the listening port - it doesn't publish anything by itself."},
+ {q:"In a multi-stage Docker build, what does the final image typically contain?", o:["Only the compiled application, with no build tools or source code left in it","The full build environment plus dev tools","Every stage's files combined together","Nothing, multi-stage builds produce an empty image"], c:0, e:"Only the compiled output makes it into the final image - the build tools and source code from earlier stages get left behind."},
+ {q:"What's the key difference between a bind mount and a named volume?", o:["A bind mount isn't managed by Docker; a named volume is, and persists after the container is deleted","They're exactly the same thing","Bind mounts can never be used for local development","Named volumes are always slower"], c:0, e:"An unmanaged bind mount, handy for live local editing, gets contrasted with a Docker-managed named volume that outlives the container."},
+ {q:"Which Docker network type shares the host's network stack with no isolation?", o:["host","bridge","none","overlay"], c:0, e:"The host network type shares the host's stack directly, with no isolation at all."},
+ {q:"Which network type is used for multi-host (swarm) networks?", o:["overlay","bridge","none","macvlan"], c:0, e:"overlay is the network type built for spanning multiple Docker daemons in a swarm."},
+ {q:"What does attaching containers to the same custom bridge network enable?", o:["Automatic name-based DNS resolution between them","Automatic image updates","Shared root filesystem access","Disabling all networking entirely"], c:0, e:"The example shows containers on a shared custom network reaching each other by name, like app connecting to db directly."},
+ {q:"What does docker compose down --volumes --rmi all --remove-orphans do?", o:["Removes everything related to the stack: containers, networks, volumes, images, and orphaned containers","Only stops the containers without removing anything","Only removes volumes, nothing else","Rebuilds every image from scratch"], c:0, e:"This combination amounts to a full cleanup and reset of the entire Compose stack."},
+ {q:"What does adding -a to docker system prune do?", o:["Also removes unused images, not just dangling ones","Removes only running containers","Skips confirmation prompts only","Removes only volumes"], c:0, e:"-a widens the cleanup to unused images generally, beyond just untagged dangling ones."},
+ {q:"What does the WORKDIR instruction do in a Dockerfile?", o:["Sets the working directory used inside the container","Creates a new Docker volume","Defines environment variables only","Starts an interactive shell session"], c:0, e:"WORKDIR sets the working directory that subsequent instructions, and the running container, will use."}
+ ]},
+ "Git": {icon:"🌱", label:"Git", qs:[
+ {q:"What does running git init with no arguments do?", o:["Initializes the current directory as a git repository","Clones the current directory to a new location","Deletes the current repository","Creates a remote repository automatically"], c:0, e:"Running git init with no arguments turns the current directory into a git repository."},
+ {q:"What does git reset <file> do to a staged file?", o:["Removes it from staging but leaves the working directory unchanged","Deletes the file permanently","Commits the file immediately","Renames the file"], c:0, e:"This unstages a file without touching or overwriting its actual content."},
+ {q:"What does git clean -n do?", o:["Shows which files would be removed, without actually removing them","Immediately deletes all untracked files","Cleans up remote branches","Resets all commits"], c:0, e:"-n acts as a dry run; swapping in -f is what actually performs the removal."},
+ {q:"What does git commit --amend do when nothing is staged?", o:["Just edits the last commit's message","Deletes the last commit entirely","Creates a brand new empty commit","Force-pushes the last commit"], c:0, e:"With nothing staged, --amend simply lets you edit the previous commit's message."},
+ {q:"What does git reflog show?", o:["A log of changes to the local repository's HEAD","A list of all remote branches","The diff of the last commit","A list of all contributors"], c:0, e:"reflog tracks how HEAD has moved locally, which --relative-date or --all can expand on."},
+ {q:"What does git log --stat include?", o:["Which files were altered, and roughly how many lines were added or deleted","Only the commit hashes","The full diff of each commit","Nothing beyond the default git log output"], c:0, e:"--stat adds a per-file summary of change size to the normal log output."},
+ {q:"What's the difference between git diff HEAD and git diff --cached?", o:["HEAD compares the working directory to the last commit; --cached compares staged changes to the last commit","They're identical commands","--cached only works on remote repos","HEAD only works right after a commit"], c:0, e:"Unstaged changes (diff HEAD) stay distinct from staged-but-uncommitted changes (diff --cached)."},
+ {q:"What does dropping the -b flag from git checkout -b <branch> do?", o:["Checks out an existing branch instead of creating a new one","Deletes the branch","Merges the branch automatically","Creates a remote branch instead of a local one"], c:0, e:"Without -b, checkout just switches to a branch that already exists rather than creating one."},
+ {q:"What does git rebase -i <base> do?", o:["Launches an editor to interactively choose how each commit is transferred to the new base","Automatically squashes every commit with no input","Deletes the base branch","Reverts the last commit"], c:0, e:"-i opens an interactive editor for deciding exactly how each commit gets replayed onto the new base."},
+ {q:"What happens if you leave off <branch> when running git fetch <remote>?", o:["It fetches all remote refs","It fetches nothing","It throws an error","It fetches only the main branch"], c:0, e:"Omitting the branch name causes git fetch to pull down all of the remote's refs at once."},
+ {q:"What does git pull --rebase <remote> use instead of a merge?", o:["git rebase, to integrate the branches","git cherry-pick","git reset --hard","A completely manual process"], c:0, e:"--rebase swaps the usual merge step for a rebase when integrating the fetched changes."},
+ {q:"What risk does git push <remote> --force carry?", o:["It can overwrite remote history other people are relying on","It permanently deletes the local repository","It always fails silently","It automatically creates a backup branch first"], c:0, e:"Force-pushing can overwrite shared remote history other collaborators depend on."},
+ {q:"Are tags automatically pushed when you push a branch or use --all?", o:["No, you need git push <remote> --tags to send them","Yes, tags are always pushed automatically","Only annotated tags are pushed automatically","Tags are pushed only with --force"], c:0, e:"Tags need their own --tags flag; they don't ride along with a normal branch push."},
+ {q:"What's the difference between git reset and git reset --hard?", o:["Plain reset leaves the working directory unchanged; --hard overwrites it too","They're identical","--hard only affects remote repos","--hard only affects tags"], c:0, e:"A soft staging-area reset gets contrasted with --hard, which resets the working directory as well."},
+ {q:"What does a --hard reset permanently discard?", o:["Uncommitted changes","Only remote branches","Nothing, it's fully reversible","Only tags"], c:0, e:"A --hard reset permanently discards any uncommitted changes in the working directory."}
+ ]},
+ "AWS": {icon:"☁️", label:"AWS", qs:[
+ {q:"What role does IAM play across an AWS account?", o:["It checks whether every action on every other service is allowed","It only manages billing and cost reports","It stores encrypted files and backups","It only applies to EC2 instances"], c:0, e:"Nothing happens on the account until IAM checks whether the request is allowed."},
+ {q:"What are IAM Roles?", o:["Permissions you borrow temporarily instead of owning","Individual logins, usually for people","JSON documents defining what's allowed","Permanent access keys pasted into code"], c:0, e:"Roles are temporarily borrowed permissions, heavily used by services like EC2 and Lambda."},
+ {q:"What determines an EC2 instance's CPU/RAM/network mix?", o:["The instance type, like t3.medium or c7g","The AMI","The Security Group","The Availability Zone"], c:0, e:"The compute profile comes down directly to the chosen instance type."},
+ {q:"What's the key difference between EBS and S3?", o:["EBS is block storage plugging into one instance; S3 only stores whole objects","They're functionally identical","S3 is block storage; EBS stores whole objects","EBS spans multiple regions automatically"], c:0, e:"EBS's raw block storage, tied to one instance, gets contrasted with S3's object-only storage model."},
+ {q:"How does EFS differ from EBS in terms of Availability Zones?", o:["EFS spans multiple AZs in a region; EBS sticks to one","EBS spans multiple AZs; EFS sticks to one","Neither spans more than one AZ","Both always span the entire region"], c:0, e:"EFS reaches across multiple AZs in a region, while EBS stays tied to a single AZ."},
+ {q:"How many nines of durability is S3 rated for?", o:["Eleven nines","Five nines","Three nines","Nine nines"], c:0, e:"S3 is rated for eleven nines of durability, with data copied across multiple facilities automatically."},
+ {q:"What does a public subnet in a VPC route to that a private subnet doesn't?", o:["An Internet Gateway","A NAT Gateway","A Route Table","A Security Group"], c:0, e:"The public/private subnet line comes down to whether it routes to an Internet Gateway."},
+ {q:"What's the purpose of a NAT Gateway?", o:["Lets private subnet resources reach out to the internet without being reachable from outside","Gives public subnet resources two-way internet access","Blocks all outbound traffic entirely","Routes traffic between two separate VPCs"], c:0, e:"A NAT Gateway sits in a public subnet specifically so private resources can reach out without being directly reachable."},
+ {q:"What happens on the first request to CloudFront from a new region?", o:["It hits the origin and gets cached at the nearest edge location","It's automatically rejected","It bypasses caching forever","It's routed directly to Route 53"], c:0, e:"The first request reaches the origin and populates the edge cache, so subsequent requests are served locally."},
+ {q:"What does Route 53's Weighted routing do?", o:["Splits traffic by percentage, handy for gradual rollouts","Sends users to whichever region answers fastest","Serves different content based on request location","Shifts traffic to a backup automatically on failure"], c:0, e:"Weighted routing splits traffic by percentage, useful for canary-style rollouts."},
+ {q:"What's a notable gotcha about RDS Read Replicas?", o:["They don't fail over automatically by default","They cost more than the primary instance","They can't be created in a different region","They require manual data syncing"], c:0, e:"Read Replicas, unlike a Multi-AZ standby, don't automatically take over if the primary fails - a known gotcha."},
+ {q:"What lets Aurora recover faster and scale further than plain RDS?", o:["Separated compute and storage, with storage replicated six ways across three AZs","More powerful physical hardware","A completely different SQL dialect","Skipping backups to save time"], c:0, e:"Aurora's advantage comes from its storage layer, which replicates data six ways across three AZs independently of compute."},
+ {q:"What's the difference between ALB and NLB?", o:["ALB is layer 7, routing by URL path or host; NLB is layer 4, for low-latency non-HTTP traffic","ALB is layer 4, NLB is layer 7","They both operate at the same layer","NLB only works with HTTP traffic"], c:0, e:"ALB sits at layer 7 for URL/host-based routing; NLB sits at layer 4 for raw, low-latency traffic."},
+ {q:"What's the maximum duration for a single Lambda invocation?", o:["15 minutes","5 minutes","1 hour","Unlimited"], c:0, e:"A single Lambda invocation is capped at 15 minutes, ruling it out for long-running processes."},
+ {q:"What's a \"cold start\" in Lambda?", o:["Extra latency on the first call after a function has been idling","A failed deployment that must be retried","A billing error requiring correction","A permanent server crash"], c:0, e:"A cold start is the added latency on a function's first invocation after sitting idle."}
+ ]},
+};
+
+// =============================================================================
+// To add a new topic: add one entry to DATA above, in the same shape
+// ({ icon, label, desc, qs: [...] }). Everything below - the topic picker,
+// accent colors, quiz flow, and score breakdown - reads DATA dynamically,
+// so no other code needs to change.
+// =============================================================================
+
+const CATEGORY_KEYS = Object.keys(DATA);
+
+// Accent colors are assigned by topic order and cycle through this palette,
+// so a new topic gets a color automatically without any extra configuration.
+const ACCENT_PALETTE = ['#FF6B5E', '#1FA398', '#8A5CF6', '#F2921D', '#2B6CB0'];
+const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
+
+/**
+ * All mutable game state lives here, in one place, so any function that
+ * needs to read or change progress has a single source of truth.
+ */
+const state = {
+  selectedTopics: new Set(CATEGORY_KEYS),
+  questionCount: 'all',
+  quiz: [],
+  currentIndex: 0,
+  score: 0,
+  streak: 0,
+  bestStreak: 0,
+  hasAnswered: false,
+  statsByTopic: {},
+};
+
+/** Cached references to every DOM element the app reads or writes. */
+const dom = {
+  chips: document.getElementById('chips'),
+  countButtons: document.querySelectorAll('.count-btn'),
+  startBtn: document.getElementById('startBtn'),
+  retryBtn: document.getElementById('retryBtn'),
+  nextBtn: document.getElementById('nextBtn'),
+
+  screenStart: document.getElementById('screen-start'),
+  screenQuiz: document.getElementById('screen-quiz'),
+  screenEnd: document.getElementById('screen-end'),
+
+  progressText: document.getElementById('progressText'),
+  progressFill: document.getElementById('progressFill'),
+  streakText: document.getElementById('streakText'),
+  catTag: document.getElementById('catTag'),
+  questionText: document.getElementById('questionText'),
+  optionsWrap: document.getElementById('optionsWrap'),
+  explainBox: document.getElementById('explainBox'),
+
+  finalScore: document.getElementById('finalScore'),
+  finalPct: document.getElementById('finalPct'),
+  breakdown: document.getElementById('breakdown'),
+
+  footerQuestion: document.getElementById('fQuestion'),
+  footerScore: document.getElementById('fScore'),
+  footerTopic: document.getElementById('fTopic'),
+};
+
+// -----------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------
+
+/** Returns a topic's accent color, cycling through the palette by order. */
+function getAccentColor(topicKey) {
+  const index = CATEGORY_KEYS.indexOf(topicKey);
+  return ACCENT_PALETTE[index % ACCENT_PALETTE.length];
+}
+
+/** Fisher-Yates shuffle. Mutates and returns the given array. */
+function shuffle(items) {
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
+}
+
+/** Flattens every question from the given topics into one shuffled pool, tagging each with its topic key. */
+function buildQuestionPool(topicKeys) {
+  const pool = [];
+  topicKeys.forEach(key => {
+    DATA[key].qs.forEach(question => pool.push({ ...question, topicKey: key }));
+  });
+  return shuffle(pool);
+}
+
+/** Trims the pool to the requested question count ('all' keeps everything). */
+function limitPool(pool, questionCount) {
+  if (questionCount === 'all') return pool;
+  return pool.slice(0, parseInt(questionCount, 10));
+}
+
+/** Creates a fresh correct/total counter for each given topic. */
+function createEmptyStats(topicKeys) {
+  const stats = {};
+  topicKeys.forEach(key => { stats[key] = { correct: 0, total: 0 }; });
+  return stats;
+}
+
+// -----------------------------------------------------------------------
+// Topic picker (start screen)
+// -----------------------------------------------------------------------
+
+/** Builds one toggle row per topic in DATA. New topics need no changes here. */
+function renderTopicPicker() {
+  CATEGORY_KEYS.forEach(key => dom.chips.appendChild(createTopicRow(key)));
+}
+
+function createTopicRow(topicKey) {
+  const topic = DATA[topicKey];
+  const row = document.createElement('label');
+  row.className = 'topic-row on';
+  row.dataset.key = topicKey;
+  row.style.setProperty('--accent', getAccentColor(topicKey));
+  row.innerHTML = `
+    <input type="checkbox" checked>
+    <span class="topic-icon">${topic.icon}</span>
+    <span class="topic-text">
+      <span class="topic-title">${topic.label}</span>
+    </span>
+    <span class="switch"><span class="knob"></span></span>
+  `;
+  row.querySelector('input').addEventListener('change', event => {
+    toggleTopicSelection(topicKey, row, event.target.checked);
+  });
+  return row;
+}
+
+function toggleTopicSelection(topicKey, row, isSelected) {
+  if (isSelected) {
+    state.selectedTopics.add(topicKey);
+    row.classList.add('on');
+  } else {
+    state.selectedTopics.delete(topicKey);
+    row.classList.remove('on');
+  }
+  updateStartButtonState();
+}
+
+function updateStartButtonState() {
+  dom.startBtn.disabled = state.selectedTopics.size === 0;
+}
+
+function bindQuestionCountButtons() {
+  dom.countButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      dom.countButtons.forEach(b => b.classList.remove('on'));
+      button.classList.add('on');
+      state.questionCount = button.dataset.n;
+    });
+  });
+}
+
+// -----------------------------------------------------------------------
+// Quiz screen
+// -----------------------------------------------------------------------
+
+function startQuiz() {
+  const pool = buildQuestionPool(state.selectedTopics);
+  state.quiz = limitPool(pool, state.questionCount);
+  state.currentIndex = 0;
+  state.score = 0;
+  state.streak = 0;
+  state.bestStreak = 0;
+  state.statsByTopic = createEmptyStats(state.selectedTopics);
+
+  showScreen(dom.screenQuiz);
+  renderQuestion();
+}
+
+function currentQuestion() {
+  return state.quiz[state.currentIndex];
+}
+
+function renderQuestion() {
+  state.hasAnswered = false;
+  const question = currentQuestion();
+  const topic = DATA[question.topicKey];
+
+  renderProgress(question.topicKey, topic);
+  dom.questionText.textContent = question.q;
+  renderOptions(question);
+  hideExplanation();
+}
+
+function renderProgress(topicKey, topic) {
+  const { currentIndex, quiz, streak, score } = state;
+  dom.progressText.textContent = `QUESTION ${currentIndex + 1} / ${quiz.length}`;
+  dom.streakText.textContent = `STREAK ${streak}`;
+  dom.progressFill.style.width = `${(currentIndex / quiz.length) * 100}%`;
+  dom.catTag.style.setProperty('--accent', getAccentColor(topicKey));
+  dom.catTag.innerHTML = `${topic.icon} ${topic.label}`;
+
+  dom.footerQuestion.textContent = `${currentIndex + 1}/${quiz.length}`;
+  dom.footerScore.textContent = score;
+  dom.footerTopic.textContent = topic.label;
+}
+
+function renderOptions(question) {
+  dom.optionsWrap.innerHTML = '';
+  question.o.forEach((optionText, index) => {
+    const button = document.createElement('button');
+    button.className = 'option';
+    button.innerHTML = `<span class="letter">${OPTION_LETTERS[index]}</span><span>${optionText}</span>`;
+    button.addEventListener('click', () => handleAnswer(index, question));
+    dom.optionsWrap.appendChild(button);
+  });
+}
+
+function hideExplanation() {
+  dom.explainBox.classList.remove('show');
+  dom.explainBox.textContent = '';
+  dom.nextBtn.classList.remove('show');
+}
+
+function handleAnswer(chosenIndex, question) {
+  if (state.hasAnswered) return;
+  state.hasAnswered = true;
+
+  markOptionButtons(chosenIndex, question.c);
+  recordAnswer(chosenIndex, question);
+  showExplanation(question.e);
+}
+
+function markOptionButtons(chosenIndex, correctIndex) {
+  document.querySelectorAll('.option').forEach((optionBtn, index) => {
+    optionBtn.disabled = true;
+    if (index === correctIndex) optionBtn.classList.add('correct');
+    else if (index === chosenIndex) optionBtn.classList.add('wrong');
+    else optionBtn.classList.add('dim');
+  });
+}
+
+function recordAnswer(chosenIndex, question) {
+  const stats = state.statsByTopic[question.topicKey];
+  stats.total++;
+
+  const isCorrect = chosenIndex === question.c;
+  if (isCorrect) {
+    state.score++;
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    stats.correct++;
+  } else {
+    state.streak = 0;
+  }
+
+  dom.footerScore.textContent = state.score;
+  dom.streakText.textContent = `STREAK ${state.streak}`;
+}
+
+function showExplanation(explanationText) {
+  dom.explainBox.textContent = explanationText;
+  dom.explainBox.classList.add('show');
+  dom.nextBtn.classList.add('show');
+  dom.nextBtn.textContent = isLastQuestion() ? 'See final tally' : 'Next question';
+}
+
+function isLastQuestion() {
+  return state.currentIndex === state.quiz.length - 1;
+}
+
+function goToNextQuestion() {
+  state.currentIndex++;
+  if (state.currentIndex >= state.quiz.length) {
+    finishQuiz();
+    return;
+  }
+  renderQuestion();
+}
+
+// -----------------------------------------------------------------------
+// End screen
+// -----------------------------------------------------------------------
+
+function finishQuiz() {
+  showScreen(dom.screenEnd);
+  renderFinalScore();
+  renderBreakdown();
+  renderFooterSummary();
+}
+
+function renderFinalScore() {
+  const { score, quiz, bestStreak } = state;
+  dom.finalScore.textContent = `${score} / ${quiz.length}`;
+  const accuracy = quiz.length ? Math.round((score / quiz.length) * 100) : 0;
+  dom.finalPct.textContent = `${accuracy}% accuracy - best streak ${bestStreak}`;
+}
+
+function renderBreakdown() {
+  dom.breakdown.innerHTML = '';
+  Object.keys(state.statsByTopic).forEach(topicKey => {
+    const stats = state.statsByTopic[topicKey];
+    if (stats.total === 0) return;
+    dom.breakdown.appendChild(createBreakdownRow(topicKey, stats));
+  });
+}
+
+function createBreakdownRow(topicKey, stats) {
+  const topic = DATA[topicKey];
+  const accuracy = Math.round((stats.correct / stats.total) * 100);
+  const row = document.createElement('div');
+  row.className = 'b-row';
+  row.innerHTML = `
+    <span class="b-name">${topic.icon} ${topic.label}</span>
+    <span class="b-bar-track"><span class="b-bar-fill" style="width:${accuracy}%; background:${getAccentColor(topicKey)}"></span></span>
+    <span class="b-frac">${stats.correct}/${stats.total}</span>
+  `;
+  return row;
+}
+
+function renderFooterSummary() {
+  const { quiz, score } = state;
+  dom.footerQuestion.textContent = `${quiz.length}/${quiz.length}`;
+  dom.footerScore.textContent = score;
+  dom.footerTopic.textContent = 'Done';
+}
+
+// -----------------------------------------------------------------------
+// Screen navigation
+// -----------------------------------------------------------------------
+
+function showScreen(screenToShow) {
+  [dom.screenStart, dom.screenQuiz, dom.screenEnd].forEach(screen => {
+    screen.classList.toggle('hidden', screen !== screenToShow);
+  });
+}
+
+// -----------------------------------------------------------------------
+// Init
+// -----------------------------------------------------------------------
+
+function init() {
+  renderTopicPicker();
+  bindQuestionCountButtons();
+  dom.startBtn.addEventListener('click', startQuiz);
+  dom.retryBtn.addEventListener('click', () => showScreen(dom.screenStart));
+  dom.nextBtn.addEventListener('click', goToNextQuestion);
+  updateStartButtonState();
+}
+
+init();
+</script></body>
+</html>

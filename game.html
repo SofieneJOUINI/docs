@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Smell Invaders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF6EC;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+
+    --space-0:#120A22;
+    --space-1:#1E1240;
+    --space-2:#2D1B54;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--paper);
+    background-image:radial-gradient(circle at 1px 1px, rgba(43,38,32,0.07) 1px, transparent 0);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 50px;
+  }
+  .wrap{width:100%;max-width:min(480px, max(280px, calc((100vh - 230px) / 1.5)));}
+
+  a.back{
+    display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);
+    border-radius:6px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.72rem;
+    text-decoration:none;color:var(--ink);background:#fff;
+  }
+  a.back:hover{background:#f0e9d8;}
+
+  header.hero{text-align:left;margin-bottom:18px;}
+  header.hero h1{
+    font-family:'Kalam',cursive;font-size:2rem;margin:0;transform:rotate(-0.6deg);
+  }
+  header.hero h1 span{
+    background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;
+  }
+
+  .arcade{
+    position:relative;
+    background:var(--space-0);
+    border:2.5px solid var(--ink);
+    border-radius:14px;
+    box-shadow:6px 6px 0 var(--ink);
+    overflow:hidden;
+    padding:0;
+  }
+
+  .hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 14px;
+    background:var(--space-1);
+    border-bottom:2px solid var(--ink);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:.75rem;
+    color:#F4EFE0;
+    letter-spacing:.03em;
+  }
+  .hud b{color:#FFE07A;}
+  .lives{display:flex;gap:4px;}
+  .life-dot{width:9px;height:9px;border-radius:50%;background:#FF6B5E;box-shadow:0 0 5px #FF6B5E;}
+  .life-dot.spent{background:#3a3255;box-shadow:none;}
+
+  #gameCanvas{
+    display:block;
+    width:100%;
+    height:auto;
+    aspect-ratio:2/3;
+    background:linear-gradient(180deg, var(--space-0), var(--space-2) 140%);
+  }
+
+  .overlay{
+    position:absolute;
+    inset:0;
+    top:41px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    background:rgba(18,10,34,0.88);
+    text-align:center;
+    padding:24px;
+  }
+  .overlay.hidden{display:none;}
+  .overlay h2{
+    font-family:'Kalam',cursive;
+    font-size:1.7rem;
+    color:#fff;
+    margin:0;
+  }
+  .overlay p{
+    font-family:'Inter',sans-serif;
+    font-size:.82rem;
+    color:#C9C2E0;
+    margin:0;
+    max-width:32ch;
+    line-height:1.5;
+  }
+  .overlay .stat{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    color:#FFE07A;
+  }
+  .arcade-btn{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    background:#FFE07A;
+    color:var(--ink);
+    border:2.5px solid var(--ink);
+    padding:12px 26px;
+    border-radius:10px;
+    box-shadow:3px 3px 0 rgba(0,0,0,0.5);
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .arcade-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(0,0,0,0.5);}
+  .arcade-btn:active{transform:translate(0,0);box-shadow:1px 1px 0 rgba(0,0,0,0.5);}
+
+  .hint{
+    margin-top:12px;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width:400px){
+    header.hero h1{font-size:1.7rem;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="./index.html">← Technical Docs</a>
+
+    <header class="hero">
+      <h1>Code Smell <span>Invaders</span></h1>
+    </header>
+
+    <div class="arcade">
+      <div class="hud">
+        <span>SCORE <b id="hudScore">0</b></span>
+        <span>WAVE <b id="hudWave">1</b></span>
+        <span class="lives" id="hudLives"></span>
+      </div>
+
+      <canvas id="gameCanvas" width="480" height="720"></canvas>
+
+      <div class="overlay" id="overlayStart">
+        <h2>Ready to clean?</h2>
+        <p>Move with the arrows, fire with space, and clear every code smell before it lands.</p>
+        <button class="arcade-btn" id="startBtn">Start Game</button>
+      </div>
+
+      <div class="overlay hidden" id="overlayOver">
+        <h2 id="overTitle">Game Over</h2>
+        <p class="stat" id="overStats">Score: 0 - Wave: 1</p>
+        <button class="arcade-btn" id="retryBtn">Play Again</button>
+      </div>
+    </div>
+
+    <p class="hint">Arrow keys / Q-D to move, Space to fire.</p>
+  </div>
+
+<script>
+// =============================================================================
+// Code Smell Invaders - a classic descending-grid shooter where the enemies
+// are named after real heuristics from the Code Smells & Heuristics guide.
+// =============================================================================
+
+const SMELL_NAMES = [
+  "Obsolete Comment","Redundant Comment","Commented-Out Code","Too Many Arguments",
+  "Output Arguments","Flag Arguments","Dead Function","Overridden Safeties",
+  "Duplication","Too Much Information","Dead Code","Vertical Separation",
+  "Inconsistency","Clutter","Artificial Coupling","Feature Envy",
+  "Selector Arguments","Obscured Intent","Misplaced Responsibility","Be Precise",
+  "Don't Be Arbitrary","Don't Inherit Constants","Constants versus Enums","Unambiguous Names",
+  "Avoid Encodings","Insufficient Tests","Use a Coverage Tool!","Tests Should Be Fast",
+];
+
+const ENEMY_COLORS = ['#FF6B5E', '#1FA398', '#8A5CF6', '#F2921D', '#2B6CB0'];
+
+// Classic 11x8 pixel-invader sprite pattern.
+const INVADER_SPRITE = [
+  "..X.....X..",
+  "...X...X...",
+  "..XXXXXXX..",
+  ".XX.XXX.XX.",
+  "XXXXXXXXXXX",
+  "X.XXXXXXX.X",
+  "X.X.....X.X",
+  "...XX.XX...",
+];
+
+const CANVAS_W = 480;
+const CANVAS_H = 720;
+const PLAYER_W = 40;
+const PLAYER_H = 34;
+const PLAYER_SPEED = 320; // px/sec
+const BULLET_SPEED = 480;
+const ENEMY_BULLET_SPEED = 220;
+const PLAYER_FIRE_COOLDOWN = 0.28;
+const ENEMY_W = 52;
+const ENEMY_H = 40;
+const ENEMY_GAP_X = 20;
+const ENEMY_GAP_Y = 36;
+const STARTING_LIVES = 3;
+
+/** Shuffles and returns a copy of the array (Fisher-Yates). */
+function shuffled(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// -----------------------------------------------------------------------
+// DOM references
+// -----------------------------------------------------------------------
+const dom = {
+  canvas: document.getElementById('gameCanvas'),
+  hudScore: document.getElementById('hudScore'),
+  hudWave: document.getElementById('hudWave'),
+  hudLives: document.getElementById('hudLives'),
+  overlayStart: document.getElementById('overlayStart'),
+  overlayOver: document.getElementById('overlayOver'),
+  overTitle: document.getElementById('overTitle'),
+  overStats: document.getElementById('overStats'),
+  startBtn: document.getElementById('startBtn'),
+  retryBtn: document.getElementById('retryBtn'),
+};
+const ctx = dom.canvas.getContext('2d');
+
+// -----------------------------------------------------------------------
+// Game state
+// -----------------------------------------------------------------------
+const state = {
+  mode: 'start', // 'start' | 'playing' | 'gameover'
+  score: 0,
+  wave: 1,
+  lives: STARTING_LIVES,
+  player: { x: CANVAS_W / 2 - PLAYER_W / 2, y: CANVAS_H - 70, fireCooldown: 0, hitTimer: 0 },
+  bullets: [],
+  enemyBullets: [],
+  enemies: [],
+  stars: [],
+  input: { left: false, right: false, shoot: false },
+  lastTime: 0,
+};
+
+// -----------------------------------------------------------------------
+// Starfield (background atmosphere)
+// -----------------------------------------------------------------------
+function createStarfield() {
+  const stars = [];
+  for (let i = 0; i < 70; i++) {
+    stars.push({
+      x: Math.random() * CANVAS_W,
+      y: Math.random() * CANVAS_H,
+      r: Math.random() * 1.6 + 0.4,
+      speed: Math.random() * 40 + 15,
+      twinkle: Math.random() * Math.PI * 2,
+    });
+  }
+  return stars;
+}
+
+function updateStarfield(dt) {
+  for (const s of state.stars) {
+    s.y += s.speed * dt;
+    s.twinkle += dt * 2;
+    if (s.y > CANVAS_H) {
+      s.y = -2;
+      s.x = Math.random() * CANVAS_W;
+    }
+  }
+}
+
+function drawStarfield() {
+  for (const s of state.stars) {
+    const alpha = 0.4 + 0.6 * Math.abs(Math.sin(s.twinkle));
+    ctx.fillStyle = `rgba(244, 239, 224, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// -----------------------------------------------------------------------
+// Enemy wave setup
+// -----------------------------------------------------------------------
+function buildWave(waveNumber) {
+  const rows = Math.min(3 + Math.floor(waveNumber / 2), 6);
+  const cols = 5;
+  const totalWidth = cols * ENEMY_W + (cols - 1) * ENEMY_GAP_X;
+  const startX = (CANVAS_W - totalWidth) / 2;
+  const startY = 60;
+
+  const baseSpeed = 30 + waveNumber * 5;
+  const namePool = shuffled(SMELL_NAMES);
+  const enemies = [];
+  let nameIndex = 0;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      enemies.push({
+        x: startX + col * (ENEMY_W + ENEMY_GAP_X),
+        y: startY + row * (ENEMY_H + ENEMY_GAP_Y),
+        w: ENEMY_W,
+        h: ENEMY_H,
+        alive: true,
+        name: namePool[nameIndex % namePool.length],
+        color: ENEMY_COLORS[(row + col) % ENEMY_COLORS.length],
+        fireChance: 0.0009 + waveNumber * 0.0002,
+        // Each invader drifts independently instead of moving as one block.
+        vx: (Math.random() < 0.5 ? -1 : 1) * (baseSpeed * (0.6 + Math.random() * 0.8)),
+        vy: 6 + waveNumber * 1.2,
+        driftCooldown: 1 + Math.random() * 2,
+      });
+      nameIndex++;
+    }
+  }
+  return enemies;
+}
+
+// -----------------------------------------------------------------------
+// Game lifecycle
+// -----------------------------------------------------------------------
+function startGame() {
+  state.mode = 'playing';
+  state.score = 0;
+  state.wave = 1;
+  state.lives = STARTING_LIVES;
+  state.bullets = [];
+  state.enemyBullets = [];
+  state.enemies = buildWave(state.wave);
+  state.player.x = CANVAS_W / 2 - PLAYER_W / 2;
+  state.player.fireCooldown = 0;
+  state.player.hitTimer = 0;
+  state.stars = createStarfield();
+
+  dom.overlayStart.classList.add('hidden');
+  dom.overlayOver.classList.add('hidden');
+  renderHud();
+  state.lastTime = performance.now();
+  requestAnimationFrame(loop);
+}
+
+function nextWave() {
+  state.wave++;
+  state.enemies = buildWave(state.wave);
+  state.enemyBullets = [];
+  renderHud();
+}
+
+function endGame() {
+  state.mode = 'gameover';
+  dom.overTitle.textContent = 'System Crash';
+  dom.overStats.textContent = `Score: ${state.score} - Wave: ${state.wave}`;
+  dom.overlayOver.classList.remove('hidden');
+}
+
+const HIT_BLINK_DURATION = 1.1; // seconds
+
+function loseLife() {
+  state.lives--;
+  state.player.hitTimer = HIT_BLINK_DURATION;
+  renderHud();
+  if (state.lives <= 0) {
+    endGame();
+  }
+}
+
+// -----------------------------------------------------------------------
+// Input handling
+// -----------------------------------------------------------------------
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'ArrowLeft' || e.code === 'KeyA') state.input.left = true;
+  if (e.code === 'ArrowRight' || e.code === 'KeyD') state.input.right = true;
+  if (e.code === 'Space') { state.input.shoot = true; e.preventDefault(); }
+});
+window.addEventListener('keyup', (e) => {
+  if (e.code === 'ArrowLeft' || e.code === 'KeyA') state.input.left = false;
+  if (e.code === 'ArrowRight' || e.code === 'KeyD') state.input.right = false;
+  if (e.code === 'Space') state.input.shoot = false;
+});
+
+dom.startBtn.addEventListener('click', startGame);
+dom.retryBtn.addEventListener('click', startGame);
+
+// -----------------------------------------------------------------------
+// Update
+// -----------------------------------------------------------------------
+function updatePlayer(dt) {
+  const p = state.player;
+  if (state.input.left) p.x -= PLAYER_SPEED * dt;
+  if (state.input.right) p.x += PLAYER_SPEED * dt;
+  p.x = Math.max(6, Math.min(CANVAS_W - PLAYER_W - 6, p.x));
+
+  if (p.hitTimer > 0) p.hitTimer = Math.max(0, p.hitTimer - dt);
+
+  p.fireCooldown -= dt;
+  if (state.input.shoot && p.fireCooldown <= 0) {
+    state.bullets.push({ x: p.x + PLAYER_W / 2 - 2, y: p.y - 6, w: 4, h: 14 });
+    p.fireCooldown = PLAYER_FIRE_COOLDOWN;
+  }
+}
+
+function updateBullets(dt) {
+  for (const b of state.bullets) b.y -= BULLET_SPEED * dt;
+  state.bullets = state.bullets.filter((b) => b.y + b.h > 0);
+
+  for (const b of state.enemyBullets) b.y += ENEMY_BULLET_SPEED * dt;
+  state.enemyBullets = state.enemyBullets.filter((b) => b.y < CANVAS_H);
+}
+
+function updateEnemies(dt) {
+  const alive = state.enemies.filter((e) => e.alive);
+  if (alive.length === 0) {
+    nextWave();
+    return;
+  }
+
+  for (const e of alive) {
+    // Occasionally pick a new random horizontal drift, so each invader
+    // wanders independently instead of the whole grid moving as one block.
+    e.driftCooldown -= dt;
+    if (e.driftCooldown <= 0) {
+      e.vx = (Math.random() < 0.5 ? -1 : 1) * (20 + Math.random() * 50);
+      e.driftCooldown = 1 + Math.random() * 2;
+    }
+
+    e.x += e.vx * dt;
+    e.y += e.vy * dt;
+
+    if (e.x <= 6) { e.x = 6; e.vx = Math.abs(e.vx); }
+    if (e.x + e.w >= CANVAS_W - 6) { e.x = CANVAS_W - 6 - e.w; e.vx = -Math.abs(e.vx); }
+
+    if (e.y + e.h >= state.player.y) {
+      endGame();
+      return;
+    }
+
+    if (Math.random() < e.fireChance) {
+      state.enemyBullets.push({ x: e.x + e.w / 2 - 2, y: e.y + e.h, w: 4, h: 12 });
+    }
+  }
+}
+
+function rectsOverlap(a, b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function checkCollisions() {
+  // player bullets vs enemies
+  for (const b of state.bullets) {
+    for (const e of state.enemies) {
+      if (!e.alive) continue;
+      if (rectsOverlap(b, e)) {
+        e.alive = false;
+        b.hit = true;
+        state.score += 10;
+        renderHud();
+        break;
+      }
+    }
+  }
+  state.bullets = state.bullets.filter((b) => !b.hit);
+
+  // enemy bullets vs player
+  const p = { x: state.player.x, y: state.player.y, w: PLAYER_W, h: PLAYER_H };
+  for (const b of state.enemyBullets) {
+    if (rectsOverlap(b, p)) {
+      b.hit = true;
+      loseLife();
+    }
+  }
+  state.enemyBullets = state.enemyBullets.filter((b) => !b.hit);
+}
+
+function renderHud() {
+  dom.hudScore.textContent = state.score;
+  dom.hudWave.textContent = state.wave;
+  dom.hudLives.innerHTML = '';
+  for (let i = 0; i < STARTING_LIVES; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'life-dot' + (i >= state.lives ? ' spent' : '');
+    dom.hudLives.appendChild(dot);
+  }
+}
+
+// -----------------------------------------------------------------------
+// Drawing
+// -----------------------------------------------------------------------
+function drawPlayer() {
+  const p = state.player;
+
+  // While the hit-blink timer is running, flicker the ship on and off
+  // instead of drawing it every frame.
+  if (p.hitTimer > 0 && Math.floor(p.hitTimer * 12) % 2 === 0) {
+    return;
+  }
+
+  const cx = p.x + PLAYER_W / 2;
+
+  // flame
+  const flameH = 10 + Math.random() * 8;
+  ctx.fillStyle = 'rgba(255, 224, 122, 0.85)';
+  ctx.beginPath();
+  ctx.moveTo(cx - 6, p.y + PLAYER_H - 4);
+  ctx.lineTo(cx, p.y + PLAYER_H + flameH);
+  ctx.lineTo(cx + 6, p.y + PLAYER_H - 4);
+  ctx.closePath();
+  ctx.fill();
+
+  // body
+  ctx.fillStyle = '#F4EFE0';
+  ctx.beginPath();
+  ctx.moveTo(cx, p.y);
+  ctx.lineTo(p.x + PLAYER_W, p.y + PLAYER_H - 6);
+  ctx.lineTo(p.x + PLAYER_W - 8, p.y + PLAYER_H);
+  ctx.lineTo(cx, p.y + PLAYER_H - 8);
+  ctx.lineTo(p.x + 8, p.y + PLAYER_H);
+  ctx.lineTo(p.x, p.y + PLAYER_H - 6);
+  ctx.closePath();
+  ctx.fill();
+
+  // cockpit glow
+  ctx.fillStyle = '#2B6CB0';
+  ctx.beginPath();
+  ctx.arc(cx, p.y + PLAYER_H / 2, 4, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawBullets() {
+  ctx.fillStyle = '#FFE07A';
+  for (const b of state.bullets) {
+    ctx.fillRect(b.x, b.y, b.w, b.h);
+  }
+  ctx.fillStyle = '#FF6B5E';
+  for (const b of state.enemyBullets) {
+    ctx.fillRect(b.x, b.y, b.w, b.h);
+  }
+}
+
+function drawEnemy(e) {
+  const cx = e.x + e.w / 2;
+  const gridCols = INVADER_SPRITE[0].length;
+  const gridRows = INVADER_SPRITE.length;
+  const spriteW = e.w - 8;
+  const spriteH = e.h - 10;
+  const px = spriteW / gridCols;
+  const py = spriteH / gridRows;
+  const originX = e.x + (e.w - spriteW) / 2;
+  const originY = e.y;
+
+  ctx.fillStyle = e.color;
+  for (let row = 0; row < gridRows; row++) {
+    for (let col = 0; col < gridCols; col++) {
+      if (INVADER_SPRITE[row][col] === 'X') {
+        ctx.fillRect(
+          originX + col * px,
+          originY + row * py,
+          px + 0.5,
+          py + 0.5
+        );
+      }
+    }
+  }
+
+  // label - solid background pill behind bold, outlined text, so it stays
+  // readable no matter what's behind it: stars, bullets, or a neighboring
+  // invader that's drifted close by.
+  ctx.font = "700 11px 'Space Grotesk', sans-serif";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
+  const words = e.name.split(' ');
+  let line1 = '', line2 = '';
+  for (const w of words) {
+    if ((line1 + ' ' + w).trim().length <= 14 && !line2) {
+      line1 = (line1 + ' ' + w).trim();
+    } else {
+      line2 = (line2 + ' ' + w).trim();
+    }
+  }
+  const drawLabelLine = (text, y) => {
+    const metrics = ctx.measureText(text);
+    const boxW = metrics.width + 10;
+    const boxH = 14;
+    ctx.fillStyle = 'rgba(18, 10, 34, 0.85)';
+    ctx.beginPath();
+    ctx.roundRect(cx - boxW / 2, y - boxH / 2, boxW, boxH, 4);
+    ctx.fill();
+
+    ctx.strokeStyle = 'rgba(18, 10, 34, 0.95)';
+    ctx.lineWidth = 3;
+    ctx.strokeText(text, cx, y);
+    ctx.fillStyle = '#FFE07A';
+    ctx.fillText(text, cx, y);
+  };
+  drawLabelLine(line1, e.y + e.h + 14);
+  if (line2) drawLabelLine(line2, e.y + e.h + 27);
+  ctx.textBaseline = 'alphabetic';
+}
+
+function drawEnemies() {
+  for (const e of state.enemies) {
+    if (e.alive) drawEnemy(e);
+  }
+}
+
+function render() {
+  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  drawStarfield();
+  if (state.mode === 'playing') {
+    drawEnemies();
+    drawBullets();
+    drawPlayer();
+  }
+}
+
+// -----------------------------------------------------------------------
+// Main loop
+// -----------------------------------------------------------------------
+function loop(now) {
+  if (state.mode !== 'playing') return;
+  const dt = Math.min((now - state.lastTime) / 1000, 0.05);
+  state.lastTime = now;
+
+  updateStarfield(dt);
+  updatePlayer(dt);
+  updateBullets(dt);
+  updateEnemies(dt);
+  checkCollisions();
+  render();
+
+  requestAnimationFrame(loop);
+}
+
+// -----------------------------------------------------------------------
+// Init: draw an idle starfield behind the start overlay
+// -----------------------------------------------------------------------
+state.stars = createStarfield();
+render();
+</script>
+</body>
+</html>

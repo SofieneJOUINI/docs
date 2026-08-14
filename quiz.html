@@ -452,9 +452,22 @@ const DATA = {
 
 const CATEGORY_KEYS = Object.keys(DATA);
 
-// Accent colors are assigned by topic order and cycle through this palette,
-// so a new topic gets a color automatically without any extra configuration.
-const ACCENT_PALETTE = ['#FF6B5E', '#1FA398', '#8A5CF6', '#F2921D', '#2B6CB0'];
+// Each topic's accent color matches that guide's card color on index.html
+// exactly, so the picker and the docs site stay visually consistent.
+const TOPIC_ACCENT_COLORS = {
+  OOP: '#8A5CF6',
+  SOLID: '#2B6CB0',
+  Patterns: '#1FA398',
+  Components: '#8A5CF6',
+  CleanCode: '#FF6B5E',
+  Smells: '#F2921D',
+  Hex: '#8A5CF6',
+  Java: '#F2921D',
+  Docker: '#2B6CB0',
+  Git: '#1FA398',
+  AWS: '#F2921D',
+};
+const FALLBACK_PALETTE = ['#FF6B5E', '#1FA398', '#8A5CF6', '#F2921D', '#2B6CB0'];
 const OPTION_LETTERS = ['A', 'B', 'C', 'D'];
 
 /**
@@ -506,10 +519,14 @@ const dom = {
 // Helpers
 // -----------------------------------------------------------------------
 
-/** Returns a topic's accent color, cycling through the palette by order. */
+/**
+ * Returns a topic's accent color. Falls back to a cycling palette for any
+ * topic added to DATA without a matching entry in TOPIC_ACCENT_COLORS.
+ */
 function getAccentColor(topicKey) {
+  if (TOPIC_ACCENT_COLORS[topicKey]) return TOPIC_ACCENT_COLORS[topicKey];
   const index = CATEGORY_KEYS.indexOf(topicKey);
-  return ACCENT_PALETTE[index % ACCENT_PALETTE.length];
+  return FALLBACK_PALETTE[index % FALLBACK_PALETTE.length];
 }
 
 /** Fisher-Yates shuffle. Mutates and returns the given array. */

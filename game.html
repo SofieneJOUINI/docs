@@ -28,9 +28,10 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:32px 16px 50px;
+    justify-content:center;
+    padding:16px 16px 24px;
   }
-  .wrap{width:100%;max-width:min(480px, max(280px, calc((100vh - 230px) / 1.5)));}
+  .wrap{width:100%;max-width:min(520px, max(300px, calc((100vh - 250px) / 1.5)));}
 
   a.back{
     display:inline-block;margin-bottom:16px;padding:4px 10px;border:1.5px solid var(--ink);
@@ -42,6 +43,7 @@
   header.hero{text-align:left;margin-bottom:18px;}
   header.hero h1{
     font-family:'Kalam',cursive;font-size:2rem;margin:0;transform:rotate(-0.6deg);
+    white-space:nowrap;
   }
   header.hero h1 span{
     background:linear-gradient(180deg, transparent 60%, #FFE07A 60%);padding:0 4px;
@@ -81,6 +83,7 @@
     height:auto;
     aspect-ratio:2/3;
     background:linear-gradient(180deg, var(--space-0), var(--space-2) 140%);
+    touch-action:none;
   }
 
   .overlay{
@@ -135,6 +138,35 @@
   .arcade-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(0,0,0,0.5);}
   .arcade-btn:active{transform:translate(0,0);box-shadow:1px 1px 0 rgba(0,0,0,0.5);}
 
+  .touch-controls{
+    display:flex;
+    gap:8px;
+    padding:8px;
+    background:var(--space-1);
+    border-top:2px solid var(--ink);
+  }
+  .touch-btn{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    background:#2A1F4D;
+    color:#F4EFE0;
+    border:2px solid #4A3D7A;
+    border-radius:8px;
+    padding:9px 0;
+    user-select:none;
+    -webkit-user-select:none;
+    touch-action:manipulation;
+  }
+  .touch-btn svg{display:block;}
+  .touch-btn:active{background:#3a2d66;}
+  .touch-btn.shoot{background:#5a2340;border-color:#8a3d66;}
+  .touch-btn.shoot:active{background:#7a3060;}
+
   .hint{
     margin-top:12px;
     font-size:.72rem;
@@ -166,7 +198,7 @@
 
       <div class="overlay" id="overlayStart">
         <h2>Ready to clean?</h2>
-        <p>Move with the arrows, fire with space, and clear every code smell before it lands.</p>
+        <p>Move with the arrows (or drag on mobile), fire with space, and clear every code smell before it lands.</p>
         <button class="arcade-btn" id="startBtn">Start Game</button>
       </div>
 
@@ -175,9 +207,19 @@
         <p class="stat" id="overStats">Score: 0 - Wave: 1</p>
         <button class="arcade-btn" id="retryBtn">Play Again</button>
       </div>
+
+      <div class="touch-controls">
+        <div class="touch-btn" id="btnLeft" aria-label="Move left">
+          <svg viewBox="0 0 24 24" width="16" height="16"><polygon points="16,4 16,20 6,12" fill="currentColor"/></svg>
+        </div>
+        <div class="touch-btn shoot" id="btnShoot">FIRE</div>
+        <div class="touch-btn" id="btnRight" aria-label="Move right">
+          <svg viewBox="0 0 24 24" width="16" height="16"><polygon points="8,4 8,20 18,12" fill="currentColor"/></svg>
+        </div>
+      </div>
     </div>
 
-    <p class="hint">Arrow keys / Q-D to move, Space to fire.</p>
+    <p class="hint">Arrow keys / Q-D to move, Space to fire. On mobile, use the buttons below the screen.</p>
   </div>
 
 <script>
@@ -248,6 +290,9 @@ const dom = {
   overStats: document.getElementById('overStats'),
   startBtn: document.getElementById('startBtn'),
   retryBtn: document.getElementById('retryBtn'),
+  btnLeft: document.getElementById('btnLeft'),
+  btnRight: document.getElementById('btnRight'),
+  btnShoot: document.getElementById('btnShoot'),
 };
 const ctx = dom.canvas.getContext('2d');
 
@@ -403,6 +448,18 @@ window.addEventListener('keyup', (e) => {
   if (e.code === 'ArrowRight' || e.code === 'KeyD') state.input.right = false;
   if (e.code === 'Space') state.input.shoot = false;
 });
+
+/** Binds press-and-hold behavior to an on-screen button for mouse and touch. */
+function bindHold(el, onDown, onUp) {
+  el.addEventListener('mousedown', (e) => { e.preventDefault(); onDown(); });
+  el.addEventListener('mouseup', onUp);
+  el.addEventListener('mouseleave', onUp);
+  el.addEventListener('touchstart', (e) => { e.preventDefault(); onDown(); }, { passive: false });
+  el.addEventListener('touchend', (e) => { e.preventDefault(); onUp(); }, { passive: false });
+}
+bindHold(dom.btnLeft, () => state.input.left = true, () => state.input.left = false);
+bindHold(dom.btnRight, () => state.input.right = true, () => state.input.right = false);
+bindHold(dom.btnShoot, () => state.input.shoot = true, () => state.input.shoot = false);
 
 dom.startBtn.addEventListener('click', startGame);
 dom.retryBtn.addEventListener('click', startGame);

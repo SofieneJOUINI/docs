@@ -539,11 +539,21 @@ function shuffle(items) {
   return items;
 }
 
+/** Returns a copy of the question with its options shuffled and the correct index remapped to match. */
+function shuffleQuestionOptions(question) {
+  const order = shuffle(question.o.map((_, i) => i));
+  return {
+    ...question,
+    o: order.map(i => question.o[i]),
+    c: order.indexOf(question.c)
+  };
+}
+
 /** Flattens every question from the given topics into one shuffled pool, tagging each with its topic key. */
 function buildQuestionPool(topicKeys) {
   const pool = [];
   topicKeys.forEach(key => {
-    DATA[key].qs.forEach(question => pool.push({ ...question, topicKey: key }));
+    DATA[key].qs.forEach(question => pool.push(shuffleQuestionOptions({ ...question, topicKey: key })));
   });
   return shuffle(pool);
 }
